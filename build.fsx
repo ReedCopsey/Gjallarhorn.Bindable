@@ -28,15 +28,15 @@ open SourceLink
 
 // The name of the project
 // (used by attributes in AssemblyInfo, name of a NuGet package and directory in 'src')
-let project = "Gjallarhorn"
+let project = "Gjallarhorn.Bindable"
 
 // Short summary of the project
 // (used as description in AssemblyInfo and as a short summary for NuGet package)
-let summary = "Framework for managing mutable data with change notification and live views"
+let summary = "Unidirectional Framework for XAML Platforms built on top of Gjallarhorn"
 
 // Longer description of the project
 // (used as a description for NuGet package; line breaks are automatically cleaned up)
-let description = "Framework for managing mutable data with change notification and live views"
+let description = "Unidirectional Framework for XAML Platforms built on top of Gjallarhorn"
 
 // List of author names (for NuGet package)
 let authors = [ "Reed Copsey, Jr." ]
@@ -47,8 +47,8 @@ let tags = "fsharp mutable reactive observable inotifypropertychanged"
 // File system information
 let solutionFile =
     match getBuildParamOrDefault "Solution" "Full" with
-    | "NoAndroid" -> "GjallarhornNoAndroid.sln"
-    | _ -> "Gjallarhorn.sln" 
+    | "NoAndroid" -> "Gjallarhorn.Bindable.NoAndroid.sln"
+    | _ -> "Gjallarhorn.Bindable.sln" 
 
 // Pattern specifying assemblies to be tested using NUnit
 let testAssemblies = "tests/**/bin/Release/*Tests*.dll"
@@ -59,7 +59,7 @@ let gitOwner = "ReedCopsey"
 let gitHome = "https://github.com/" + gitOwner
 
 // The name of the project on GitHub
-let gitName = "Gjallarhorn"
+let gitName = "Gjallarhorn.Bindable"
 
 // The url for the raw files hosted
 let gitRaw = environVarOrDefault "gitRaw" "https://raw.github.com/ReedCopsey"

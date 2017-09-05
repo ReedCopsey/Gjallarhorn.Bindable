@@ -3,8 +3,8 @@ namespace System
 open System.Reflection
 
 [<assembly: AssemblyTitleAttribute("Gjallarhorn.ReferenceDocumentation")>]
-[<assembly: AssemblyProductAttribute("Gjallarhorn")>]
-[<assembly: AssemblyDescriptionAttribute("Framework for managing mutable data with change notification and live views")>]
+[<assembly: AssemblyProductAttribute("Gjallarhorn.Bindable")>]
+[<assembly: AssemblyDescriptionAttribute("Unidirectional Framework for XAML Platforms built on top of Gjallarhorn")>]
 [<assembly: AssemblyVersionAttribute("1.0.0")>]
 [<assembly: AssemblyFileVersionAttribute("1.0.0")>]
 [<assembly: AssemblyCopyrightAttribute("Copyright 2017 Reed Copsey, Jr.")>]
@@ -13,8 +13,8 @@ do ()
 
 module internal AssemblyVersionInformation =
     let [<Literal>] AssemblyTitle = "Gjallarhorn.ReferenceDocumentation"
-    let [<Literal>] AssemblyProduct = "Gjallarhorn"
-    let [<Literal>] AssemblyDescription = "Framework for managing mutable data with change notification and live views"
+    let [<Literal>] AssemblyProduct = "Gjallarhorn.Bindable"
+    let [<Literal>] AssemblyDescription = "Unidirectional Framework for XAML Platforms built on top of Gjallarhorn"
     let [<Literal>] AssemblyVersion = "1.0.0"
     let [<Literal>] AssemblyFileVersion = "1.0.0"
     let [<Literal>] AssemblyCopyright = "Copyright 2017 Reed Copsey, Jr."
