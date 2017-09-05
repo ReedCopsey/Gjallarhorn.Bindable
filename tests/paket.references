@@ -1,0 +1,5 @@
+group Test
+    FSharp.Core
+    NUnit
+    NUnit.Runners
+    Gjallarhorn

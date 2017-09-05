@@ -1,0 +1,25 @@
+# Auto detect text files
+* text=auto 
+
+# Custom for Visual Studio
+*.cs diff=csharp text=auto eol=crlf
+*.fs diff=csharp text=auto eol=crlf
+*.fsi diff=csharp text=auto eol=crlf
+*.fsx diff=csharp text=auto eol=crlf
+*.sln text eol=crlf merge=union
+*.csproj merge=union
+*.vbproj merge=union
+*.fsproj merge=union
+*.dbproj merge=union
+
+# Standard to msysgit
+*.doc diff=astextplain
+*.DOC diff=astextplain
+*.docx diff=astextplain
+*.DOCX diff=astextplain
+*.dot diff=astextplain
+*.DOT diff=astextplain
+*.pdf diff=astextplain
+*.PDF diff=astextplain
+*.rtf diff=astextplain
+*.RTF diff=astextplain
