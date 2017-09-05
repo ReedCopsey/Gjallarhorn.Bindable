@@ -1,3 +1,8 @@
+#### 1.0.0-beta2 - Sept 5th 2017
+* Allowed collection binding to work against all collection types
+* Building against new Gjallarhorn 1.0 release 
+* Separated repository from core Gjallarhorn repository
+
 #### 1.0.0-beta1 - Sept 4th 2017
 * **Significant** breaking changes introduced to Bindable API
 * Created new, default API which is type safe and eliminates magic strings
