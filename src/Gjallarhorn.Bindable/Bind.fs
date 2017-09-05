@@ -523,7 +523,7 @@ module Bind =
             |> Some  
        
     /// Bind a collection as a one-way property, acting as a reducer for messages from the individual components of the collection
-    let collection<'Model,'Msg,'Submodel,'Submsg when 'Submodel : equality> (getter : 'Model -> 'Submodel seq) (collectionVm : Component<'Submodel, 'Submsg>) (mapper : 'Submsg * 'Submodel -> 'Msg) (name : Expr<'Submodel seq>) =
+    let collection<'Model,'Msg,'Submodel,'SubmodelCollection,'Submsg when 'Submodel : equality and 'SubmodelCollection :> seq<'Submodel>> (getter : 'Model -> 'SubmodelCollection) (collectionVm : Component<'Submodel, 'Submsg>) (mapper : 'Submsg * 'Submodel -> 'Msg) (name : Expr<'SubmodelCollection>) =
         fun (source : BindingSource) (signal : ISignal<'Model>) ->
             let name = getPropertyNameFromExpression name
             let mapped = signal |> Signal.map getter

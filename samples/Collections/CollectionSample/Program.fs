@@ -79,7 +79,7 @@ module Program =
 
     type RequestsViewModel =
         {
-            Requests : Request seq 
+            Requests : Requests
         }
     let reqsd = { Requests = [] }
     
@@ -87,7 +87,7 @@ module Program =
     // Note that this uses BindingCollection to map the collection to individual request -> messages,
     // using the component defined previously, then maps this to the model-wide update message.
     let requestsComponent = //source (model : ISignal<Requests>) =
-        let sorted (requests : Requests) = requests |> Seq.sortBy (fun r -> r.Created)
+        let sorted (requests : Requests) = requests |> List.sortBy (fun r -> r.Created)
         Component.fromBindings [
             <@ reqsd.Requests @> |> Bind.collection sorted requestComponent Operations.requestUpdateToUpdate
         ]         
