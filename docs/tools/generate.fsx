@@ -16,17 +16,17 @@ let referenceBinaries = [
     ]
 
 // Web site location for the generated documentation
-let website = "/Gjallarhorn"
+let website = "/Gjallarhorn.Bindable"
 
-let githubLink = "http://github.com/ReedCopsey/Gjallarhorn"
+let githubLink = "http://github.com/ReedCopsey/Gjallarhorn.Bindable"
 
 // Specify more information about your project
 let info =
-  [ "project-name", "Gjallarhorn"
+  [ "project-name", "Gjallarhorn.Bindable"
     "project-author", "Reed Copsey, Jr."
-    "project-summary", "Framework for managing mutable data with change notification and live views"
+    "project-summary", "Unidirectional Framework for XAML Platforms built on top of Gjallarhorn"
     "project-github", githubLink
-    "project-nuget", "http://nuget.org/packages/Gjallarhorn" ]
+    "project-nuget", "http://nuget.org/packages/Gjallarhorn.Bindable" ]
 
 // --------------------------------------------------------------------------------------
 // For typical project, no changes are needed below

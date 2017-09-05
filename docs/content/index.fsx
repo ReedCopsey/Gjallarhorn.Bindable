@@ -5,44 +5,19 @@
 #r "C:/Program Files (x86)/Reference Assemblies/Microsoft/Framework/.NETFramework/v4.6.1/Facades/System.Runtime.dll"
 
 (**
-Gjallarhorn
+Gjallarhorn.Bindable
 ===================
 
-Gjallarhorn is a library designed to manage notifications and mutable state.  It provides mechanisms for signaling of changes, represented via signals.
+Gjallarhorn.Bindable is a library and framework designed to enable an unidirectional architecture for XAML platforms.
 
-Example
--------
+This serves as an alternative approach to MVVM and similar architectures.
 
-This example demonstrates using basic functionality in Gjallarhorn.
-
-*)
-#r "Gjallarhorn.dll"
-open Gjallarhorn
-
-// Create a mutable variable
-let var1 = Mutable.create 0
-let var2 = Mutable.create 2
-let result = Signal.map2 (fun a b -> a + b) var1 var2
-
-Signal.Subscription.create (fun value -> printfn "The sum of our variables is %d" value) result
-
-// Set first variable, which causes subscription to print
-var1.Value <- 20
-// Set first variable, which again causes subscription to print
-var2.Value <- 22
-
-
-(**
-For more information, see the detailed documentation.
+It is built on top of [Gjallarhorn](/Gjallarhorn/), a reactive framework for managing mutable state.
 
 Core Types and Usage
 -----------------------
 
- * [Introduction to Gjallarhorn](intro.html): A brief introduction to core concepts within Gjallarhorn.
- * [Signals](signals.html): Details about Signals
- * [Mutables](mutables.html): Details about Mutables
- * [Validation](validation.html): The core validation engine 
- * [Validating Signals](validate_types.html): Details about Validation of Signals
+ * [Introduction to Gjallarhorn.Bindable](intro.html): A brief introduction to core concepts within Gjallarhorn.Bindable.
 
 API Reference
 -----------------------
@@ -54,10 +29,10 @@ API Reference
 Contributing and copyright
 --------------------------
 
-The project is hosted on [GitHub](https://github.com/ReedCopsey/Gjallarhorn) where you can [report issues](https://github.com/ReedCopsey/Gjallarhorn/issues), fork 
+The project is hosted on [GitHub](https://github.com/ReedCopsey/Gjallarhorn.Bindable) where you can [report issues](https://github.com/ReedCopsey/Gjallarhorn.Bindable/issues), fork 
 the project and submit pull requests. 
 
-The library is available under the Apache 2.0 License, which allows modification and 
+The library is available under the MIT License, which allows modification and 
 redistribution for both commercial and non-commercial purposes. For more information see the 
 [License file](https://github.com/ReedCopsey/Gjallarhorn/blob/master/LICENSE.txt) in the GitHub repository. 
 
