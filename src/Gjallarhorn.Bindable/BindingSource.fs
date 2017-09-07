@@ -185,24 +185,26 @@ and [<AbstractClass>] ObservableBindingSource<'Message>() as self =
     
     // Use event as simple observable source
     let output = Event<'Message>()
-    let mbp = 
-        MailboxProcessor<'Message>.Start(fun inbox -> 
-            let rec loop () = 
-                async {
-                    let! msg = inbox.Receive()
-                    output.Trigger msg
-                    return! loop ()
-                    }
-            loop ())
 
-    do self.AddDisposable mbp
+    // See if we can reimplement this safely. Very fast messages seem to cause problems when this is in place.
+    //let mbp = 
+    //    MailboxProcessor<'Message>.Start(fun inbox -> 
+    //        let rec loop () = 
+    //            async {
+    //                let! msg = inbox.Receive()
+    //                output.Trigger msg
+    //                return! loop ()
+    //                }
+    //        loop ())
+
+    //do self.AddDisposable mbp
 
     /// Outputs a value through it's observable implementation
     member __.OutputValue value = output.Trigger value
 
     /// Outputs values by subscribing to changes on an observable
     member this.OutputObservable<'Message> (obs : IObservable<'Message>) =
-        obs.Subscribe mbp.Post
+        obs.Subscribe (fun v -> output.Trigger v) // mbp.Post
         |> this.AddDisposable 
 
     /// Outputs values by subscribing to changes on a list of observables

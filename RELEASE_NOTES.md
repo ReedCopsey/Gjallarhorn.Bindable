@@ -1,3 +1,6 @@
+#### 1.0.0-beta4 - Sept 7th 2017
+* Fixed possible race condition in message pumping
+
 #### 1.0.0-beta3 - Sept 7th 2017
 * Added parameterized command
 * Building against newer Gjallarhorn
