@@ -6,7 +6,7 @@
     mc:Ignorable="d" 
     xmlns:elmOne="clr-namespace:ElmInspiredOne;assembly=ElmInspiredOne"
 	Title="Elm Architecture Sample One"     
-    MinWidth="300" 
+    MinWidth="400" 
     MinHeight="100" 
     SizeToContent="WidthAndHeight"
     d:DataContext="{x:Static elmOne:Program.d}">
@@ -19,13 +19,11 @@
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
+        
         <TextBlock Grid.Row="0" Grid.Column="0" Margin="5">Current:</TextBlock>
-        <TextBox Grid.Row="0" Grid.Column="1" Margin="5" 
-                 Text="{Binding Current, Mode=OneWay}" IsReadOnly="True" />
+        <TextBox Text="{Binding Current, Mode=OneWay}" IsReadOnly="True" Grid.Row="0" Grid.Column="1" Margin="5" />
 
-        <Button Margin="5" Grid.Row="1" Grid.Column="0"
-                Command="{Binding Increment}">Increment</Button>
-        <Button Margin="5" Grid.Row="1" Grid.Column="1" 
-                Command="{Binding Decrement}">Decrement</Button>
+        <Button Command="{Binding Increment}" Margin="5" Grid.Row="1" Grid.Column="0">Increment</Button>
+        <Button Command="{Binding Decrement}" Margin="5" Grid.Row="1" Grid.Column="1">Decrement</Button>
     </Grid>
 </Window>

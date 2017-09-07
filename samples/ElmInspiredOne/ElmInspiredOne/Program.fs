@@ -8,8 +8,10 @@ open Gjallarhorn.Bindable.Framework
 module Program =    
     // ----------------------------------     Model     ---------------------------------- 
     // Model is a simple integer for counter
-    type Model = int
-    let initModel i : Model = i
+    type Model = { Value : int }
+    
+    // Create an initialization function
+    let initModel i = { Value = i }
 
     // ----------------------------------    Update     ---------------------------------- 
     // We define a union type for each possible message
@@ -20,13 +22,13 @@ module Program =
     // Create a function that updates the model given a message
     let update msg (model : Model) : Model =
         match msg with
-        | Increment -> min 10 (model + 1)
-        | Decrement -> max 0 (model - 1)
+        | Increment -> { Value = min 10 (model.Value + 1) }
+        | Decrement -> { Value = max 0 (model.Value - 1) }
 
     // Our "ViewModel". This is optional, but allows you to avoid using "magic strings", as well as enables design time XAML in C# projects
     type ViewModel = 
         {
-            Current : Model 
+            Current : int 
             Increment : VmCmd<Msg>
             Decrement : VmCmd<Msg>
         }    
@@ -41,9 +43,9 @@ module Program =
     let bindToSource =           
         // Create our bindings - the VM type defines the name, the Bind call determines the type of data binding
         Component.fromBindings [
-            <@ d.Current    @> |> Bind.oneWay id
-            <@ d.Increment  @> |> Bind.cmdIf (fun v -> v < 10)
-            <@ d.Decrement  @> |> Bind.cmdIf (fun v -> v > 0)
+            <@ d.Current    @> |> Bind.oneWay (fun m -> m.Value)
+            <@ d.Increment  @> |> Bind.cmdIf (fun m -> m.Value < 10)
+            <@ d.Decrement  @> |> Bind.cmdIf (fun m -> m.Value > 0)
         ]         
 
     // ----------------------------------   Framework  -----------------------------------     
