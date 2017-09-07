@@ -1,3 +1,7 @@
+#### 1.0.0-beta3 - Sept 7th 2017
+* Added parameterized command
+* Building against newer Gjallarhorn
+
 #### 1.0.0-beta2 - Sept 5th 2017
 * Allowed collection binding to work against all collection types
 * Building against new Gjallarhorn 1.0 release 
