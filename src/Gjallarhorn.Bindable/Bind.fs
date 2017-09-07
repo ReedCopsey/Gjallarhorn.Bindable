@@ -500,6 +500,15 @@ module Bind =
             | _ -> failwith "Bad expression"        
             |> Some
 
+    /// Creates a parameterized ICommand (one way property) to a binding source by name which outputs a specific message
+    let cmdParam<'Model,'Param,'Msg> (setter : 'Param -> 'Msg) (name : Expr<VmCmd<'Msg>>) : BindingSource -> ISignal<'Model> -> IObservable<'Msg> option =
+        fun (source : BindingSource) (_signal : ISignal<'Model>) ->
+            let name = getPropertyNameFromExpression name
+            let cmd = Explicit.createCommandParam<'Param> name source
+            cmd
+            |> Observable.map setter
+            |> Some
+
     /// Creates an ICommand (one way property) to a binding source by name which outputs a specific message
     let cmdIf<'Model,'Msg> canExecute (name : Expr<VmCmd<'Msg>>) : BindingSource -> ISignal<'Model> -> IObservable<'Msg> option =
         fun (source : BindingSource) (signal : ISignal<'Model>) ->
