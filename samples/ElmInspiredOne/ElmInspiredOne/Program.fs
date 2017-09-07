@@ -20,7 +20,7 @@ module Program =
         | Decrement
 
     // Create a function that updates the model given a message
-    let update msg (model : Model) : Model =
+    let update msg model =
         match msg with
         | Increment -> { Value = min 10 (model.Value + 1) }
         | Decrement -> { Value = max 0 (model.Value - 1) }
