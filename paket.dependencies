@@ -11,7 +11,7 @@ group Build
   nuget FSharp.Formatting
   nuget FsXaml.WPF
   nuget Xamarin.Forms
-  nuget FSharp.Core 4.0.0.1
+  nuget FSharp.Core >= 4.0.0.1
 
   github fsharp/FAKE modules/Octokit/Octokit.fsx
 
@@ -25,4 +25,4 @@ group Test
   nuget Gjallarhorn >= 1.0.0
   nuget NUnit ~> 2
   nuget NUnit.Runners ~> 2
-  nuget FSharp.Core 4.0.0.1
+  nuget FSharp.Core >= 4.0.0.1
