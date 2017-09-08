@@ -36,9 +36,9 @@
     <DocumentationFile>bin\Release\CollectionSample.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Model.fs" />
-    <Compile Include="Execution.fs" />
-    <Compile Include="StateManagement.fs" />
+    <Compile Include="Request.fs" />
+    <Compile Include="Requests.fs" />
+    <Compile Include="CollectionApplication.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
   <ItemGroup>

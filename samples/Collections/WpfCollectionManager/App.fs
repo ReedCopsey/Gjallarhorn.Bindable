@@ -2,7 +2,6 @@
 open System
 
 open CollectionSample
-open CollectionSample.RequestModel
 open Gjallarhorn.Wpf
 
 open Views
@@ -21,13 +20,29 @@ let main _ =
     // anywhere in the program, and inject them into the PCL target safely 
     // (since printfn/Console isn't available in PCL)
     // In a "real program" this would likely call out to a service
-    let fnAccepted req = 
+    let fnAccepted (req : Request.Model) = 
         Console.ForegroundColor <- ConsoleColor.Green
         printfn "Accepted Request: %A" req.Id
-    let fnRejected req = 
+    let fnRejected (req : Request.Model) = 
         Console.ForegroundColor <- ConsoleColor.Red
         printfn "Rejected Request: %A" req.Id
 
+    let printItem (req : Request.Model) =
+        match req.Status with
+        | Request.Status.Accepted -> fnAccepted req
+        | Request.Status.Rejected -> fnRejected req
+        | _ -> ()
+
+    let logger _ msg _ =
+        match msg with 
+        | CollectionApplication.Msg.Update(Requests.Message.Remove(items)) -> 
+            items
+            |> List.iter printItem
+        | _ -> ()
+
     // Run using the WPF wrappers around the basic application framework    
-    Framework.RunApplication (App, MainWin, Program.applicationCore fnAccepted fnRejected)
+    let app = Program.applicationCore
+    app.AddLogger logger
+
+    Framework.RunApplication (App, MainWin, app)
     1

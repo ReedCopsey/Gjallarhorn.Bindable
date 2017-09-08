@@ -180,7 +180,7 @@ type BindingSource() as self =
     abstract AddReadWriteProperty<'a> : string * System.Func<'a> * System.Action<'a> -> unit
 
 /// Base class for binding sources, used by platform specific libraries to share implementation details
-and [<AbstractClass>] ObservableBindingSource<'Message>() as self =
+and [<AbstractClass>] ObservableBindingSource<'Message>() =
     inherit BindingSource()
     
     // Use event as simple observable source

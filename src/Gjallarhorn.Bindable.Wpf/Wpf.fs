@@ -57,8 +57,7 @@ type Framework =
             // Use standdard WPF message pump
             app.Run win |> ignore
 
-        Platform.install true |> ignore
-        applicationInfo.Init ()
+        Platform.install true |> ignore        
         Gjallarhorn.Bindable.Framework.Framework.runApplication (App.toApplicationSpecification render applicationInfo) 
     
     /// Run an application using Application.Current and a function to construct the main window
@@ -84,6 +83,5 @@ type Framework =
             else                
                 win.Show()                
 
-        Platform.install true |> ignore
-        applicationInfo.Init ()
+        Platform.install true |> ignore        
         Gjallarhorn.Bindable.Framework.Framework.runApplication (App.toApplicationSpecification render applicationInfo) 

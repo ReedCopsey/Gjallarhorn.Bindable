@@ -34,14 +34,13 @@ module Framework =
         }
         with
             member this.ToApplicationSpecification render : Framework.ApplicationSpecification<'Model,'Message> = 
-                { Core = Framework.ApplicationCore(this.Core.Model, this.Core.Init, this.Core.Update, this.Core.Binding) ; Render = render }            
+                { Core = this.Core ; Render = render }            
 
             member this.CreateApp() =
                 let render (createCtx : SynchronizationContext -> ObservableBindingSource<'Message>) = 
                     this.View.BindingContext <- createCtx SynchronizationContext.Current
                            
                 Platform.install ()
-                this.Core.Init ()
                 Gjallarhorn.Bindable.Framework.Framework.runApplication (this.ToApplicationSpecification render) |> ignore
                 App(this.View)                
 

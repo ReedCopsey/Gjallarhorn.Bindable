@@ -1,6 +1,6 @@
 ﻿namespace CollectionManager.Views
 
-open CollectionSample.RequestModel
+open CollectionSample
 open System.Windows
 open System.Windows.Media
 
@@ -14,10 +14,10 @@ module internal Converters =
         lgb :> Brush
     let statusToColor status _ =
         match status with
-        | Accepted -> Colors.Green
-        | Rejected -> Colors.Red
-        | Unknown -> Colors.Transparent    
+        | Request.Accepted -> Colors.Green
+        | Request.Rejected -> Colors.Red
+        | Request.Unknown -> Colors.Transparent    
         |> makeBrush
 
 type StatusToColorConverter () =
-     inherit FsXaml.Converter<Status, Brush>(Converters.statusToColor, Brushes.Transparent)
+     inherit FsXaml.Converter<Request.Status, Brush>(Converters.statusToColor, Brushes.Transparent)

@@ -49,4 +49,4 @@ module Program =
         ]         
 
     // ----------------------------------   Framework  -----------------------------------     
-    let applicationCore = Framework.basicApplication (initModel 5) update bindToSource
+    let applicationCore = Framework.application (initModel 5) update bindToSource

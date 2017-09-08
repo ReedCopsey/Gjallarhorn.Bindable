@@ -58,4 +58,4 @@ module Program =
         ]   
 
     // ----------------------------------   Framework  -----------------------------------     
-    let applicationCore = Framework.basicApplication Model.Default update bindToSource
+    let applicationCore = Framework.application Model.Default update bindToSource
