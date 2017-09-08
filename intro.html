@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8"/>
-    <title>A Brief Introduction to Gjallarhorn
+    <title>A Brief Introduction to Gjallarhorn.Bindable
 </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content="Unidirectional Framework for XAML Platforms built on top of Gjallarhorn"/>
@@ -33,66 +33,13 @@
       <div class="row">
         <div class="span9" id="main">
           
-<h1><a name="A-Brief-Introduction-to-Gjallarhorn" class="anchor" href="#A-Brief-Introduction-to-Gjallarhorn">A Brief Introduction to Gjallarhorn</a></h1>
-<p>Gjallarhorn is centered around two core types - Signals and Mutables.</p>
-<p>A signal represents a value that changes over time, and has the following properties:
-- A current value, which can always be fetched
-- A mechanism to signal changes to subscribers that the value has been updated</p>
-<p>A Mutable is a holder for mutable variables, similar to a reference cell.  They are typically created via Mutable.create:</p>
-<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
-<span class="l">2: </span>
-<span class="l">3: </span>
-<span class="l">4: </span>
-<span class="l">5: </span>
-<span class="l">6: </span>
-<span class="l">7: </span>
-<span class="l">8: </span>
-</pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="prep">#r</span> <span class="s">&quot;Gjallarhorn.dll&quot;</span>
-<span class="k">open</span> <span class="i">Gjallarhorn</span>
-
-<span class="c">// Create a mutable variable</span>
-<span class="k">let</span> <span class="i">variable</span> <span class="o">=</span> <span class="i">Mutable</span><span class="o">.</span><span class="i">create</span> <span class="s">&quot;Foo&quot;</span>
-<span class="i">printfn</span> <span class="s">&quot;hello = %s&quot;</span> <span class="i">variable</span><span class="o">.</span><span class="i">Value</span>
-<span class="i">variable</span><span class="o">.</span><span class="i">Value</span> <span class="o">&lt;-</span> <span class="s">&quot;Bar&quot;</span>
-<span class="i">printfn</span> <span class="s">&quot;hello = %s&quot;</span> <span class="i">variable</span><span class="o">.</span><span class="i">Value</span>
-</code></pre></td>
-</tr>
-</table>
-<p>In this simple example, we show creating, reading from, and updating a Mutable.</p>
-<p>Mutable variables in Gjallarhorn have some distict features:</p>
-<ul>
-<li>Very low memory overhead: When created, a mutable like the one above has no memory overhead above that of a standard reference cell. It is effectively nothing but a thin wrapper around the current value, without any extra fields.</li>
-<li>They expose themselves as a signal - there is always a current value and they can notify subscribers of changes</li>
-</ul>
-<p>Once your core data is held within a Mutable or pulled in via something that provides a signal, you can use the Signal module to transform the data</p>
-<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
-<span class="l"> 2: </span>
-<span class="l"> 3: </span>
-<span class="l"> 4: </span>
-<span class="l"> 5: </span>
-<span class="l"> 6: </span>
-<span class="l"> 7: </span>
-<span class="l"> 8: </span>
-<span class="l"> 9: </span>
-<span class="l">10: </span>
-<span class="l">11: </span>
-</pre></td>
-<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="c">// Create mutable variables</span>
-<span class="k">let</span> <span class="i">first</span> <span class="o">=</span> <span class="i">Mutable</span><span class="o">.</span><span class="i">create</span> <span class="s">&quot;&quot;</span>
-<span class="k">let</span> <span class="i">last</span> <span class="o">=</span> <span class="i">Mutable</span><span class="o">.</span><span class="i">create</span> <span class="s">&quot;&quot;</span>
-<span class="c">// Map these two variables from a first and last name to a full name</span>
-<span class="k">let</span> <span class="i">full</span> <span class="o">=</span> <span class="i">Signal</span><span class="o">.</span><span class="i">map2</span> (<span class="k">fun</span> <span class="i">f</span> <span class="i">l</span> <span class="k">-&gt;</span> <span class="i">f</span> <span class="o">+</span> <span class="s">&quot; &quot;</span> <span class="o">+</span> <span class="i">l</span>) <span class="i">first</span> <span class="i">last</span>
-
-<span class="i">printfn</span> <span class="s">&quot;initial = %s&quot;</span> <span class="i">full</span><span class="o">.</span><span class="i">Value</span>
-<span class="i">first</span><span class="o">.</span><span class="i">Value</span> <span class="o">&lt;-</span> <span class="s">&quot;Reed&quot;</span>
-<span class="i">last</span><span class="o">.</span><span class="i">Value</span> <span class="o">&lt;-</span> <span class="s">&quot;Copsey&quot;</span>
-<span class="c">// Prints: &quot;Hello Reed Copsey!&quot;</span>
-<span class="i">printfn</span> <span class="s">&quot;Hello %s!&quot;</span> <span class="i">full</span><span class="o">.</span><span class="i">Value</span>
-</code></pre></td>
-</tr>
-</table>
-<p>Next, we'll go into <a href="signals.html">more details about signals</a>.</p>
+<h1><a name="A-Brief-Introduction-to-Gjallarhorn-Bindable" class="anchor" href="#A-Brief-Introduction-to-Gjallarhorn-Bindable">A Brief Introduction to Gjallarhorn.Bindable</a></h1>
+<p>Gjallarhorn.Bindable provides a new UI architecture for XAML platforms</p>
+<p>The goal is to keep the best of XAML (decoupled view, flexible UI, high performance rendering, etc),
+while allowing a fully immutable data model, pure functions for updates on the model, and a clean
+architecture to be used for representing the application.</p>
+<p>This is done by building up on the Gjallarhorn project to create a reactive, data flow oriented
+framework for XAML Binding.</p>
 
 
         </div>
