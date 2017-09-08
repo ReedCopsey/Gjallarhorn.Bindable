@@ -14,7 +14,7 @@ module CollectionApplication =
 
     // Create an application wide model+ msg + update which composes 
     // multiple models
-    type Model = { Requests : Requests.Model ; AddingRequests : Executor<Requests.Message> ; Processing : Executor<Msg> }
+    type Model = { Requests : Requests.Model ; AddingRequests : Executor<Msg> ; Processing : Executor<Msg> }
 
     let buildInitialModel adding processing : Model = 
         { 
@@ -26,10 +26,10 @@ module CollectionApplication =
     let update (dispatch : Dispatcher<Msg>) (msg : Msg) (current : Model) = 
         match msg with
         | AddRequests b -> 
-            current.AddingRequests.Executing.Value <- b
+            if b then current.AddingRequests.Start() else current.AddingRequests.Stop()
             current
-        | ProcessRequests b ->
-            current.Processing.Executing.Value <- b
+        | ProcessRequests b -> 
+            if b then current.Processing.Start() else current.Processing.Stop()            
             current
         | Update u -> { current with Requests = Requests.update u current.Requests }
         | Process timeSpan ->

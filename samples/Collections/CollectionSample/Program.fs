@@ -1,7 +1,5 @@
 ﻿namespace CollectionSample
 
-open Gjallarhorn
-open Gjallarhorn.Bindable
 open Gjallarhorn.Bindable.Framework
 open System
 
@@ -18,8 +16,8 @@ module Program =
     // Generate a message to add a random new element to the list on a regular basis
     // In a "real" application, this would likely be doing something like
     // asynchronously calling out to a service and adding in new items
-    // Returns a token source used to stop generating
-    let startUpdating (dispatch : Dispatch<Requests.Message>) token =        
+    // Accepts a cancelation token used to stop processing
+    let startUpdating (dispatch : Dispatch<CollectionApplication.Msg>) token =        
         let rnd = Random()
         let rec wf () = 
             async {
@@ -27,6 +25,7 @@ module Program =
                 do! Async.Sleep <| minAddTime + rnd.Next(addRandomness)                                
                 
                 Requests.AddNew(Guid.NewGuid(), rnd.NextDouble() * 500.0)
+                |> CollectionApplication.Msg.Update
                 |> dispatch
 
                 return! wf()
@@ -35,7 +34,7 @@ module Program =
         Async.Start(wf(), cancellationToken = token)       
 
     // Purge processed elements from the list as time goes by at random intervals
-    let startProcessing (dispatch : CollectionApplication.Msg -> unit) token =        
+    let startProcessing (dispatch : Dispatch<CollectionApplication.Msg>) token =        
         let rec wf () = async {
             // On half second intervals, purge anything processed more than processThreshold seconds ago
             do! Async.Sleep 250
@@ -60,10 +59,10 @@ module Program =
         let updates = Dispatcher<CollectionApplication.Msg>()
 
         // Start these processes - if we don't do this, the toggles will be off by default
-        //adding.Start()
-        //processing.Start()        
+        adding.Start()
+        processing.Start()        
 
         Framework.application (CollectionApplication.buildInitialModel adding processing) (CollectionApplication.update updates) CollectionApplication.appComponent
-        |> Framework.withDispatcher updates id
-        |> Framework.withDispatcher adding CollectionApplication.Update
-        |> Framework.withDispatcher processing id
+        |> Framework.withDispatcher updates
+        |> Framework.withDispatcher adding 
+        |> Framework.withDispatcher processing

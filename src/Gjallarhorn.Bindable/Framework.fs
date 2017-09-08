@@ -5,29 +5,17 @@ open Gjallarhorn.Bindable
 open System.Threading
 open System
 
-/// Dispatch a single message
-type Dispatch<'a> = 'a -> unit
-
 /// The core information required for an application 
 type ApplicationCore<'Model,'Message> (initialModel, update, binding) =             
 
     let model = Mutable.createAsync initialModel
     let logging = Event<_>()
 
-    let mutable dispatched = None
-    let dispatch msg = dispatched <- Some msg    
-
     let rec updateLog msg model =
         let orig = model
         let updated = update msg model
         logging.Trigger (orig, msg, updated)
-
-        if Option.isSome dispatched then
-            let msg = Option.get dispatched
-            dispatched <- None
-            updateLog msg updated
-        else
-            updated
+        updated
 
     let upd msg = model.Update (updateLog msg) |> ignore
     let updAsync msg = model.UpdateAsync (updateLog msg) |> Async.Ignore
@@ -47,10 +35,7 @@ type ApplicationCore<'Model,'Message> (initialModel, update, binding) =
     member __.Binding : Component<'Model,'Message> = binding
 
     /// An stream that reports all updates as original model, message, new model
-    member __.UpdateLog with get () = logging.Publish :> System.IObservable<_>
-
-    /// Used to dispatch operations back to  
-    member __.Dispatch : Dispatch<'Message> = dispatch
+    member __.UpdateLog with get () = logging.Publish :> System.IObservable<_>    
 
     /// Add a logger to this application
     member this.AddLogger logger =
@@ -75,21 +60,25 @@ type ApplicationSpecification<'Model,'Message> =
         /// The binding function from the core application
         member this.Binding = this.Core.Binding   
 
-type Dispatcher<'a> () =
-    let evt = Event<'a>()
+/// Represents a Dispatch of a single message
+type Dispatch<'Msg> = 'Msg -> unit
+
+/// Allows dispatching of a message via an Observable
+type Dispatcher<'Msg> () =
+    let evt = Event<'Msg>()
     let trigger: Dispatch<_> = fun msg -> evt.Trigger msg
 
     // Trigger our message
     member __.Dispatch msg = trigger msg
 
-    interface System.IObservable<'a> with
-        member __.Subscribe (o : System.IObserver<'a>) = evt.Publish.Subscribe o
+    interface System.IObservable<'Msg> with
+        member __.Subscribe (o : System.IObserver<'Msg>) = evt.Publish.Subscribe o
 
-/// Type to execute messages externally
-type Executor<'a> (startExecuting : Dispatch<'a> -> CancellationToken -> unit) = 
+/// Manages the execution of an operation that produces messages to be dispatched
+type Executor<'Msg> (startExecuting : Dispatch<'Msg> -> CancellationToken -> unit) = 
     let executing = Mutable.create false
     
-    let dispatch = Dispatcher<'a>()
+    let dispatch = Dispatcher<'Msg>()
 
     let mutable cts = null
     let changeState run =
@@ -102,21 +91,22 @@ type Executor<'a> (startExecuting : Dispatch<'a> -> CancellationToken -> unit) =
 
     let subscription = executing |> Signal.Subscription.create changeState
 
-    // Use to start or stop this operation
-    member __.Executing with get () = executing :> IMutatable<_>
+    /// Used to watch our execution status
+    member __.Executing with get () = executing :> ISignal<_>
 
-    member this.Start() = this.Executing.Value <- true
-    member this.Stop()  = this.Executing.Value <- false
+    /// Attempt to start the operation
+    member __.Start() = executing.Value <- true
+    
+    /// Attempt to stop the operation
+    member __.Stop()  = executing.Value <- false
 
-    interface System.IObservable<'a> with
-        member __.Subscribe (o : System.IObserver<'a>) = (dispatch :> System.IObservable<'a>).Subscribe o
+    interface System.IObservable<'Msg> with
+        member __.Subscribe (o : System.IObserver<'Msg>) = (dispatch :> System.IObservable<'Msg>).Subscribe o
     interface System.IDisposable with
         member __.Dispose() = 
             subscription.Dispose()
             if not(isNull cts) then
                 cts.Dispose()
-
-
     
 
 /// A platform neutral application framework
@@ -126,12 +116,9 @@ module Framework =
     let application model update binding = ApplicationCore(model, update, binding)
 
     /// Add a dispatch operation from an arbitrary observable to pump messages into the application
-    let withDispatcher (dispatcher : System.IObservable<'a>) (mapper : 'a -> 'Msg) (application : ApplicationCore<_,'Msg>) =
-        let execute a =
-            let msg = mapper a
-            application.UpdateAsync msg |> Async.Start
-        dispatcher
-        |> Observable.add execute
+    let withDispatcher (dispatcher : System.IObservable<'Msg>) (application : ApplicationCore<_,'Msg>) =
+        let execute msg = application.UpdateAsync msg |> Async.Start
+        dispatcher |> Observable.add execute
         application
 
     /// Adds a logger function 
