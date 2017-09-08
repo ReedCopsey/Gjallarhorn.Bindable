@@ -1,7 +1,8 @@
 ﻿namespace CollectionSample
 
-open Gjallarhorn.Bindable.Framework
 open System
+open Gjallarhorn.Bindable
+open Gjallarhorn.Bindable.Framework
 
 // Note that this program is defined in a PCL, and is completely platform neutral.
 // It will work unchanged on WPF, Xamarin Forms, etc

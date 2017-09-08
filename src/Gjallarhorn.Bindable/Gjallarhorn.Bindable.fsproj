@@ -44,6 +44,7 @@
     <Compile Include="Bind.fs" />
     <Compile Include="BindingSourceUtilities.fs" />
     <Compile Include="BindingSourceFactory.fs" />
+    <Compile Include="Dispatch.fs" />
     <Compile Include="Framework.fs" />
   </ItemGroup>
   <PropertyGroup>
