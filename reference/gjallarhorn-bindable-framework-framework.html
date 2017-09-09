@@ -43,28 +43,31 @@
 <p>A platform neutral application framework</p>
 
 </div>
-  <h3>Static members</h3>
+
+<!-- Render nested types and modules, if there are any -->
+
+  <h3>Functions and values</h3>
   <table class="table table-bordered member-list">
     <thead>
-      <tr><td>Static member</td><td>Description</td></tr>
+      <tr><td>Function or value</td><td>Description</td></tr>
     </thead>
     <tbody>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '64', 64)" onmouseover="showTip(event, '64', 64)">
-            application(model init update binding)
+          <code onmouseout="hideTip(event, '43', 43)" onmouseover="showTip(event, '43', 43)">
+            application model update binding
           </code>
-          <div class="tip" id="64">
-            <strong>Signature:</strong> (model:(unit -&gt; ISignal&lt;&#39;?7322&gt;)) -&gt; (init:(unit -&gt; unit)) -&gt; (update:(&#39;?7323 -&gt; unit)) -&gt; binding:Component&lt;&#39;?7322,&#39;?7323&gt; -&gt; ApplicationCore&lt;&#39;?7322,&#39;?7323&gt;<br />
-                          <strong>Type parameters:</strong> '?7322, '?7323          </div>
+          <div class="tip" id="43">
+            <strong>Signature:</strong> model:&#39;?7365 -&gt; update:(&#39;?7366 -&gt; &#39;?7365 -&gt; &#39;?7365) -&gt; binding:Component&lt;&#39;?7365,&#39;?7366&gt; -&gt; ApplicationCore&lt;&#39;?7365,&#39;?7366&gt;<br />
+                          <strong>Type parameters:</strong> '?7365, '?7366          </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/Framework.fs#L41-41" class="github-link">
+            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/Framework.fs#L67-67" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>Build an application given a model generator, initialization function, update function, and binding function</p>
+          <p>Build an application given an initial model, update function, and binding function</p>
 
 
         </td>
@@ -72,39 +75,59 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '65', 65)" onmouseover="showTip(event, '65', 65)">
-            basicApplication(model update binding)
+          <code onmouseout="hideTip(event, '44', 44)" onmouseover="showTip(event, '44', 44)">
+            runApplication applicationInfo
           </code>
-          <div class="tip" id="65">
-            <strong>Signature:</strong> model:&#39;Model -&gt; (update:(&#39;Message -&gt; &#39;Model -&gt; &#39;Model)) -&gt; binding:Component&lt;&#39;Model,&#39;Message&gt; -&gt; ApplicationCore&lt;&#39;Model,&#39;Message&gt;<br />
-                          <strong>Type parameters:</strong> 'Model, 'Message          </div>
-        </td>
-        <td class="xmldoc">
-            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/Framework.fs#L43-43" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          <p>Build a basic application which manages state internally, given a initial model state, update function, and binding function</p>
-
-
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '66', 66)" onmouseover="showTip(event, '66', 66)">
-            runApplication(applicationInfo)
-          </code>
-          <div class="tip" id="66">
+          <div class="tip" id="44">
             <strong>Signature:</strong> applicationInfo:ApplicationSpecification&lt;&#39;Model,&#39;Message&gt; -&gt; unit<br />
                           <strong>Type parameters:</strong> 'Model, 'Message          </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/Framework.fs#L51-51" class="github-link">
+            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/Framework.fs#L81-81" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
           <p>Run an application given the full ApplicationSpecification</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '45', 45)" onmouseover="showTip(event, '45', 45)">
+            withDispatcher dispatcher application
+          </code>
+          <div class="tip" id="45">
+            <strong>Signature:</strong> dispatcher:IObservable&lt;&#39;Msg&gt; -&gt; application:ApplicationCore&lt;&#39;?7369,&#39;Msg&gt; -&gt; ApplicationCore&lt;&#39;?7369,&#39;Msg&gt;<br />
+                          <strong>Type parameters:</strong> 'Msg, '?7369          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/Framework.fs#L70-70" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Add a dispatch operation from an arbitrary observable to pump messages into the application</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '46', 46)" onmouseover="showTip(event, '46', 46)">
+            withLogger logger application
+          </code>
+          <div class="tip" id="46">
+            <strong>Signature:</strong> logger:(&#39;Model -&gt; &#39;Message -&gt; &#39;Model -&gt; unit) -&gt; application:ApplicationCore&lt;&#39;Model,&#39;Message&gt; -&gt; ApplicationCore&lt;&#39;Model,&#39;Message&gt;<br />
+                          <strong>Type parameters:</strong> 'Model, 'Message          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/Framework.fs#L76-76" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Adds a logger function</p>
 
 
         </td>

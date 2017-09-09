@@ -52,11 +52,11 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '54', 54)" onmouseover="showTip(event, '54', 54)">
-            new(model, init, update, binding)
+          <code onmouseout="hideTip(event, '58', 58)" onmouseover="showTip(event, '58', 58)">
+            new(initialModel, update, binding)
           </code>
-          <div class="tip" id="54">
-            <strong>Signature:</strong> (model:(unit -&gt; ISignal&lt;&#39;Model&gt;) * init:(unit -&gt; unit) * update:(&#39;Message -&gt; unit) * binding:Component&lt;&#39;Model,&#39;Message&gt;) -&gt; ApplicationCore&lt;&#39;Model,&#39;Message&gt;<br />
+          <div class="tip" id="58">
+            <strong>Signature:</strong> (initialModel:&#39;Model * update:(&#39;Message -&gt; &#39;Model -&gt; &#39;Model) * binding:Component&lt;&#39;Model,&#39;Message&gt;) -&gt; ApplicationCore&lt;&#39;Model,&#39;Message&gt;<br />
                       </div>
         </td>
         <td class="xmldoc">
@@ -79,15 +79,35 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '55', 55)" onmouseover="showTip(event, '55', 55)">
+          <code onmouseout="hideTip(event, '59', 59)" onmouseover="showTip(event, '59', 59)">
+            AddLogger(logger)
+          </code>
+          <div class="tip" id="59">
+            <strong>Signature:</strong> (logger:(&#39;Model -&gt; &#39;Message -&gt; &#39;Model -&gt; unit)) -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/Framework.fs#L39-39" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Add a logger to this application</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '60', 60)" onmouseover="showTip(event, '60', 60)">
             Binding
           </code>
-          <div class="tip" id="55">
+          <div class="tip" id="60">
             <strong>Signature:</strong> Component&lt;&#39;Model,&#39;Message&gt;<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/Framework.fs#L15-15" class="github-link">
+            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/Framework.fs#L33-33" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -100,40 +120,19 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '56', 56)" onmouseover="showTip(event, '56', 56)">
-            Init
-          </code>
-          <div class="tip" id="56">
-            <strong>Signature:</strong> unit -&gt; unit<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/Framework.fs#L11-11" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          <p>Initialization function which runs once after platforms are installed</p>
-
-
-              <p>CompiledName: <code>get_Init</code></p>
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '57', 57)" onmouseover="showTip(event, '57', 57)">
+          <code onmouseout="hideTip(event, '61', 61)" onmouseover="showTip(event, '61', 61)">
             Model
           </code>
-          <div class="tip" id="57">
-            <strong>Signature:</strong> unit -&gt; ISignal&lt;&#39;Model&gt;<br />
+          <div class="tip" id="61">
+            <strong>Signature:</strong> ISignal&lt;&#39;Model&gt;<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/Framework.fs#L9-9" class="github-link">
+            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/Framework.fs#L22-22" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>The function which generates the model</p>
+          <p>The current model as a signal</p>
 
 
               <p>CompiledName: <code>get_Model</code></p>
@@ -142,22 +141,62 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '58', 58)" onmouseover="showTip(event, '58', 58)">
-            Update
+          <code onmouseout="hideTip(event, '62', 62)" onmouseover="showTip(event, '62', 62)">
+            Update(message)
           </code>
-          <div class="tip" id="58">
-            <strong>Signature:</strong> &#39;Message -&gt; unit<br />
+          <div class="tip" id="62">
+            <strong>Signature:</strong> message:&#39;Message -&gt; unit<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/Framework.fs#L13-13" class="github-link">
+            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/Framework.fs#L25-25" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>The update function</p>
+          <p>Push an update message to the model</p>
 
 
-              <p>CompiledName: <code>get_Update</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '63', 63)" onmouseover="showTip(event, '63', 63)">
+            UpdateAsync(message)
+          </code>
+          <div class="tip" id="63">
+            <strong>Signature:</strong> message:&#39;Message -&gt; Async&lt;unit&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/Framework.fs#L29-29" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Push an update message asynchronously to the model</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '64', 64)" onmouseover="showTip(event, '64', 64)">
+            UpdateLog
+          </code>
+          <div class="tip" id="64">
+            <strong>Signature:</strong> IObservable&lt;&#39;Model * &#39;Message * &#39;Model&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/Framework.fs#L36-36" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>An stream that reports all updates as original model, message, new model</p>
+
+
+              <p>CompiledName: <code>get_UpdateLog</code></p>
         </td>
       </tr>
     </tbody>
