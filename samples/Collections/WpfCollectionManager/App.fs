@@ -20,17 +20,17 @@ let main _ =
     // anywhere in the program, and inject them into the PCL target safely 
     // (since printfn/Console isn't available in PCL)
     // In a "real program" this would likely call out to a service
-    let fnAccepted (req : Request.Model) = 
+    let fnAccepted (req : Request) = 
         Console.ForegroundColor <- ConsoleColor.Green
         printfn "Accepted Request: %A" req.Id
-    let fnRejected (req : Request.Model) = 
+    let fnRejected (req : Request) = 
         Console.ForegroundColor <- ConsoleColor.Red
         printfn "Rejected Request: %A" req.Id
 
-    let printItem (req : Request.Model) =
+    let printItem (req : Request) =
         match req.Status with
-        | Request.Status.Accepted -> fnAccepted req
-        | Request.Status.Rejected -> fnRejected req
+        | RequestStatus.Accepted -> fnAccepted req
+        | RequestStatus.Rejected -> fnRejected req
         | _ -> ()
 
     let logger _ msg _ =

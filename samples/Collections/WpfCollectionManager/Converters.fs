@@ -14,10 +14,10 @@ module internal Converters =
         lgb :> Brush
     let statusToColor status _ =
         match status with
-        | Request.Accepted -> Colors.Green
-        | Request.Rejected -> Colors.Red
-        | Request.Unknown -> Colors.Transparent    
+        | RequestStatus.Accepted -> Colors.Green
+        | Rejected -> Colors.Red
+        | Unknown -> Colors.Transparent    
         |> makeBrush
 
 type StatusToColorConverter () =
-     inherit FsXaml.Converter<Request.Status, Brush>(Converters.statusToColor, Brushes.Transparent)
+     inherit FsXaml.Converter<RequestStatus, Brush>(Converters.statusToColor, Brushes.Transparent)

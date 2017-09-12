@@ -63,7 +63,7 @@ module Program =
         adding.Start()
         processing.Start()        
 
-        Framework.application (CollectionApplication.buildInitialModel adding processing) (CollectionApplication.update updates) CollectionApplication.appComponent
+        Framework.application (CollectionApplication.buildInitialModel adding processing) (fun () -> None) (CollectionApplication.update updates) CollectionApplication.appComponent
         |> Framework.withDispatcher updates
         |> Framework.withDispatcher adding 
         |> Framework.withDispatcher processing

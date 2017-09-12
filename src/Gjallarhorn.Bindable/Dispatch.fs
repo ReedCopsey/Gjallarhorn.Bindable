@@ -19,15 +19,23 @@ type Dispatcher<'Msg> () =
     interface IObservable<'Msg> with
         member __.Subscribe (o : IObserver<'Msg>) = evt.Publish.Subscribe o
 
+/// Navigation dispatcher for navigation messages
+type INavigationDispatcher<'NavRequest> =
+    /// Dispatch a navigation message
+    abstract member Dispatch : 'NavRequest -> unit
+
 /// Used by navigation to dispatch messages back to the Application when navigation occurs
 type NavigationDispatcher<'NavRequest,'Msg> (update : 'NavRequest -> 'Msg option) =
     inherit Dispatcher<'Msg> ()
 
-    /// Call our update method, and trigger a dispatch if needed
-    member this.Update msg =
+    /// Call our dispatch method, and trigger a message if needed
+    member this.Dispatch msg =
         match update msg with
         | Some out -> this.Dispatch out
         | None -> ()
+
+    interface INavigationDispatcher<'NavRequest> with
+        member this.Dispatch msg = this.Dispatch msg
 
 /// Manages the execution of an operation that produces messages to be dispatched
 type Executor<'Msg> (startExecuting : Dispatch<'Msg> -> CancellationToken -> unit) = 

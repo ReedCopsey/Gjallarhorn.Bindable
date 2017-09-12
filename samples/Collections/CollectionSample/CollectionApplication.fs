@@ -35,9 +35,9 @@ module CollectionApplication =
         | Process timeSpan ->
             let threshold = DateTime.UtcNow - timeSpan
 
-            let shouldRemove (req : Request.Model) =
+            let shouldRemove (req : Request) =
                 match req.Status, req.StatusUpdated with
-                | Request.Status.Unknown, _ -> false
+                | RequestStatus.Unknown, _ -> false
                 | _ , Some u when u <= threshold -> true
                 | _ -> false
                 

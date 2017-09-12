@@ -218,17 +218,17 @@ and [<AbstractClass>] ObservableBindingSource<'Message>() =
 /// A component takes a BindingSource and a Signal for a model and returns a list of observable messages
 and Component<'Model,'Nav,'Message> internal (bindingFunction) =        
     /// The actual function which performs the operation of installing the component to a binding source
-    member __.Install (navigation : NavigationDispatcher<'Nav,'Message>) (source : BindingSource) (model : ISignal<'Model>)  : IObservable<'Message> list = bindingFunction navigation source model
+    member __.Install (navigation : INavigationDispatcher<'Nav>) (source : BindingSource) (model : ISignal<'Model>)  : IObservable<'Message> list = bindingFunction navigation source model
 
 /// Routines for constructing and working with Components
 module Component =
     /// Create a component from a "new API" style of binding list
-    let fromBindings<'Model,'Nav,'Message> (bindings : (NavigationDispatcher<'Nav,'Message> -> BindingSource -> ISignal<'Model> -> IObservable<'Message> option) list) =
-        let fn (nav : NavigationDispatcher<'Nav,'Message>) (source : BindingSource) (model : ISignal<'Model>) =
+    let fromBindings<'Model,'Nav,'Message> (bindings : (INavigationDispatcher<'Nav> -> BindingSource -> ISignal<'Model> -> IObservable<'Message> option) list) =
+        let fn (nav : INavigationDispatcher<'Nav>) (source : BindingSource) (model : ISignal<'Model>) =
             bindings
             |> List.choose (fun v -> v nav source model)
         Component<'Model,'Nav,'Message>(fn)
 
     /// Create a component from explicit binding generators
-    let fromExplicit (bindings : NavigationDispatcher<'Nav,'Message> -> BindingSource -> ISignal<'Model> -> IObservable<'Message> list) =
+    let fromExplicit (bindings : INavigationDispatcher<'Nav> -> BindingSource -> ISignal<'Model> -> IObservable<'Message> list) =
         Component<'Model,'Nav,'Message>(bindings)

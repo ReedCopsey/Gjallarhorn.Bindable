@@ -4,28 +4,28 @@ open System
 open Gjallarhorn.Bindable
 
 module Requests = 
-    type Model = Request.Model list
+    type Model = Request list
 
     // These are the updates that can be performed on our requests
     type Message = 
-        | Accept of Request.Model
-        | Reject of Request.Model
+        | Accept of Request
+        | Reject of Request
         | AddNew of Guid * float
-        | Remove of Request.Model list
+        | Remove of Request list
 
     // Maps from an accept/rejection of a single request to an
     // update message for the model as a whole
-    let requestUpdateToUpdate (ru : Request.Message, req : Request.Model) =
+    let requestUpdateToUpdate (ru : RequestMsg, req : Request) =
         match ru with
-        | Request.Accept -> Accept req
-        | Request.Reject -> Reject req        
+        | RequestMsg.Accept -> Accept req
+        | RequestMsg.Reject -> Reject req        
 
     // Update the model based on an UpdateRequest
     let rec update msg current =
         let excluded r = current |> List.except [| r |]
         match msg with
-        | Accept(r)-> Request.update Request.Accept r :: excluded r
-        | Reject(r) -> Request.update Request.Reject r :: excluded r            
+        | Accept(r)-> Request.update RequestMsg.Accept r :: excluded r
+        | Reject(r) -> Request.update RequestMsg.Reject r :: excluded r            
         | AddNew(guid, hours) -> Request.create guid hours :: current 
         | Remove(toRemove) -> current |> List.except toRemove
 

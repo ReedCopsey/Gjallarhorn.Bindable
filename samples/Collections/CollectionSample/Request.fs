@@ -10,24 +10,25 @@
 open System
 open Gjallarhorn.Bindable
 
+type RequestStatus =
+    | Unknown
+    | Accepted
+    | Rejected
+
+type Request = 
+        { 
+            Id : Guid // What is our unique identifier
+            Created : DateTime 
+            ExpectedHours : float 
+            Status : RequestStatus 
+            StatusUpdated : DateTime option 
+        }    
+
+type RequestMsg =
+    | Accept
+    | Reject
+
 module Request =
-    type Status =
-        | Unknown
-        | Accepted
-        | Rejected
-
-    type Model = 
-            { 
-                Id : Guid // What is our unique identifier
-                Created : DateTime 
-                ExpectedHours : float 
-                Status : Status 
-                StatusUpdated : DateTime option 
-            }    
-
-    type Message =
-        | Accept
-        | Reject
 
     let create guid hours = { Id = guid ; Created = DateTime.UtcNow ; ExpectedHours = hours ; Status = Unknown ; StatusUpdated = None }
     let update msg model =
@@ -40,15 +41,15 @@ module Request =
         {
             Id : Guid
             Hours : float
-            Status : Status
-            Accept : VmCmd<Message>
-            Reject : VmCmd<Message>
+            Status : RequestStatus
+            Accept : VmCmd<RequestMsg>
+            Reject : VmCmd<RequestMsg>
         }
     let reqd = { Id = Guid.NewGuid() ; Hours = 45.32 ; Status = Accepted ; Accept = Vm.cmd Accept ; Reject = Vm.cmd Reject }
     
     // Create a component for a single request
-    let requestComponent =
-        Component.fromBindings<Model,_> [
+    let requestComponent  =
+        Component.fromBindings<Request,unit,_> [
             <@ reqd.Id @>       |> Bind.oneWay (fun r -> r.Id)
             <@ reqd.Hours @>    |> Bind.oneWay (fun r -> r.ExpectedHours)
             <@ reqd.Status @>   |> Bind.oneWay (fun r -> r.Status)
