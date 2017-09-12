@@ -27,7 +27,7 @@ type ApplicationCore<'Model,'Nav,'Message> (initialModel, navUpdate, update, bin
     member __.Model : ISignal<'Model> = model :> _
 
     /// The navigation dispatcher for pumping messages
-    member __.Navigation = nav
+    member __.Navigation (msg : 'Nav) = nav.Dispatch msg
     
     /// Push an update message to the model
     member __.Update (message : 'Message) : unit =  

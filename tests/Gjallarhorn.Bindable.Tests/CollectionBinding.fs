@@ -40,7 +40,7 @@ type CollectionBindingTest() =
         Gjallarhorn.Bindable.Component.fromExplicit fn
 
     let ignoreComp = intComponent ignore
-    let ignoreNav = NavigationDispatcher<unit,unit>(fun () -> None)
+    let ignoreNav = ignore
 
     [<TestFixtureSetUp>]
     member __.Initialize() =

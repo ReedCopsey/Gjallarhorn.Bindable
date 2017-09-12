@@ -23,14 +23,18 @@ module Requests =
     type RequestsViewModel =
         {
             Requests : Model
+            Edit : VmCmd<Nav>
         }
-    let reqsd = { Requests = [] }
+    let reqsd = { Requests = [] ; Edit = Vm.cmd <| Nav.DisplayRequest (Request.create (Guid.NewGuid()) 0.0) }
     
     // Create the component for the Requests as a whole.
     // Note that this uses BindingCollection to map the collection to individual request -> messages,
     // using the component defined previously, then maps this to the model-wide update message.
     let requestsComponent = //source (model : ISignal<Requests>) =
         let sorted (requests : Model) = requests |> List.sortBy (fun r -> r.Created)
-        Component.create [
-            <@ reqsd.Requests @> |> Bind.collection sorted Request.requestComponent Update
+        let req = Request.requestComponent |> Component.withMappedNavigation Nav.suppress
+                   
+        Component.create<Model,Nav,Message> [
+            <@ reqsd.Requests @> |> Bind.collection sorted req Update            
+            <@ reqsd.Edit @> |> Bind.cmdParam Nav.DisplayRequest |> Bind.toNav
         ]         

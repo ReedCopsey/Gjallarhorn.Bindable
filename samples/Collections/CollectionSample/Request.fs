@@ -15,7 +15,7 @@ type RequestStatus =
     | Accepted
     | Rejected
 
-type Request = 
+and Request = 
         { 
             Id : Guid // What is our unique identifier
             Created : DateTime 
@@ -33,17 +33,22 @@ module Request =
     | Reject
 
     let create guid hours = { Id = guid ; Created = DateTime.UtcNow ; ExpectedHours = hours ; Status = Unknown ; StatusUpdated = None }
+    let defRequest = create (Guid.NewGuid()) 0.0
 
     // We start with a "ViewModel" for cleaner bindings and XAML support
     type RequestViewModel =
         {
+            // The properties we want to display
             Id : Guid
             Hours : float
             Status : RequestStatus
+            // Our commands
             Accept : VmCmd<RequestMsg>
             Reject : VmCmd<RequestMsg>
+            // Bind ourself, which allows the collection parent to use SelectedItem.Self to get the model from XAML
+            Self : Request
         }
-    let reqd = { Id = Guid.NewGuid() ; Hours = 45.32 ; Status = Accepted ; Accept = Vm.cmd Accept ; Reject = Vm.cmd Reject }
+    let reqd = { Id = Guid.NewGuid() ; Hours = 45.32 ; Status = Accepted ; Accept = Vm.cmd Accept ; Reject = Vm.cmd Reject ; Self = defRequest }
     
     // Create a component for a single request
     let requestComponent =
@@ -60,4 +65,5 @@ module Request =
             <@ reqd.Status @>   |> Bind.oneWay (fun r -> r.Status)
             <@ reqd.Accept @>   |> Bind.cmd 
             <@ reqd.Reject @>   |> Bind.cmd 
+            <@ reqd.Self @>     |> Bind.self
         ] 

@@ -40,8 +40,17 @@ let main _ =
             |> List.iter printItem
         | _ -> ()
 
+    let nav (request : Nav) =
+        match request with
+        | DisplayRequest r ->
+            let d = RequestDialog()
+            d.DataContext <- r
+            d.Owner <- System.Windows.Application.Current.MainWindow
+            d.ShowDialog() |> ignore
+        None
+
     // Run using the WPF wrappers around the basic application framework    
-    let app = Program.applicationCore
+    let app = Program.applicationCore nav
     app.AddLogger logger
 
     Framework.RunApplication (App, MainWin, app)

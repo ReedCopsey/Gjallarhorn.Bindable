@@ -62,12 +62,21 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <TextBlock Grid.Row="0" Grid.Column="0" Margin="5">Approve or Reject the Following:</TextBlock>
 
-        <ListView Grid.Row="1" Grid.Column="1" Margin="5" 
+        <ListView x:Name="listView" Grid.Row="1" Grid.Column="1" Margin="5" 
                   ItemsSource="{Binding Requests, Mode=OneWay}"
                   ItemContainerStyle="{StaticResource ContainerStyle}" />
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="1" Margin="5" Command="{Binding Edit}" CommandParameter="{Binding SelectedItem.Self, ElementName=listView}">Edit</Button>
+        </Grid>
     </Grid>
 </UserControl>

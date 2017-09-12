@@ -37,6 +37,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Request.fs" />
+    <Compile Include="Nav.fs" />
     <Compile Include="Requests.fs" />
     <Compile Include="CollectionApplication.fs" />
     <Compile Include="Program.fs" />

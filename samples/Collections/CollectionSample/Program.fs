@@ -51,7 +51,7 @@ module Program =
     
 
     // Build our core application
-    let applicationCore =
+    let applicationCore nav =
         // These are external "executors" which allows us to start and control a process which pumps messages
         let adding = new Executor<_>(startUpdating)
         let processing = new Executor<_>(startProcessing)
@@ -63,7 +63,7 @@ module Program =
         adding.Start()
         processing.Start()        
 
-        Framework.application (CollectionApplication.buildInitialModel adding processing) (fun () -> None) (CollectionApplication.update updates) CollectionApplication.appComponent
+        Framework.application (CollectionApplication.buildInitialModel adding processing) nav (CollectionApplication.update updates) CollectionApplication.appComponent
         |> Framework.withDispatcher updates
         |> Framework.withDispatcher adding 
         |> Framework.withDispatcher processing

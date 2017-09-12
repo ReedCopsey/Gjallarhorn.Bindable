@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
     <Resource Include="App.xaml" />
+    <Resource Include="RequestDialog.xaml" />
     <Resource Include="RequestView.xaml" />
     <Resource Include="MainWindow.xaml" />
     <Compile Include="Converters.fs" />
