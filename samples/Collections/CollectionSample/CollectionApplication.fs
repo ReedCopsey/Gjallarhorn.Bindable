@@ -57,7 +57,7 @@ module CollectionApplication =
     type extVM = { AddingRequests : bool ; Processing : bool }
     let  extD = { AddingRequests = false ; Processing = false }
     let externalComponent =                
-        Component.fromBindings<Model,_> [
+        Component.fromBindings<Model,_,_> [
             <@ extD.AddingRequests @> |> Bind.twoWay (fun m -> m.AddingRequests.Executing.Value) AddRequests
             <@ extD.Processing     @> |> Bind.twoWay (fun m -> m.Processing.Executing.Value)     ProcessRequests
         ]         
@@ -72,7 +72,7 @@ module CollectionApplication =
 
     /// Compose our components above into one application level component
     let appComponent =
-        Component.fromBindings<Model,_> [
+        Component.fromBindings<Model,_,_> [
             <@ appd.Requests @> |> Bind.comp (fun m -> m.Requests) Requests.requestsComponent (fst >> Update)
             <@ appd.Updates @>  |> Bind.comp id externalComponent fst
         ] 

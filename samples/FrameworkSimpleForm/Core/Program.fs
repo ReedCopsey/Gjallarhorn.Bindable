@@ -24,13 +24,19 @@ module Program =
     // We define a union type for each possible message
     type Msg = 
         | FirstName of string
-        | LastName of string
+        | LastName of string        
+        | Clear
+
+    // Union type of navigation operations
+    type Navigation =
+        | Confirm of Model
 
     // Create a function that updates the model given a message
     let update msg (model : Model) =
         match msg with
         | FirstName f -> { model with FirstName = f }
-        | LastName l -> { model with LastName = l }
+        | LastName l -> { model with LastName = l }        
+        | Clear -> Model.Default
 
     // Our "ViewModel". This is optional, but allows you to avoid using "magic strings", as well as enables design time XAML in C# projects
     [<CLIMutable>] // CLIMutable is required by XAML tooling if we have 2-way bindings
@@ -51,11 +57,11 @@ module Program =
         let validLast = notNullOrWhitespace >> notEqual "Copsey" 
         let validFull = notNullOrWhitespace >> fixErrorsWithMessage "Please enter a valid name"
 
-        Component.fromBindings<Model,Msg> [
+        Component.fromBindings<Model,_,Msg> [
             <@ d.FirstName @>  |> Bind.twoWayValidated (fun m -> m.FirstName) notNullOrWhitespace FirstName
             <@ d.LastName @>   |> Bind.twoWayValidated (fun m -> m.LastName) validLast LastName
             <@ d.FullName @>   |> Bind.oneWayValidated (fun m -> m.FirstName + " " + m.LastName) validFull
         ]   
 
     // ----------------------------------   Framework  -----------------------------------     
-    let applicationCore = Framework.application Model.Default update bindToSource
+    let applicationCore = Framework.application Model.Default (fun _ -> None) update bindToSource

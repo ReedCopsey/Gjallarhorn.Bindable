@@ -32,7 +32,7 @@ type CollectionChangedObserver(o : INotifyCollectionChanged) =
 [<TestFixture>]
 type CollectionBindingTest() =
     let intComponent subscription =
-        let fn (source : BindingSource) (model : ISignal<int>)  =
+        let fn _ (source : BindingSource) (model : ISignal<int>)  =
             model 
             |> Signal.Subscription.create subscription 
             |> source.AddDisposable
@@ -40,6 +40,7 @@ type CollectionBindingTest() =
         Gjallarhorn.Bindable.Component.fromExplicit fn
 
     let ignoreComp = intComponent ignore
+    let ignoreNav = NavigationDispatcher<unit,unit>(fun () -> None)
 
     [<TestFixtureSetUp>]
     member __.Initialize() =
@@ -49,7 +50,7 @@ type CollectionBindingTest() =
     member __.``BoundCollection raises collection changed`` () =
         let l = Mutable.create [ 1 ; 2 ; 3 ; 4 ]
 
-        use bc = new Bind.Collections.BoundCollection<int, unit, int list>(l, ignoreComp)
+        use bc = new Bind.Collections.BoundCollection<int, unit, unit, int list>(l, ignoreNav, ignoreComp)
 
         let obs = CollectionChangedObserver(bc)    
 
@@ -61,7 +62,7 @@ type CollectionBindingTest() =
     member __.``BoundCollection raises collection changed with remove for single element missing in center`` () =
         let l = Mutable.create [ 1 ; 2 ; 3 ; 4 ]
 
-        use bc = new Bind.Collections.BoundCollection<int, unit, int list>(l, ignoreComp)
+        use bc = new Bind.Collections.BoundCollection<int, unit, unit, int list>(l, ignoreNav, ignoreComp)
 
         let obs = CollectionChangedObserver(bc)    
 
@@ -74,7 +75,7 @@ type CollectionBindingTest() =
     member __.``BoundCollection raises add on cons`` () =
         let l = Mutable.create [ 2 ; 3 ; 4 ]
 
-        use bc = new Bind.Collections.BoundCollection<int, unit, int list>(l, ignoreComp)
+        use bc = new Bind.Collections.BoundCollection<int, unit, unit, int list>(l, ignoreNav, ignoreComp)
 
         let obs = CollectionChangedObserver(bc)    
 
@@ -89,7 +90,7 @@ type CollectionBindingTest() =
     member __.``BoundCollection raises add with correct index on cons`` () =
         let l = Mutable.create [ 2 ; 3 ; 4 ]
 
-        use bc = new Bind.Collections.BoundCollection<int, unit, int list>(l, ignoreComp)
+        use bc = new Bind.Collections.BoundCollection<int, unit, unit, int list>(l, ignoreNav, ignoreComp)
 
         let obs = CollectionChangedObserver(bc)    
 
@@ -106,7 +107,7 @@ type CollectionBindingTest() =
     member __.``BoundCollection raises add with correct indices on cons x 2`` () =
         let l = Mutable.create [ 2 ; 3 ; 4 ]
 
-        use bc = new Bind.Collections.BoundCollection<int, unit, int list>(l, ignoreComp)
+        use bc = new Bind.Collections.BoundCollection<int, unit, unit, int list>(l, ignoreNav, ignoreComp)
 
         let obs = CollectionChangedObserver(bc)    
 
@@ -126,7 +127,7 @@ type CollectionBindingTest() =
     member __.``BoundCollection raises add on append`` () =
         let l = Mutable.create [ 2 ; 3 ; 4 ]
 
-        use bc = new Bind.Collections.BoundCollection<int, unit, int list>(l, ignoreComp)
+        use bc = new Bind.Collections.BoundCollection<int, unit, unit, int list>(l, ignoreNav, ignoreComp)
 
         let obs = CollectionChangedObserver(bc)    
 
@@ -142,7 +143,7 @@ type CollectionBindingTest() =
     member __.``BoundCollection raises adds on multiple appends`` () =
         let l = Mutable.create [ 2 ; 3 ; 4 ]
 
-        use bc = new Bind.Collections.BoundCollection<int, unit, int list>(l, ignoreComp)
+        use bc = new Bind.Collections.BoundCollection<int, unit, unit, int list>(l, ignoreNav, ignoreComp)
 
         let obs = CollectionChangedObserver(bc)    
 
@@ -158,7 +159,7 @@ type CollectionBindingTest() =
     member __.``BoundCollection raises adds on multiple inserts`` () =
         let l = Mutable.create [ 1 ; 4 ; 5 ]
 
-        use bc = new Bind.Collections.BoundCollection<int, unit, int list>(l, ignoreComp)
+        use bc = new Bind.Collections.BoundCollection<int, unit, unit, int list>(l, ignoreNav, ignoreComp)
 
         let obs = CollectionChangedObserver(bc)    
         
@@ -176,7 +177,7 @@ type CollectionBindingTest() =
         let l = Mutable.create [ 1 ; 4 ; 5 ]
         let count = ref 0
         let subscription _ = incr count
-        use bc = new Bind.Collections.BoundCollection<int, unit, int list>(l, intComponent subscription)
+        use bc = new Bind.Collections.BoundCollection<int, unit, unit, int list>(l, ignoreNav, intComponent subscription)
 
         let obs = CollectionChangedObserver(bc)    
         
@@ -195,7 +196,7 @@ type CollectionBindingTest() =
         let l = Mutable.create [ 1 ; 3 ; 5 ]
         let count = ref 0
         let subscription _ = incr count
-        use bc = new Bind.Collections.BoundCollection<int, unit, int list>(l, intComponent subscription)
+        use bc = new Bind.Collections.BoundCollection<int, unit, unit, int list>(l, ignoreNav, intComponent subscription)
 
         let obs = CollectionChangedObserver(bc)    
         
@@ -214,7 +215,7 @@ type CollectionBindingTest() =
         let l = Mutable.create [ 1 ; 2 ; 3 ]
         let count = ref 0
         let subscription _ = incr count
-        use bc = new Bind.Collections.BoundCollection<int, unit, int list>(l, intComponent subscription)
+        use bc = new Bind.Collections.BoundCollection<int, unit, unit, int list>(l, ignoreNav, intComponent subscription)
 
         let obs = CollectionChangedObserver(bc)    
         
@@ -233,7 +234,7 @@ type CollectionBindingTest() =
         let l = Mutable.create [ 1 ; 2 ; 3 ]
         let count = ref 0
         let subscription _ = incr count
-        use bc = new Bind.Collections.BoundCollection<int, unit, int list>(l, intComponent subscription)
+        use bc = new Bind.Collections.BoundCollection<int, unit, unit, int list>(l, ignoreNav, intComponent subscription)
 
         let obs = CollectionChangedObserver(bc)    
         
@@ -252,7 +253,7 @@ type CollectionBindingTest() =
         let l = Mutable.create [ 1 ; 2 ; 3 ]
         let count = ref 0
         let subscription _ = incr count
-        use bc = new Bind.Collections.BoundCollection<int, unit, int list>(l, intComponent subscription)
+        use bc = new Bind.Collections.BoundCollection<int, unit, unit, int list>(l, ignoreNav, intComponent subscription)
 
         let obs = CollectionChangedObserver(bc)    
         
@@ -271,7 +272,7 @@ type CollectionBindingTest() =
         let l = Mutable.create [ 1 ; 2 ; 3 ; 4 ; 5]
         let count = ref 0
         let subscription _ = incr count
-        use bc = new Bind.Collections.BoundCollection<int, unit, int list>(l, intComponent subscription)
+        use bc = new Bind.Collections.BoundCollection<int, unit, unit, int list>(l, ignoreNav, intComponent subscription)
 
         let obs = CollectionChangedObserver(bc)    
         
@@ -290,7 +291,7 @@ type CollectionBindingTest() =
         let l = Mutable.create [ 1 .. 100 ]
         let count = ref 0
         let subscription _ = incr count
-        use bc = new Bind.Collections.BoundCollection<int, unit, int list>(l, intComponent subscription)
+        use bc = new Bind.Collections.BoundCollection<int, unit, unit, int list>(l, ignoreNav, intComponent subscription)
 
         let obs = CollectionChangedObserver(bc)    
         
@@ -311,7 +312,7 @@ type CollectionBindingTest() =
         let l = Mutable.create [ 1 ; 2 ; 3 ; 4 ]
         let count = ref 0
         let subscription _ = incr count
-        use bc = new Bind.Collections.BoundCollection<int, unit, int list>(l, intComponent subscription)
+        use bc = new Bind.Collections.BoundCollection<int, unit, unit, int list>(l, ignoreNav, intComponent subscription)
 
         let obs = CollectionChangedObserver(bc)    
         
@@ -330,7 +331,7 @@ type CollectionBindingTest() =
         let l = Mutable.create [ 1 ; 2 ; 3 ; 4 ]
         let count = ref 0
         let subscription _ = incr count
-        use bc = new Bind.Collections.BoundCollection<int, unit, int list>(l, intComponent subscription)
+        use bc = new Bind.Collections.BoundCollection<int, unit, unit, int list>(l, ignoreNav, intComponent subscription)
 
         let obs = CollectionChangedObserver(bc)    
         

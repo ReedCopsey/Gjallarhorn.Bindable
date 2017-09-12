@@ -131,12 +131,12 @@ type BindingSource() as self =
     abstract CreateObservableBindingSource<'a> : unit -> ObservableBindingSource<'a>
 
     /// Track a component in the view, given a signal representing the model and a name for binding
-    member this.TrackComponent<'a,'b> (name, comp : Component<'a,'b>, model : ISignal<'a>) = 
+    member this.TrackComponent<'a,'nav,'b> (name, nav, comp : Component<'a,'nav,'b>, model : ISignal<'a>) = 
         let source = this.CreateObservableBindingSource<'b>()
         this.TrackObservable (name, model)
         this.AddReadOnlyProperty(name, fun _ -> source)
         
-        let obs = comp.Install (source :> BindingSource) model
+        let obs = comp.Install nav (source :> BindingSource) model
         source.OutputObservables(obs)
 
         source :> IObservable<_>
@@ -216,19 +216,19 @@ and [<AbstractClass>] ObservableBindingSource<'Message>() =
         member __.Subscribe obs = output.Publish.Subscribe obs
 
 /// A component takes a BindingSource and a Signal for a model and returns a list of observable messages
-and Component<'Model,'Message> internal (bindingFunction) =        
+and Component<'Model,'Nav,'Message> internal (bindingFunction) =        
     /// The actual function which performs the operation of installing the component to a binding source
-    member __.Install (source : BindingSource) (model : ISignal<'Model>) : IObservable<'Message> list = bindingFunction source model
+    member __.Install (navigation : NavigationDispatcher<'Nav,'Message>) (source : BindingSource) (model : ISignal<'Model>)  : IObservable<'Message> list = bindingFunction navigation source model
 
 /// Routines for constructing and working with Components
 module Component =
     /// Create a component from a "new API" style of binding list
-    let fromBindings<'Model,'Message> (bindings : (BindingSource -> ISignal<'Model> -> IObservable<'Message> option) list) =
-        let fn (source : BindingSource) (model : ISignal<'Model>) =
+    let fromBindings<'Model,'Nav,'Message> (bindings : (NavigationDispatcher<'Nav,'Message> -> BindingSource -> ISignal<'Model> -> IObservable<'Message> option) list) =
+        let fn (nav : NavigationDispatcher<'Nav,'Message>) (source : BindingSource) (model : ISignal<'Model>) =
             bindings
-            |> List.choose (fun v -> v source model)
-        Component<'Model,'Message>(fn)
+            |> List.choose (fun v -> v nav source model)
+        Component<'Model,'Nav,'Message>(fn)
 
     /// Create a component from explicit binding generators
-    let fromExplicit (bindings : BindingSource -> ISignal<'Model> -> IObservable<'Message> list) =
-        Component<'Model,'Message>(bindings)
+    let fromExplicit (bindings : NavigationDispatcher<'Nav,'Message> -> BindingSource -> ISignal<'Model> -> IObservable<'Message> list) =
+        Component<'Model,'Nav,'Message>(bindings)

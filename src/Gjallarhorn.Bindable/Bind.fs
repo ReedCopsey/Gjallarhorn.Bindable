@@ -124,8 +124,8 @@ module Bind =
             source.ConstantToView (value, name)
 
         /// Bind a component to the given name
-        let componentOneWay<'TModel, 'TMessage> (source : BindingSource) name (comp : Component<'TModel,'TMessage>) (signal : ISignal<'TModel>) =
-            source.TrackComponent(name, comp, signal)
+        let componentOneWay<'TModel, 'TNav, 'TMessage> (source : BindingSource) name nav (comp : Component<'TModel,'TNav,'TMessage>) (signal : ISignal<'TModel>) =
+            source.TrackComponent(name, nav, comp, signal)
 
         /// Creates an ICommand (one way property) to a binding source by name
         let createCommand name (source : BindingSource) =
@@ -192,7 +192,7 @@ module Bind =
             | Remove of index:int * orig:ObservableBindingSource<'Message>
             | Move of oldIndex:int * newIndex:int * orig:ObservableBindingSource<'Message>
 
-        type internal BoundCollection<'Model,'Message,'Coll when 'Model : equality and 'Coll :> System.Collections.Generic.IEnumerable<'Model>> (collection : ISignal<'Coll>, comp : Component<'Model,'Message>) as self =
+        type internal BoundCollection<'Model,'Nav,'Message,'Coll when 'Model : equality and 'Coll :> System.Collections.Generic.IEnumerable<'Model>> (collection : ISignal<'Coll>, nav, comp : Component<'Model,'Nav,'Message>) as self =
             [<Literal>] 
             let maxChangesBeforeReset = 5
 
@@ -231,7 +231,7 @@ module Bind =
             let createEntry (m : 'Model) =
                 let bs = createObservableSource<'Message> ()
                 let mm = Mutable.create m
-                comp.Install bs mm
+                comp.Install nav bs mm
                 |> bs.OutputObservables
                 let s = bs |> Observable.subscribe (fun msg -> outputMessage msg mm.Value)
                 (mm, bs, s)
@@ -446,8 +446,8 @@ module Bind =
                     sub.Dispose()
 
         /// Add a collection bound to the view
-        let oneWay (source : BindingSource) name (signal : ISignal<'Coll>) (comp : Component<'Model,'Message>) =
-            let cb = new BoundCollection<_,_,_>(signal, comp)
+        let oneWay (source : BindingSource) name nav (signal : ISignal<'Coll>) (comp : Component<'Model,'Nav,'Message>) =
+            let cb = new BoundCollection<_,_,_,_>(signal, nav, comp)
             source.ConstantToView (cb, name)
             source.AddDisposable cb
             cb :> IObservable<_>
@@ -456,22 +456,22 @@ module Bind =
     // Standard API for binding from here down
     
     /// Add a watched signal (one way property) to a binding source by name
-    let oneWay<'Model, 'Prop, 'Msg> (getter : 'Model -> 'Prop) (name : Expr<'Prop>) : BindingSource -> ISignal<'Model> -> IObservable<'Msg> option =
-        fun (source : BindingSource) (signal : ISignal<'Model>) ->
+    let oneWay<'Model, 'Nav, 'Prop, 'Msg> (getter : 'Model -> 'Prop) (name : Expr<'Prop>) : NavigationDispatcher<'Nav,'Msg> -> BindingSource -> ISignal<'Model> -> IObservable<'Msg> option =
+        fun nav (source : BindingSource) (signal : ISignal<'Model>) ->
             let mapped = signal |> Signal.map getter
             source.TrackInput (getPropertyNameFromExpression name, IO.Report.create mapped)
             None
 
     /// Add a watched signal (one way validated property) to a binding source by name
-    let oneWayValidated<'Model, 'Prop, 'Msg> (getter : 'Model -> 'Prop) validation (name : Expr<'Prop>) : BindingSource -> ISignal<'Model> -> IObservable<'Msg> option =
-        fun (source : BindingSource) (signal : ISignal<'Model>) ->
+    let oneWayValidated<'Model, 'Nav, 'Prop, 'Msg> (getter : 'Model -> 'Prop) validation (name : Expr<'Prop>) : NavigationDispatcher<'Nav,'Msg> -> BindingSource -> ISignal<'Model> -> IObservable<'Msg> option =
+        fun nav (source : BindingSource) (signal : ISignal<'Model>) ->
             let mapped = signal |> Signal.map getter
             source.TrackInput (getPropertyNameFromExpression name, IO.Report.validated validation mapped)      
             None
 
     /// Add a two way property to a binding source by name
-    let twoWay<'Model, 'Prop, 'Msg> (getter : 'Model -> 'Prop) (setter : 'Prop -> 'Msg) (name : Expr<'Prop>) : BindingSource -> ISignal<'Model> -> IObservable<'Msg> option =
-        fun (source : BindingSource) (signal : ISignal<'Model>) ->
+    let twoWay<'Model, 'Nav, 'Prop, 'Msg> (getter : 'Model -> 'Prop) (setter : 'Prop -> 'Msg) (name : Expr<'Prop>) : NavigationDispatcher<'Nav,'Msg> -> BindingSource -> ISignal<'Model> -> IObservable<'Msg> option =
+        fun nav (source : BindingSource) (signal : ISignal<'Model>) ->
             let name = getPropertyNameFromExpression name
             let mapped = signal |> Signal.map getter
             let output = Explicit.twoWay<'Prop> source name mapped
@@ -480,8 +480,8 @@ module Bind =
             |> Some
 
     /// Add a two way property to a binding source by name
-    let twoWayValidated<'Model, 'Prop, 'Msg> (getter : 'Model -> 'Prop) (validation : Validation<'Prop,'Prop>) (setter : 'Prop -> 'Msg) (name : Expr<'Prop>) : BindingSource -> ISignal<'Model> -> IObservable<'Msg> option =
-        fun (source : BindingSource) (signal : ISignal<'Model>) ->
+    let twoWayValidated<'Model, 'Nav, 'Prop, 'Msg> (getter : 'Model -> 'Prop) (validation : Validation<'Prop,'Prop>) (setter : 'Prop -> 'Msg) (name : Expr<'Prop>) : NavigationDispatcher<'Nav,'Msg> -> BindingSource -> ISignal<'Model> -> IObservable<'Msg> option =
+        fun nav (source : BindingSource) (signal : ISignal<'Model>) ->
             let name = getPropertyNameFromExpression name
             let mapped = signal |> Signal.map getter
             let validated = Explicit.twoWayValidated<'Prop,'Prop> source name validation mapped
@@ -490,8 +490,8 @@ module Bind =
             |> Some
 
     /// Creates an ICommand (one way property) to a binding source by name which outputs a specific message
-    let cmd<'Model,'Msg> (name : Expr<VmCmd<'Msg>>) : BindingSource -> ISignal<'Model> -> IObservable<'Msg> option =
-        fun (source : BindingSource) (_signal : ISignal<'Model>) ->
+    let cmd<'Model, 'Nav, 'Msg> (name : Expr<VmCmd<'Msg>>) : NavigationDispatcher<'Nav,'Msg> -> BindingSource -> ISignal<'Model> -> IObservable<'Msg> option =
+        fun nav (source : BindingSource) (_signal : ISignal<'Model>) ->
             let o, pi = getPropertyFromExpression name
             match o.Value with
             | PropertyGet(_,v,_) ->
@@ -501,8 +501,8 @@ module Bind =
             |> Some
 
     /// Creates a parameterized ICommand (one way property) to a binding source by name which outputs a specific message
-    let cmdParam<'Model,'Param,'Msg> (setter : 'Param -> 'Msg) (name : Expr<VmCmd<'Msg>>) : BindingSource -> ISignal<'Model> -> IObservable<'Msg> option =
-        fun (source : BindingSource) (_signal : ISignal<'Model>) ->
+    let cmdParam<'Model,'Nav,'Param,'Msg> (setter : 'Param -> 'Msg) (name : Expr<VmCmd<'Msg>>) : NavigationDispatcher<'Nav,'Msg> -> BindingSource -> ISignal<'Model> -> IObservable<'Msg> option =
+        fun nav (source : BindingSource) (_signal : ISignal<'Model>) ->
             let name = getPropertyNameFromExpression name
             let cmd = Explicit.createCommandParam<'Param> name source
             cmd
@@ -510,8 +510,8 @@ module Bind =
             |> Some
 
     /// Creates an ICommand (one way property) to a binding source by name which outputs a specific message
-    let cmdIf<'Model,'Msg> canExecute (name : Expr<VmCmd<'Msg>>) : BindingSource -> ISignal<'Model> -> IObservable<'Msg> option =
-        fun (source : BindingSource) (signal : ISignal<'Model>) ->
+    let cmdIf<'Model, 'Nav, 'Msg> canExecute (name : Expr<VmCmd<'Msg>>) : NavigationDispatcher<'Nav,'Msg> -> BindingSource -> ISignal<'Model> -> IObservable<'Msg> option =
+        fun nav (source : BindingSource) (signal : ISignal<'Model>) ->
             let o, pi = getPropertyFromExpression name
             match o.Value with
             | PropertyGet(_,v,_) ->
@@ -522,27 +522,27 @@ module Bind =
             |> Some
 
     /// Bind a component as a two-way property, acting as a reducer for messages from the component
-    let comp<'Model,'Msg,'Submodel,'Submsg> (getter : 'Model -> 'Submodel) (componentVm : Component<'Submodel, 'Submsg>) (mapper : 'Submsg * 'Submodel -> 'Msg) (name : Expr<'Submodel>) =
-        fun (source : BindingSource) (signal : ISignal<'Model>) ->
+    let comp<'Model,'Nav,'Msg,'Submodel,'Submsg> (getter : 'Model -> 'Submodel) (componentVm : Component<'Submodel, 'Nav, 'Submsg>) (mapper : 'Submsg * 'Submodel -> 'Msg) (name : Expr<'Submodel>) =
+        fun nav (source : BindingSource) (signal : ISignal<'Model>) ->
             let name = getPropertyNameFromExpression name
             let mapped = signal |> Signal.map getter
-            let output = Explicit.componentOneWay source name componentVm mapped 
+            let output = Explicit.componentOneWay source name nav componentVm mapped 
             output
             |> Observable.map (fun subMsg -> mapper(subMsg, mapped.Value))
             |> Some  
        
     /// Bind a collection as a one-way property, acting as a reducer for messages from the individual components of the collection
-    let collection<'Model,'Msg,'Submodel,'SubmodelCollection,'Submsg when 'Submodel : equality and 'SubmodelCollection :> seq<'Submodel>> (getter : 'Model -> 'SubmodelCollection) (collectionVm : Component<'Submodel, 'Submsg>) (mapper : 'Submsg * 'Submodel -> 'Msg) (name : Expr<'SubmodelCollection>) =
-        fun (source : BindingSource) (signal : ISignal<'Model>) ->
+    let collection<'Model,'Nav,'Msg,'Submodel,'SubmodelCollection,'Submsg when 'Submodel : equality and 'SubmodelCollection :> seq<'Submodel>> (getter : 'Model -> 'SubmodelCollection) (collectionVm : Component<'Submodel, 'Nav, 'Submsg>) (mapper : 'Submsg * 'Submodel -> 'Msg) (name : Expr<'SubmodelCollection>) =
+        fun nav (source : BindingSource) (signal : ISignal<'Model>) ->
             let name = getPropertyNameFromExpression name
             let mapped = signal |> Signal.map getter
-            let output = Collections.oneWay source name mapped collectionVm
+            let output = Collections.oneWay source name nav mapped collectionVm
             output
             |> Observable.map mapper
             |> Some
 
     /// Convert from new API to explicit form
-    let toExplicit<'Model,'Msg> (source : BindingSource) (model : ISignal<'Model>) (list : (BindingSource -> ISignal<'Model> -> IObservable<'Msg> option) list) : IObservable<'Msg> list =
+    let toExplicit<'Model, 'Nav, 'Msg> nav (source : BindingSource) (model : ISignal<'Model>) (list : (NavigationDispatcher<'Nav,'Msg> -> BindingSource -> ISignal<'Model> -> IObservable<'Msg> option) list) : IObservable<'Msg> list =
         list
-        |> List.choose (fun v -> v source model)
+        |> List.choose (fun v -> v nav source model)
 

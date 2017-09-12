@@ -34,7 +34,7 @@ module Platform =
         | false -> SynchronizationContext.Current
 
 module App =                    
-    let toApplicationSpecification render (appCore : Framework.ApplicationCore<'Model, 'Message>) : Framework.ApplicationSpecification<'Model,'Message> = 
+    let toApplicationSpecification render (appCore : Framework.ApplicationCore<'Model, 'Nav, 'Message>) : Framework.ApplicationSpecification<'Model,'Nav,'Message> = 
             { 
                 Core = appCore
                 Render = render 
@@ -44,7 +44,7 @@ module App =
 [<AbstractClass;Sealed>]
 type Framework =
     /// Run an application given an Application generator, Window generator, and other required information
-    static member RunApplication<'Model,'Message,'Application,'Window when 'Application :> Application and 'Window :> Window> (applicationCreation : unit -> 'Application, windowCreation : unit -> 'Window, applicationInfo : Framework.ApplicationCore<'Model,'Message>) =
+    static member RunApplication<'Model,'Nav,'Message,'Application,'Window when 'Application :> Application and 'Window :> Window> (applicationCreation : unit -> 'Application, windowCreation : unit -> 'Window, applicationInfo : Framework.ApplicationCore<'Model,'Nav,'Message>) =
         let render (createCtx : SynchronizationContext -> ObservableBindingSource<'Message>) = 
             let dataContext = createCtx SynchronizationContext.Current
 
@@ -61,7 +61,7 @@ type Framework =
         Gjallarhorn.Bindable.Framework.Framework.runApplication (App.toApplicationSpecification render applicationInfo) 
     
     /// Run an application using Application.Current and a function to construct the main window
-    static member RunApplication<'Model,'Message,'Window when 'Window :> Window> (windowCreation : System.Func<'Window>, applicationInfo : Framework.ApplicationCore<'Model,'Message>) =
+    static member RunApplication<'Model,'Nav,'Message,'Window when 'Window :> Window> (windowCreation : System.Func<'Window>, applicationInfo : Framework.ApplicationCore<'Model,'Nav,'Message>) =
         let render (createCtx : SynchronizationContext -> ObservableBindingSource<'Message>) = 
             let dataContext = createCtx SynchronizationContext.Current
 

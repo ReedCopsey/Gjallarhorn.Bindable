@@ -27,13 +27,13 @@ module Framework =
         do         
             self.MainPage <- page
 
-    type XamarinApplicationInfo<'Model,'Message> = 
+    type XamarinApplicationInfo<'Model,'Nav,'Message> = 
         { 
-            Core : Framework.ApplicationCore<'Model, 'Message>
+            Core : Framework.ApplicationCore<'Model, 'Nav, 'Message>
             View : Page
         }
         with
-            member this.ToApplicationSpecification render : Framework.ApplicationSpecification<'Model,'Message> = 
+            member this.ToApplicationSpecification render : Framework.ApplicationSpecification<'Model,'Nav,'Message> = 
                 { Core = this.Core ; Render = render }            
 
             member this.CreateApp() =

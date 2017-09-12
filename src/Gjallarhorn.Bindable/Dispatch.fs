@@ -13,11 +13,21 @@ type Dispatcher<'Msg> () =
     let evt = Event<'Msg>()
     let trigger: Dispatch<_> = fun msg -> evt.Trigger msg
 
-    // Trigger our message
+    /// Trigger our message to be dispatched
     member __.Dispatch msg = trigger msg
 
     interface IObservable<'Msg> with
         member __.Subscribe (o : IObserver<'Msg>) = evt.Publish.Subscribe o
+
+/// Used by navigation to dispatch messages back to the Application when navigation occurs
+type NavigationDispatcher<'NavRequest,'Msg> (update : 'NavRequest -> 'Msg option) =
+    inherit Dispatcher<'Msg> ()
+
+    /// Call our update method, and trigger a dispatch if needed
+    member this.Update msg =
+        match update msg with
+        | Some out -> this.Dispatch out
+        | None -> ()
 
 /// Manages the execution of an operation that produces messages to be dispatched
 type Executor<'Msg> (startExecuting : Dispatch<'Msg> -> CancellationToken -> unit) = 

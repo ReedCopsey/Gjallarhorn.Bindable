@@ -4,10 +4,11 @@ open Gjallarhorn
 open Gjallarhorn.Bindable
 
 /// The core information required for an application 
-type ApplicationCore<'Model,'Message> (initialModel, update, binding) =             
+type ApplicationCore<'Model,'Nav,'Message> (initialModel, navUpdate, update, binding) =             
 
     let model = Mutable.createAsync initialModel
     let logging = Event<_>()
+    let nav = NavigationDispatcher<'Nav,'Message>(navUpdate)
 
     let rec updateLog msg model =
         let orig = model
@@ -18,8 +19,15 @@ type ApplicationCore<'Model,'Message> (initialModel, update, binding) =
     let upd msg = model.Update (updateLog msg) |> ignore
     let updAsync msg = model.UpdateAsync (updateLog msg) |> Async.Ignore
 
+    let execute (msg : 'Message) = updAsync msg |> Async.Start
+    do
+        nav |> Observable.add execute
+
     /// The current model as a signal
     member __.Model : ISignal<'Model> = model :> _
+
+    /// The navigation dispatcher for pumping messages
+    member __.Navigation = nav
     
     /// Push an update message to the model
     member __.Update (message : 'Message) : unit =  
@@ -30,7 +38,7 @@ type ApplicationCore<'Model,'Message> (initialModel, update, binding) =
         updAsync message
 
     /// The function which binds the model to the view
-    member __.Binding : Component<'Model,'Message> = binding
+    member __.Binding : Component<'Model,'Nav,'Message> = binding
 
     /// An stream that reports all updates as original model, message, new model
     member __.UpdateLog with get () = logging.Publish :> System.IObservable<_>    
@@ -43,10 +51,10 @@ type ApplicationCore<'Model,'Message> (initialModel, update, binding) =
 type CreateDataContext<'Message> = System.Threading.SynchronizationContext -> ObservableBindingSource<'Message>
 
 /// Full specification required to run an application
-type ApplicationSpecification<'Model,'Message> = 
+type ApplicationSpecification<'Model,'Nav,'Message> = 
     { 
         /// The application core
-        Core : ApplicationCore<'Model,'Message>
+        Core : ApplicationCore<'Model,'Nav,'Message>
         /// The platform specific render function
         Render : CreateDataContext<'Message> -> unit
     }
@@ -64,21 +72,21 @@ type ApplicationSpecification<'Model,'Message> =
 module Framework =
         
     /// Build an application given an initial model, update function, and binding function
-    let application model update binding = ApplicationCore(model, update, binding)
+    let application model nav update binding = ApplicationCore(model, nav, update, binding)
 
     /// Add a dispatch operation from an arbitrary observable to pump messages into the application
-    let withDispatcher (dispatcher : System.IObservable<'Msg>) (application : ApplicationCore<_,'Msg>) =
+    let withDispatcher (dispatcher : System.IObservable<'Msg>) (application : ApplicationCore<_,_,'Msg>) =
         let execute msg = application.UpdateAsync msg |> Async.Start
         dispatcher |> Observable.add execute
         application
 
     /// Adds a logger function 
-    let withLogger (logger : 'Model -> 'Message -> 'Model -> unit) (application : ApplicationCore<'Model,'Message>) =
+    let withLogger (logger : 'Model -> 'Message -> 'Model -> unit) (application : ApplicationCore<'Model,'Nav,'Message>) =
         application.AddLogger logger
         application        
     
     /// Run an application given the full ApplicationSpecification            
-    let runApplication<'Model,'Message> (applicationInfo : ApplicationSpecification<'Model,'Message>) =        
+    let runApplication<'Model,'Nav,'Message> (applicationInfo : ApplicationSpecification<'Model,'Nav,'Message>) =        
         // Map our state directly into the view context - this gives us something that can be data bound
         let viewContext (ctx : System.Threading.SynchronizationContext) = 
             let source = Bind.createObservableSource<'Message>()                    
@@ -86,7 +94,7 @@ module Framework =
                 applicationInfo.Model 
                 |> Signal.observeOn ctx
 
-            applicationInfo.Binding.Install (source :> BindingSource) model
+            applicationInfo.Binding.Install applicationInfo.Core.Navigation (source :> BindingSource) model
             |> source.OutputObservables
 
             // Permanently subscribe to the observables, and call our update function

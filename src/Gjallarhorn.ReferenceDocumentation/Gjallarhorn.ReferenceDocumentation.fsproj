@@ -52,6 +52,9 @@
     <Compile Include="..\Gjallarhorn.Bindable\BoundSignal.fs">
       <Link>BoundSignal.fs</Link>
     </Compile>
+    <Compile Include="..\Gjallarhorn.Bindable\Dispatch.fs">
+      <Link>Dispatch.fs</Link>
+    </Compile>
     <Compile Include="..\Gjallarhorn.Bindable\BindingSource.fs">
       <Link>BindingSource.fs</Link>
     </Compile>
