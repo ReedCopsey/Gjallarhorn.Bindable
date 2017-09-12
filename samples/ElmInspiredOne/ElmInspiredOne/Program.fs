@@ -42,7 +42,7 @@ module Program =
     // the view as much as map from our type to bindings
     let bindToSource =           
         // Create our bindings - the VM type defines the name, the Bind call determines the type of data binding
-        Component.fromBindings [
+        Component.create [
             <@ d.Current    @> |> Bind.oneWay (fun m -> m.Value)
             <@ d.Increment  @> |> Bind.cmdIf (fun m -> m.Value < 10)
             <@ d.Decrement  @> |> Bind.cmdIf (fun m -> m.Value > 0)

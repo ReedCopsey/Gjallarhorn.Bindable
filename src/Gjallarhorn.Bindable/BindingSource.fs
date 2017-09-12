@@ -12,6 +12,7 @@ open System.Windows.Input
 
 open Microsoft.FSharp.Quotations
 open Microsoft.FSharp.Quotations.Patterns
+open System.Threading
 
 
 [<AbstractClass>]
@@ -131,7 +132,7 @@ type BindingSource() as self =
     abstract CreateObservableBindingSource<'a> : unit -> ObservableBindingSource<'a>
 
     /// Track a component in the view, given a signal representing the model and a name for binding
-    member this.TrackComponent<'a,'nav,'b> (name, nav, comp : Component<'a,'nav,'b>, model : ISignal<'a>) = 
+    member this.TrackComponent<'a,'nav,'b> (name, nav, comp : IComponent<'a,'nav,'b>, model : ISignal<'a>) = 
         let source = this.CreateObservableBindingSource<'b>()
         this.TrackObservable (name, model)
         this.AddReadOnlyProperty(name, fun _ -> source)
@@ -216,19 +217,51 @@ and [<AbstractClass>] ObservableBindingSource<'Message>() =
         member __.Subscribe obs = output.Publish.Subscribe obs
 
 /// A component takes a BindingSource and a Signal for a model and returns a list of observable messages
-and Component<'Model,'Nav,'Message> internal (bindingFunction) =        
+and IComponent<'Model,'Nav,'Message> =
     /// The actual function which performs the operation of installing the component to a binding source
-    member __.Install (navigation : INavigationDispatcher<'Nav>) (source : BindingSource) (model : ISignal<'Model>)  : IObservable<'Message> list = bindingFunction navigation source model
+    abstract member Install : INavigationDispatcher<'Nav> -> BindingSource -> ISignal<'Model> -> IObservable<'Message> list 
 
 /// Routines for constructing and working with Components
 module Component =
+    /// A component takes a BindingSource and a Signal for a model and returns a list of observable messages
+    type private Component<'Model,'Nav,'Message> internal (bindingFunction) =        
+        interface IComponent<'Model,'Nav,'Message> with
+            member __.Install (navigation : INavigationDispatcher<'Nav>) (source : BindingSource) (model : ISignal<'Model>)  : IObservable<'Message> list = bindingFunction navigation source model
+
+    /// A component takes a BindingSource and a Signal for a model and returns a list of observable messages
+    type private UpdatingComponent<'Model,'Nav,'Message> internal (bindingFunction : INavigationDispatcher<'Nav> -> BindingSource -> ISignal<'Model> -> IObservable<'Message> list, update : 'Message -> 'Model -> 'Model) =
+
+        let bind (navigation : INavigationDispatcher<'Nav>) (source : BindingSource) (model : ISignal<'Model>)  : IObservable<'Model> list =
+            let disp = Dispatcher<'Model>()
+
+            let dispatchMessage (messageObservable : IObservable<'Message>) =
+                messageObservable
+                |> Observable.subscribe(fun msg -> update msg model.Value |> disp.Dispatch)
+                |> source.AddDisposable
+
+            let messages = bindingFunction navigation source model
+            messages
+            |> List.iter dispatchMessage
+            [disp]
+    
+        interface IComponent<'Model,'Nav,'Model> with
+            /// The actual function which performs the operation of installing the component to a binding source
+            member __.Install (navigation : INavigationDispatcher<'Nav>) (source : BindingSource) (model : ISignal<'Model>)  : IObservable<'Model> list = bind navigation source model
+
     /// Create a component from a "new API" style of binding list
-    let fromBindings<'Model,'Nav,'Message> (bindings : (INavigationDispatcher<'Nav> -> BindingSource -> ISignal<'Model> -> IObservable<'Message> option) list) =
+    let create<'Model,'Nav,'Message> (bindings : (INavigationDispatcher<'Nav> -> BindingSource -> ISignal<'Model> -> IObservable<'Message> option) list) =
         let fn (nav : INavigationDispatcher<'Nav>) (source : BindingSource) (model : ISignal<'Model>) =
             bindings
             |> List.choose (fun v -> v nav source model)
-        Component<'Model,'Nav,'Message>(fn)
+        Component<'Model,'Nav,'Message>(fn) :> IComponent<_,_,_>
+
+    /// Create a component from a "new API" style of binding list
+    let selfUpdating<'Model,'Nav,'Message> (update : 'Message -> 'Model -> 'Model) (bindings : (INavigationDispatcher<'Nav> -> BindingSource -> ISignal<'Model> -> IObservable<'Message> option) list) =
+        let fn (nav : INavigationDispatcher<'Nav>) (source : BindingSource) (model : ISignal<'Model>) =
+            bindings
+            |> List.choose (fun v -> v nav source model)
+        UpdatingComponent<'Model,'Nav,'Message>(fn, update) :> IComponent<_,_,_>
 
     /// Create a component from explicit binding generators
     let fromExplicit (bindings : INavigationDispatcher<'Nav> -> BindingSource -> ISignal<'Model> -> IObservable<'Message> list) =
-        Component<'Model,'Nav,'Message>(bindings)
+        Component<'Model,'Nav,'Message>(bindings) :> IComponent<_,_,_>

@@ -8,7 +8,6 @@ open System
 open System.Collections
 open System.Collections.Generic
 open System.Collections.Specialized
-open System.Windows.Input
 
 open Microsoft.FSharp.Quotations
 open Microsoft.FSharp.Quotations.Patterns
@@ -124,7 +123,7 @@ module Bind =
             source.ConstantToView (value, name)
 
         /// Bind a component to the given name
-        let componentOneWay<'TModel, 'TNav, 'TMessage> (source : BindingSource) name nav (comp : Component<'TModel,'TNav,'TMessage>) (signal : ISignal<'TModel>) =
+        let componentOneWay<'TModel, 'TNav, 'TMessage> (source : BindingSource) name nav (comp : IComponent<'TModel,'TNav,'TMessage>) (signal : ISignal<'TModel>) =
             source.TrackComponent(name, nav, comp, signal)
 
         /// Creates an ICommand (one way property) to a binding source by name
@@ -192,7 +191,7 @@ module Bind =
             | Remove of index:int * orig:ObservableBindingSource<'Message>
             | Move of oldIndex:int * newIndex:int * orig:ObservableBindingSource<'Message>
 
-        type internal BoundCollection<'Model,'Nav,'Message,'Coll when 'Model : equality and 'Coll :> System.Collections.Generic.IEnumerable<'Model>> (collection : ISignal<'Coll>, nav, comp : Component<'Model,'Nav,'Message>) as self =
+        type internal BoundCollection<'Model,'Nav,'Message,'Coll when 'Model : equality and 'Coll :> System.Collections.Generic.IEnumerable<'Model>> (collection : ISignal<'Coll>, nav, comp : IComponent<'Model,'Nav,'Message>) as self =
             [<Literal>] 
             let maxChangesBeforeReset = 5
 
@@ -446,7 +445,7 @@ module Bind =
                     sub.Dispose()
 
         /// Add a collection bound to the view
-        let oneWay (source : BindingSource) name nav (signal : ISignal<'Coll>) (comp : Component<'Model,'Nav,'Message>) =
+        let oneWay (source : BindingSource) name nav (signal : ISignal<'Coll>) (comp : IComponent<'Model,'Nav,'Message>) =
             let cb = new BoundCollection<_,_,_,_>(signal, nav, comp)
             source.ConstantToView (cb, name)
             source.AddDisposable cb
@@ -522,7 +521,7 @@ module Bind =
             |> Some
 
     /// Bind a component as a two-way property, acting as a reducer for messages from the component
-    let comp<'Model,'Nav,'Msg,'Submodel,'Submsg> (getter : 'Model -> 'Submodel) (componentVm : Component<'Submodel, 'Nav, 'Submsg>) (mapper : 'Submsg * 'Submodel -> 'Msg) (name : Expr<'Submodel>) =
+    let comp<'Model,'Nav,'Msg,'Submodel,'Submsg> (getter : 'Model -> 'Submodel) (componentVm : IComponent<'Submodel, 'Nav, 'Submsg>) (mapper : 'Submsg * 'Submodel -> 'Msg) (name : Expr<'Submodel>) =
         fun nav (source : BindingSource) (signal : ISignal<'Model>) ->
             let name = getPropertyNameFromExpression name
             let mapped = signal |> Signal.map getter
@@ -532,7 +531,7 @@ module Bind =
             |> Some  
        
     /// Bind a collection as a one-way property, acting as a reducer for messages from the individual components of the collection
-    let collection<'Model,'Nav,'Msg,'Submodel,'SubmodelCollection,'Submsg when 'Submodel : equality and 'SubmodelCollection :> seq<'Submodel>> (getter : 'Model -> 'SubmodelCollection) (collectionVm : Component<'Submodel, 'Nav, 'Submsg>) (mapper : 'Submsg * 'Submodel -> 'Msg) (name : Expr<'SubmodelCollection>) =
+    let collection<'Model,'Nav,'Msg,'Submodel,'SubmodelCollection,'Submsg when 'Submodel : equality and 'SubmodelCollection :> seq<'Submodel>> (getter : 'Model -> 'SubmodelCollection) (collectionVm : IComponent<'Submodel, 'Nav, 'Submsg>) (mapper : 'Submsg * 'Submodel -> 'Msg) (name : Expr<'SubmodelCollection>) =
         fun nav (source : BindingSource) (signal : ISignal<'Model>) ->
             let name = getPropertyNameFromExpression name
             let mapped = signal |> Signal.map getter

@@ -24,17 +24,15 @@ type Request =
             StatusUpdated : DateTime option 
         }    
 
-type RequestMsg =
+module Request =
+
+    // Our messages. This is only used by the component in the application code,
+    // but needs to remain public for our ViewModel/Commanding and design time xaml code
+    type RequestMsg =
     | Accept
     | Reject
 
-module Request =
-
     let create guid hours = { Id = guid ; Created = DateTime.UtcNow ; ExpectedHours = hours ; Status = Unknown ; StatusUpdated = None }
-    let update msg model =
-        match msg with
-        | Accept -> { model with Status = Accepted ; StatusUpdated = Some(DateTime.UtcNow) }
-        | Reject -> { model with Status = Rejected ; StatusUpdated = Some(DateTime.UtcNow) }
 
     // We start with a "ViewModel" for cleaner bindings and XAML support
     type RequestViewModel =
@@ -48,8 +46,15 @@ module Request =
     let reqd = { Id = Guid.NewGuid() ; Hours = 45.32 ; Status = Accepted ; Accept = Vm.cmd Accept ; Reject = Vm.cmd Reject }
     
     // Create a component for a single request
-    let requestComponent  =
-        Component.fromBindings<Request,unit,_> [
+    let requestComponent =
+        // This is a self-updating component, so we can define our update function locally if we choose
+        let update msg model =
+            match msg with
+            | Accept -> { model with Status = Accepted ; StatusUpdated = Some(DateTime.UtcNow) }
+            | Reject -> { model with Status = Rejected ; StatusUpdated = Some(DateTime.UtcNow) }
+
+        // This component works on a model in, and produces a message of updated models out
+        Component.selfUpdating<Request,unit,_> update [
             <@ reqd.Id @>       |> Bind.oneWay (fun r -> r.Id)
             <@ reqd.Hours @>    |> Bind.oneWay (fun r -> r.ExpectedHours)
             <@ reqd.Status @>   |> Bind.oneWay (fun r -> r.Status)

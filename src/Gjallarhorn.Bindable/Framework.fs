@@ -38,7 +38,7 @@ type ApplicationCore<'Model,'Nav,'Message> (initialModel, navUpdate, update, bin
         updAsync message
 
     /// The function which binds the model to the view
-    member __.Binding : Component<'Model,'Nav,'Message> = binding
+    member __.Binding : IComponent<'Model,'Nav,'Message> = binding
 
     /// An stream that reports all updates as original model, message, new model
     member __.UpdateLog with get () = logging.Publish :> System.IObservable<_>    
