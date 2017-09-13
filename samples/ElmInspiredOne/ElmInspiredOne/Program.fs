@@ -49,4 +49,4 @@ module Program =
         ]         
 
     // ----------------------------------   Framework  -----------------------------------     
-    let applicationCore = Framework.application (initModel 5) (fun () -> None) update bindToSource
+    let applicationCore = Framework.application (initModel 5) Nav.empty update bindToSource

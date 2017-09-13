@@ -4,7 +4,7 @@ open Gjallarhorn
 open Gjallarhorn.Bindable
 
 /// The core information required for an application 
-type ApplicationCore<'Model,'Nav,'Message> (initialModel, navUpdate, update, binding) =             
+type ApplicationCore<'Model,'Nav,'Message> (initialModel, navUpdate : 'Nav -> Dispatch<'Message> -> unit, update, binding) =             
 
     let model = Mutable.createAsync initialModel
     let logging = Event<_>()

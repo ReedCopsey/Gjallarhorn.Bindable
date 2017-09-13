@@ -2,6 +2,8 @@
 open System
 
 open CollectionSample
+open Gjallarhorn
+open Gjallarhorn.Bindable
 open Gjallarhorn.Wpf
 
 open Views
@@ -40,14 +42,28 @@ let main _ =
             |> List.iter printItem
         | _ -> ()
 
-    let nav (request : Nav) =
+    let nav (request : Nav) dispatch =
         match request with
         | DisplayRequest r ->
             let d = RequestDialog()
-            d.DataContext <- r
+            let comp = Request.requestComponent |> Component.withMappedNavigation Nav.suppress
+            let bindingSource = Bind.createObservableSource<Request>()
+            let model = Signal.constant r
+            let messages = comp.Install dispatch bindingSource model
+
+            let sendMessage (req : Request)=                
+                let msg = 
+                    Requests.Message.Update (req, r)
+                    |> CollectionApplication.Msg.Update
+                dispatch msg
+
+            messages
+            |> List.iter (Observable.subscribe sendMessage >> bindingSource.AddDisposable)
+
+            d.DataContext <- bindingSource
             d.Owner <- System.Windows.Application.Current.MainWindow
             d.ShowDialog() |> ignore
-        None
+        
 
     // Run using the WPF wrappers around the basic application framework    
     let app = Program.applicationCore nav

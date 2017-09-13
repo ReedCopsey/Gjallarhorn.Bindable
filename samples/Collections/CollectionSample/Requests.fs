@@ -14,7 +14,7 @@ module Requests =
 
     // Update the model based on an UpdateRequest
     let rec update msg current =
-        let excluded r = current |> List.except [| r |]
+        let excluded r = current |> List.filter (fun req -> req.Id <> r.Id)
         match msg with
         | Update(r,o)-> r :: excluded o
         | AddNew(guid, hours) -> Request.create guid hours :: current 

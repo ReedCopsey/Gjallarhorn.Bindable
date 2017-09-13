@@ -25,14 +25,11 @@ type INavigationDispatcher<'NavRequest> =
     abstract member Dispatch : 'NavRequest -> unit
 
 /// Used by navigation to dispatch messages back to the Application when navigation occurs
-type NavigationDispatcher<'NavRequest,'Msg> (update : 'NavRequest -> 'Msg option) =
+type NavigationDispatcher<'NavRequest,'Msg> (update : 'NavRequest -> ('Msg -> unit) -> unit) =
     inherit Dispatcher<'Msg> ()
 
     /// Call our dispatch method, and trigger a message if needed
-    member this.Dispatch msg =
-        match update msg with
-        | Some out -> this.Dispatch out
-        | None -> ()
+    member this.Dispatch msg = update msg this.Dispatch
 
     interface INavigationDispatcher<'NavRequest> with
         member this.Dispatch msg = this.Dispatch msg
@@ -75,7 +72,7 @@ type Executor<'Msg> (startExecuting : Dispatch<'Msg> -> CancellationToken -> uni
 /// Routines for working with Navigation
 module Nav =
     /// A predefined, unit form navigation dispatch
-    let empty () = ()   
+    let empty () _ = ()   
 
     /// Create a mapper to bubble from a child navigation to a parent navigation
     let bubble<'ChildNav,'ParentNav> (mapper : 'ChildNav -> 'ParentNav option) (parent : Dispatch<'ParentNav>) : Dispatch<'ChildNav> =

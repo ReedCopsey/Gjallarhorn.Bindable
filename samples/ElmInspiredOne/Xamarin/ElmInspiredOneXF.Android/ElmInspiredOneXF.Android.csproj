@@ -53,9 +53,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="README_FIRST.txt">
-      <Paket>True</Paket>
-    </Content>
     <Resource Include="Toolkit.Content\ApplicationBar.Add.png">
       <Paket>True</Paket>
     </Resource>
