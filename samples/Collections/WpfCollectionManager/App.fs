@@ -13,6 +13,20 @@ open Views
 // 2) The start the WPF specific version of the framework with the view
 
 
+module WpfNav =
+    let displayDialog<'Model,'Nav,'Message,'Window when 'Window :> System.Windows.Window> (nav : Dispatch<'Nav>) (viewFn : unit -> 'Window) (initial : 'Model) (comp : IComponent<'Model,'Nav,'Message>) (dispatch : Dispatch<'Message>) =
+        let d = viewFn()
+        let bindingSource = Bind.createObservableSource<'Message>()
+        let model = Signal.constant initial
+        let messages = comp.Install nav bindingSource model
+
+        messages
+        |> List.iter (Observable.subscribe dispatch >> bindingSource.AddDisposable)
+
+        d.DataContext <- bindingSource
+        d.Owner <- System.Windows.Application.Current.MainWindow
+        d.ShowDialog() |> ignore
+
 // ----------------------------------  Application  ---------------------------------- 
 [<STAThread>]
 [<EntryPoint>]
@@ -42,27 +56,17 @@ let main _ =
             |> List.iter printItem
         | _ -> ()
 
-    let nav (request : Nav) dispatch =
+    let rec nav (request : Nav) (dispatch : Dispatch<CollectionApplication.Msg>) =
+        let navDispatch r = nav r dispatch
         match request with
-        | DisplayRequest r ->
-            let d = RequestDialog()
-            let comp = Request.requestComponent |> Component.withMappedNavigation Nav.suppress
-            let bindingSource = Bind.createObservableSource<Request>()
-            let model = Signal.constant r
-            let messages = comp.Install dispatch bindingSource model
-
-            let sendMessage (req : Request)=                
+        | DisplayRequest r -> 
+            let comp = Request.requestComponent |> Component.withMappedNavigation Nav.suppress<_,Nav>
+            let dispatchRequest (req : Request) =                
                 let msg = 
                     Requests.Message.Update (req, r)
                     |> CollectionApplication.Msg.Update
                 dispatch msg
-
-            messages
-            |> List.iter (Observable.subscribe sendMessage >> bindingSource.AddDisposable)
-
-            d.DataContext <- bindingSource
-            d.Owner <- System.Windows.Application.Current.MainWindow
-            d.ShowDialog() |> ignore
+            WpfNav.displayDialog navDispatch RequestDialog r comp dispatchRequest 
         
 
     // Run using the WPF wrappers around the basic application framework    

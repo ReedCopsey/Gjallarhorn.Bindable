@@ -276,4 +276,4 @@ module Component =
 
     /// Wrap a component with a navigation dispatch mapper
     let withMappedNavigation<'Model,'NavChild,'NavParent,'Message> mapper childComponent =
-        NavMapComponent<'Model,'NavChild,'NavParent,'Message>(childComponent, mapper) :> IComponent<_,_,_>
+        NavMapComponent<'Model,'NavChild,'NavParent,'Message>(childComponent, mapper) :> IComponent<_,_,_>    
