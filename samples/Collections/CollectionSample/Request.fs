@@ -8,6 +8,7 @@
 // defined itself as a collection
 
 open System
+open Gjallarhorn
 open Gjallarhorn.Bindable
 
 type RequestStatus =
@@ -46,9 +47,9 @@ module Request =
             Accept : VmCmd<RequestMsg>
             Reject : VmCmd<RequestMsg>
             // Bind ourself, which allows the collection parent to use SelectedItem.Self to get the model from XAML
-            Self : Request
+            Self : ISignal<Request>
         }
-    let reqd = { Id = Guid.NewGuid() ; Hours = 45.32 ; Status = Accepted ; Accept = Vm.cmd Accept ; Reject = Vm.cmd Reject ; Self = defRequest }
+    let reqd = { Id = Guid.NewGuid() ; Hours = 45.32 ; Status = Accepted ; Accept = Vm.cmd Accept ; Reject = Vm.cmd Reject ; Self = Signal.constant defRequest }
     
     // Create a component for a single request
     let requestComponent =
