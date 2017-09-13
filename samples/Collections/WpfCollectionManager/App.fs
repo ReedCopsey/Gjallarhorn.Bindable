@@ -60,11 +60,11 @@ let main _ =
         let navDispatch r = nav r dispatch
         match request with
         | DisplayRequest r -> 
-            let comp = Request.requestComponent |> Component.withMappedNavigation Nav.suppress<_,Nav>
+            let comp = 
+                Request.requestComponent 
+                |> Component.withMappedNavigation Nav.suppress<_,Nav>
             let dispatchRequest (req : Request) =                
-                let msg = 
-                    Requests.Message.Update (req, r)
-                    |> CollectionApplication.Msg.Update
+                let msg = (req, r) |> Requests.Message.Update |> CollectionApplication.Msg.Update
                 dispatch msg
             WpfNav.displayDialog navDispatch RequestDialog r comp dispatchRequest 
         
