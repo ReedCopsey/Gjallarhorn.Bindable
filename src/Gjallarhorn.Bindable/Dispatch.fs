@@ -54,14 +54,3 @@ type Executor<'Msg> (startExecuting : Dispatch<'Msg> -> CancellationToken -> uni
                 cts.Dispose()
 
 
-/// Routines for working with Navigation
-module Nav =
-    /// A predefined, unit typed navigation dispatch which does nothing
-    let empty (_ : Dispatch<unit> * Dispatch<_>) _ = ()   
-
-    /// Create a mapper to bubble from a child navigation to a parent navigation
-    let bubble<'ChildNav,'ParentNav> (mapper : 'ChildNav -> 'ParentNav option) (parent : Dispatch<'ParentNav>) : Dispatch<'ChildNav> =
-        mapper >> (Option.iter parent)
-
-    /// Suppress all navigation messages from a child component to the parent
-    let suppress<'ChildNav,'ParentNav> : 'ChildNav -> 'ParentNav option = fun _ -> None

@@ -231,9 +231,16 @@ module Component =
     type private NavMapComponent<'Model,'NavChild,'NavParent,'Message>(child : IComponent<'Model,'NavChild,'Message>, mapper : 'NavChild -> 'NavParent option) =        
         interface IComponent<'Model,'NavParent,'Message> with
             member __.Install (navigation : Dispatch<'NavParent>) (source : BindingSource) (model : ISignal<'Model>)  : IObservable<'Message> list = 
-                let childNav = Nav.bubble mapper navigation
+                let childNav = mapper >> (Option.iter navigation)
                 child.Install childNav source model
-                
+
+    /// Component which bubbles up message requests
+    type private MsgMapComponent<'Model,'Nav,'MessageChild,'MessageParent>(child : IComponent<'Model,'Nav,'MessageChild>, mapper : 'MessageChild -> 'MessageParent) =        
+        interface IComponent<'Model,'Nav,'MessageParent> with
+            member __.Install (navigation : Dispatch<'Nav>) (source : BindingSource) (model : ISignal<'Model>)  : IObservable<'MessageParent> list = 
+                let childMsg = child.Install navigation source model
+                childMsg
+                |> List.map (fun o -> Observable.map mapper o)
 
     /// A component takes a BindingSource and a Signal for a model and returns a list of observable messages
     type private Component<'Model,'Nav,'Message> internal (bindingFunction) =        
@@ -282,6 +289,10 @@ module Component =
     let withMappedNavigation<'Model,'NavChild,'NavParent,'Message> mapper childComponent =
         NavMapComponent<'Model,'NavChild,'NavParent,'Message>(childComponent, mapper) :> IComponent<_,_,_>    
 
+    /// Wrap a component with a message mapper
+    let withMappedMessages<'Model,'Nav,'MessageChild,'MessageParent> mapper childComponent =
+        MsgMapComponent<'Model,'Nav,'MessageChild,'MessageParent>(childComponent, mapper) :> IComponent<_,_,_>    
+
     /// Wrap a component with a suppressed navigation dispatcher
     let suppressNavigation<'Model,'NavChild,'NavParent,'Message> childComponent =
-        NavMapComponent<'Model,'NavChild,'NavParent,'Message>(childComponent, Nav.suppress) :> IComponent<_,_,_>    
+        NavMapComponent<'Model,'NavChild,'NavParent,'Message>(childComponent, fun _ -> None) :> IComponent<_,_,_>    

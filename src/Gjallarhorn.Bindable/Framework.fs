@@ -4,7 +4,7 @@ open Gjallarhorn
 open Gjallarhorn.Bindable
 
 /// The core information required for an application 
-type ApplicationCore<'Model,'Nav,'Message> (initialModel, navUpdate : (Dispatch<'Nav> * Dispatch<'Message> -> 'Nav -> unit), update, binding) =             
+type ApplicationCore<'Model,'Nav,'Message> (initialModel, navUpdate : (ApplicationCore<'Model,'Nav,'Message> -> 'Nav -> unit), update, binding) =             
 
     let model = Mutable.createAsync initialModel
     let logging = Event<_>()
@@ -23,7 +23,7 @@ type ApplicationCore<'Model,'Nav,'Message> (initialModel, navUpdate : (Dispatch<
     member __.Model : ISignal<'Model> = model :> _
 
     /// The navigation dispatcher for pumping messages
-    member this.Navigation (msg : 'Nav) = navUpdate (this.TrampolineNavigationDispatch, execute) msg
+    member this.Navigation (msg : 'Nav) = navUpdate this msg
 
     /// Used to dispatch new navigation requests asynchronously  
     member private this.TrampolineNavigationDispatch (msg : 'Nav) = 
@@ -34,7 +34,7 @@ type ApplicationCore<'Model,'Nav,'Message> (initialModel, navUpdate : (Dispatch<
     
     /// Push an update message to the model
     member __.Update (message : 'Message) : unit =  
-        upd message
+        execute message
 
     /// Push an update message asynchronously to the model
     member __.UpdateAsync (message : 'Message) : Async<unit> =  
@@ -108,4 +108,17 @@ module Framework =
         
         // Render the "application"
         applicationInfo.Render viewContext
-           
+
+namespace Gjallarhorn.Bindable
+
+/// Routines for working with Navigation
+module Nav =
+    /// A predefined, unit typed navigation dispatch which does nothing
+    let empty<'Model,'Nav,'Message> (_ : Framework.ApplicationCore<'Model,'Nav,'Message>) (_ : 'Message) = ()   
+
+    /// Create a mapper to bubble from a child navigation to a parent navigation
+    let bubble<'ChildNav,'ParentNav> (mapper : 'ChildNav -> 'ParentNav option) (parent : Dispatch<'ParentNav>) : Dispatch<'ChildNav> =
+        mapper >> (Option.iter parent)
+
+    /// Suppress all navigation messages from a child component to the parent
+    let suppress<'ChildNav,'ParentNav> : 'ChildNav -> 'ParentNav option = fun _ -> None

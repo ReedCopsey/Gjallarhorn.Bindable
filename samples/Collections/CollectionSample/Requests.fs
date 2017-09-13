@@ -9,15 +9,15 @@ module Requests =
 
     // These are the updates that can be performed on our requests
     type Message = 
-        | Update of newRequest : Request * originalRequest : Request
+        | Update of Request
         | AddNew of Guid * float
         | Remove of Request list
 
     // Update the model based on an UpdateRequest
     let rec update msg current =
-        let excluded r = current |> List.filter (fun req -> req.Id <> r.Id)
+        let excluded guid = current |> List.filter (fun req -> req.Id <> guid)
         match msg with
-        | Update(r,o)-> r :: excluded o
+        | Update r -> r :: excluded r.Id
         | AddNew(guid, hours) -> Request.create guid hours :: current 
         | Remove(toRemove) -> current |> List.except toRemove
 
@@ -38,6 +38,6 @@ module Requests =
         let sorted (requests : Model) = requests |> List.sortBy (fun r -> r.Created)        
                    
         Component.create<Model,CollectionNav,Message> [
-            <@ reqsd.Requests @> |> Bind.collection sorted requestComponentWithNav Update            
+            <@ reqsd.Requests @> |> Bind.collection sorted requestComponentWithNav (fst >> Update)
             <@ reqsd.Edit @> |> Bind.cmdParam CollectionNav.DisplayRequest |> Bind.toNav
         ]         

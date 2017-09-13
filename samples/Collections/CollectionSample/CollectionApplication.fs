@@ -14,7 +14,7 @@ module CollectionApplication =
         with 
             // Helpers we use to convert from "child messages" to this message type
             static member FromRequests (msg : Requests.Message) = msg |> Update
-            static member FromRequest (newRequest : Request, originalRequest : Request) = (newRequest,originalRequest) |> Requests.Message.Update |> Msg.FromRequests
+            static member FromRequest (request : Request) = request |> Requests.Message.Update |> Msg.FromRequests
 
     // Create an application wide model+ msg + update which composes 
     // multiple models
