@@ -34,7 +34,6 @@ module Request =
     | Reject
 
     let create guid hours = { Id = guid ; Created = DateTime.UtcNow ; ExpectedHours = hours ; Status = Unknown ; StatusUpdated = None }
-    let defRequest = create (Guid.NewGuid()) 0.0
 
     // We start with a "ViewModel" for cleaner bindings and XAML support
     type RequestViewModel =
@@ -49,7 +48,8 @@ module Request =
             // Bind ourself, which allows the collection parent to use SelectedItem.Self to get the model from XAML
             Self : ISignal<Request>
         }
-    let reqd = { Id = Guid.NewGuid() ; Hours = 45.32 ; Status = Accepted ; Accept = Vm.cmd Accept ; Reject = Vm.cmd Reject ; Self = Signal.constant defRequest }
+    let designSignal = create (Guid.NewGuid()) 0.0 |> Signal.constant
+    let reqd = { Id = Guid.NewGuid() ; Hours = 45.32 ; Status = Accepted ; Accept = Vm.cmd Accept ; Reject = Vm.cmd Reject ; Self = designSignal }
     
     // Create a component for a single request
     let requestComponent =
