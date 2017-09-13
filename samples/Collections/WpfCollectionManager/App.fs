@@ -7,6 +7,7 @@ open Gjallarhorn.Bindable
 open Gjallarhorn.Wpf
 
 open Views
+open Gjallarhorn.Bindable.Nav
 
 // The WPF Platform specific bits of this application need to do 2 things:
 // 1) They create the view (the actual Window)
@@ -14,14 +15,14 @@ open Views
 
 
 module WpfNav =
-    let displayDialog<'Model,'Nav,'Message,'Window when 'Window :> System.Windows.Window> (nav : Dispatch<'Nav>) (viewFn : unit -> 'Window) (initial : 'Model) (comp : IComponent<'Model,'Nav,'Message>) (dispatch : Dispatch<'Message>) =
+    let displayDialog<'Model,'Nav,'Message,'Window when 'Window :> System.Windows.Window> (viewFn : unit -> 'Window) (model : ISignal<'Model>) (comp : IComponent<'Model,'Nav,'Message>) (dispatchers : Dispatch<'Nav> * Dispatch<'Message>) =
+        let navigate, dispatch = dispatchers
         let d = viewFn()
-        let bindingSource = Bind.createObservableSource<'Message>()
-        let model = Signal.constant initial
-        let messages = comp.Install nav bindingSource model
+        let bindingSource = Bind.createObservableSource<'Message>()        
+        let messages = comp.Install navigate bindingSource model
 
         messages
-        |> List.iter (Observable.subscribe dispatch >> bindingSource.AddDisposable)
+        |> List.iter ((Observable.subscribe dispatch) >> bindingSource.AddDisposable)
 
         d.DataContext <- bindingSource
         d.Owner <- System.Windows.Application.Current.MainWindow
@@ -56,21 +57,20 @@ let main _ =
             |> List.iter printItem
         | _ -> ()
 
-    let rec nav (request : Nav) (dispatch : Dispatch<CollectionApplication.Msg>) =
-        let navDispatch r = nav r dispatch
+    let rec routeNavigation (dispatchers : Dispatch<CollectionNav> * Dispatch<CollectionApplication.Msg>) (request : CollectionNav) =
         match request with
         | DisplayRequest r -> 
-            let comp = 
-                Request.requestComponent 
-                |> Component.withMappedNavigation Nav.suppress<_,Nav>
-            let dispatchRequest (req : Request) =                
-                let msg = (req, r) |> Requests.Message.Update |> CollectionApplication.Msg.Update
-                dispatch msg
-            WpfNav.displayDialog navDispatch RequestDialog r comp dispatchRequest 
+            let bubbleMessageToTop (req : Request) = 
+                (req, r.Value) 
+                |> CollectionApplication.Msg.FromRequest 
+                |> (snd dispatchers)
+            let newDispatchers = fst dispatchers, bubbleMessageToTop
+
+            WpfNav.displayDialog RequestDialog r Requests.requestComponentWithNav newDispatchers
         
 
     // Run using the WPF wrappers around the basic application framework    
-    let app = Program.applicationCore nav
+    let app = Program.applicationCore routeNavigation
     app.AddLogger logger
 
     Framework.RunApplication (App, MainWin, app)

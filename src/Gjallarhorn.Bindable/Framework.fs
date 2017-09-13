@@ -4,11 +4,10 @@ open Gjallarhorn
 open Gjallarhorn.Bindable
 
 /// The core information required for an application 
-type ApplicationCore<'Model,'Nav,'Message> (initialModel, navUpdate : 'Nav -> Dispatch<'Message> -> unit, update, binding) =             
+type ApplicationCore<'Model,'Nav,'Message> (initialModel, navUpdate : (Dispatch<'Nav> * Dispatch<'Message> -> 'Nav -> unit), update, binding) =             
 
     let model = Mutable.createAsync initialModel
     let logging = Event<_>()
-    let nav = NavigationDispatcher<'Nav,'Message>(navUpdate)
 
     let rec updateLog msg model =
         let orig = model
@@ -16,18 +15,22 @@ type ApplicationCore<'Model,'Nav,'Message> (initialModel, navUpdate : 'Nav -> Di
         logging.Trigger (orig, msg, updated)
         updated
 
-    let upd msg = model.Update (updateLog msg) |> ignore
+    let upd msg = model.Update (updateLog msg) |> ignore 
     let updAsync msg = model.UpdateAsync (updateLog msg) |> Async.Ignore
-
-    let execute (msg : 'Message) = updAsync msg |> Async.Start
-    do
-        nav |> Observable.add execute
+    let execute (msg : 'Message) = updAsync msg |> Async.Start // Dispatch<'Message>   
 
     /// The current model as a signal
     member __.Model : ISignal<'Model> = model :> _
 
     /// The navigation dispatcher for pumping messages
-    member __.Navigation (msg : 'Nav) = nav.Dispatch msg
+    member this.Navigation (msg : 'Nav) = navUpdate (this.TrampolineNavigationDispatch, execute) msg
+
+    /// Used to dispatch new navigation requests asynchronously  
+    member private this.TrampolineNavigationDispatch (msg : 'Nav) = 
+        async { 
+            this.Navigation msg
+            return ()
+        } |> Async.Start
     
     /// Push an update message to the model
     member __.Update (message : 'Message) : unit =  

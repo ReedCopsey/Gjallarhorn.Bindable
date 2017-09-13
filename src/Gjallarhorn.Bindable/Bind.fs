@@ -462,8 +462,10 @@ module Bind =
             None
 
     /// Add a watched signal that is our entire model to a binding source by name
-    let self<'Model, 'Nav, 'Msg> (name : Expr<'Model>) : Dispatch<'Nav> -> BindingSource -> ISignal<'Model> -> IObservable<'Msg> option =
-        oneWay id name
+    let self<'Model, 'Nav, 'Msg> (name : Expr<ISignal<'Model>>) : Dispatch<'Nav> -> BindingSource -> ISignal<'Model> -> IObservable<'Msg> option =
+        fun nav (source : BindingSource) (signal : ISignal<'Model>) ->            
+            source.TrackDirect (getPropertyNameFromExpression name, Interaction.Direct(signal))
+            None
 
     /// Add a watched signal (one way validated property) to a binding source by name
     let oneWayValidated<'Model, 'Nav, 'Prop, 'Msg> (getter : 'Model -> 'Prop) validation (name : Expr<'Prop>) : Dispatch<'Nav> -> BindingSource -> ISignal<'Model> -> IObservable<'Msg> option =

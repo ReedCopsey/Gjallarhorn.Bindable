@@ -1,4 +1,4 @@
-group Build
+group Main
     FSharp.Core
     FsXaml.Wpf
     Gjallarhorn

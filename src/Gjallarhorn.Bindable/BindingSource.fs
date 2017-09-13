@@ -107,6 +107,10 @@ type BindingSource() as self =
 
         updateErrors name validator.Value 
 
+    /// Track a Direct binding type
+    member this.TrackDirect (name, input : Direct<'a>) =        
+        this.AddReadOnlyProperty (name, Func<_>(input.GetValue))
+        
     /// Track an Input type
     member this.TrackInput (name, input : Report<'a,'b>) =
         this.TrackObservable (name, input.UpdateStream)
@@ -277,3 +281,7 @@ module Component =
     /// Wrap a component with a navigation dispatch mapper
     let withMappedNavigation<'Model,'NavChild,'NavParent,'Message> mapper childComponent =
         NavMapComponent<'Model,'NavChild,'NavParent,'Message>(childComponent, mapper) :> IComponent<_,_,_>    
+
+    /// Wrap a component with a suppressed navigation dispatcher
+    let suppressNavigation<'Model,'NavChild,'NavParent,'Message> childComponent =
+        NavMapComponent<'Model,'NavChild,'NavParent,'Message>(childComponent, Nav.suppress) :> IComponent<_,_,_>    

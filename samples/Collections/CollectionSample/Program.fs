@@ -51,7 +51,7 @@ module Program =
     
 
     // Build our core application
-    let applicationCore nav =
+    let applicationCore (nav : (Dispatch<CollectionNav> * Dispatch<CollectionApplication.Msg>) -> CollectionNav -> unit) =
         // These are external "executors" which allows us to start and control a process which pumps messages
         let adding = new Executor<_>(startUpdating)
         let processing = new Executor<_>(startProcessing)

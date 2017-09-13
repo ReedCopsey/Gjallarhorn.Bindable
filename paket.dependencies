@@ -1,11 +1,11 @@
-group Build
+group Main
   source https://nuget.org/api/v2
   
   redirects: on
 
   framework: net461, net45, portable-net45+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1
 
-  nuget Gjallarhorn >= 1.0.0
+  nuget Gjallarhorn >= 1.1.0
   nuget SourceLink.Fake
   nuget FAKE
   nuget FSharp.Formatting
@@ -22,7 +22,7 @@ group Test
 
   framework: net461, net45, portable-net45+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1
   
-  nuget Gjallarhorn >= 1.0.0
+  nuget Gjallarhorn >= 1.1.0
   nuget NUnit ~> 2
   nuget NUnit.Runners ~> 2
   nuget FSharp.Core >= 4.0.0.1

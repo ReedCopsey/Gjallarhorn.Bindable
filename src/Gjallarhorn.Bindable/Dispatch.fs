@@ -19,21 +19,6 @@ type Dispatcher<'Msg> () =
     interface IObservable<'Msg> with
         member __.Subscribe (o : IObserver<'Msg>) = evt.Publish.Subscribe o
 
-/// Navigation dispatcher for navigation messages
-type INavigationDispatcher<'NavRequest> =
-    /// Dispatch a navigation message
-    abstract member Dispatch : 'NavRequest -> unit
-
-/// Used by navigation to dispatch messages back to the Application when navigation occurs
-type NavigationDispatcher<'NavRequest,'Msg> (update : 'NavRequest -> ('Msg -> unit) -> unit) =
-    inherit Dispatcher<'Msg> ()
-
-    /// Call our dispatch method, and trigger a message if needed
-    member this.Dispatch msg = update msg this.Dispatch
-
-    interface INavigationDispatcher<'NavRequest> with
-        member this.Dispatch msg = this.Dispatch msg
-
 /// Manages the execution of an operation that produces messages to be dispatched
 type Executor<'Msg> (startExecuting : Dispatch<'Msg> -> CancellationToken -> unit) = 
     let executing = Mutable.create false
@@ -71,8 +56,8 @@ type Executor<'Msg> (startExecuting : Dispatch<'Msg> -> CancellationToken -> uni
 
 /// Routines for working with Navigation
 module Nav =
-    /// A predefined, unit form navigation dispatch
-    let empty () _ = ()   
+    /// A predefined, unit typed navigation dispatch which does nothing
+    let empty (_ : Dispatch<unit> * Dispatch<_>) _ = ()   
 
     /// Create a mapper to bubble from a child navigation to a parent navigation
     let bubble<'ChildNav,'ParentNav> (mapper : 'ChildNav -> 'ParentNav option) (parent : Dispatch<'ParentNav>) : Dispatch<'ChildNav> =
