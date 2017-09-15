@@ -66,5 +66,5 @@ module Request =
             <@ reqd.Status @>   |> Bind.oneWay (fun r -> r.Status)
             <@ reqd.Accept @>   |> Bind.cmd 
             <@ reqd.Reject @>   |> Bind.cmd 
-            <@ reqd.Self @>     |> Bind.self
+            <@ reqd.Self @>     |> Bind.self // We bind ourself as a signal, for use with navigation
         ] 

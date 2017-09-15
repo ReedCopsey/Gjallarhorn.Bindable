@@ -1,6 +1,7 @@
 ﻿namespace CollectionSample
 
 open System
+open Gjallarhorn
 open Gjallarhorn.Bindable
 open Gjallarhorn.Bindable.Framework
 
@@ -18,23 +19,23 @@ module CollectionApplication =
 
     // Create an application wide model+ msg + update which composes 
     // multiple models
-    type Model = { Requests : Requests.Model ; AddingRequests : Executor<Msg> ; Processing : Executor<Msg> }
+    type Model = { Requests : Requests.Model ; AddingRequests : bool ; Processing : bool }
 
-    let buildInitialModel adding processing : Model = 
+    let buildInitialModel : Model = 
         { 
             Requests = [] 
-            AddingRequests = adding
-            Processing = processing
+            AddingRequests = false
+            Processing = false
         }
     
-    let update (dispatch : Dispatcher<Msg>) (msg : Msg) (current : Model) = 
+    let update (adding : Executor<_>) (processing : Executor<_>) (dispatch : Dispatcher<Msg>) (msg : Msg) (current : Model) = 
         match msg with
         | AddRequests b -> 
-            if b then current.AddingRequests.Start() else current.AddingRequests.Stop()
-            current
+            adding.Executing <- b
+            { current with AddingRequests = adding.Executing }
         | ProcessRequests b -> 
-            if b then current.Processing.Start() else current.Processing.Stop()            
-            current
+            processing.Executing <- b
+            { current with Processing = b }            
         | Update u -> { current with Requests = Requests.update u current.Requests }
         | Process timeSpan ->
             let threshold = DateTime.UtcNow - timeSpan
@@ -58,13 +59,18 @@ module CollectionApplication =
     // We split our update operations into a separate, nested "child" object
     // This is completely optional, but allows us, on the binding side, to use separate xaml bound to "Updates" 
     // (see below) to access these properties for toggling on the operations
-    type extVM = { AddingRequests : bool ; Processing : bool }
-    let  extD = { AddingRequests = false ; Processing = false }
-    let externalComponent =                
+    type ProcessVM =
+        {
+            AddingRequests : bool
+            Processing : bool
+        }
+    let procd = { AddingRequests = false ; Processing = false }
+
+    let externalComponent = 
         Component.create<Model,_,_> [
-            <@ extD.AddingRequests @> |> Bind.twoWay (fun m -> m.AddingRequests.Executing.Value) AddRequests
-            <@ extD.Processing     @> |> Bind.twoWay (fun m -> m.Processing.Executing.Value)     ProcessRequests
-        ]         
+            <@ procd.AddingRequests @> |> Bind.twoWay (fun m -> m.AddingRequests) AddRequests
+            <@ procd.Processing @>     |> Bind.twoWay (fun m -> m.Processing)     ProcessRequests
+        ]
 
     // Our main "ViewModel" for creating the bindings
     type AppViewModel =

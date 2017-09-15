@@ -45,6 +45,7 @@
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="DesktopBindingSource.fs" />
     <Compile Include="Wpf.fs" />
+    <Compile Include="Nav.fs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Gjallarhorn.Bindable\Gjallarhorn.Bindable.fsproj">

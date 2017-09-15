@@ -37,7 +37,7 @@ type Executor<'Msg> (startExecuting : Dispatch<'Msg> -> CancellationToken -> uni
     let subscription = executing |> Signal.Subscription.create changeState
 
     /// Used to watch our execution status
-    member __.Executing with get () = executing :> ISignal<_>
+    member __.Executing with get () = executing.Value and set(b) = executing.Value <- b
 
     /// Attempt to start the operation
     member __.Start() = executing.Value <- true

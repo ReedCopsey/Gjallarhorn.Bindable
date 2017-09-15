@@ -47,11 +47,10 @@ module Program =
             return! wf()
         }
 
-        Async.Start(wf(), cancellationToken = token)        
-    
+        Async.Start(wf(), cancellationToken = token)            
 
     // Build our core application
-    let applicationCore (nav : Framework.ApplicationCore<_,_,_> -> CollectionNav -> unit) =
+    let applicationCore nav =
         // These are external "executors" which allows us to start and control a process which pumps messages
         let adding = new Executor<_>(startUpdating)
         let processing = new Executor<_>(startProcessing)
@@ -59,11 +58,11 @@ module Program =
         // This is a dispatcher that lets us pump messages back into the application as needed
         let updates = Dispatcher<CollectionApplication.Msg>()
 
-        // Start these processes - if we don't do this, the toggles will be off by default
-        adding.Start()
-        processing.Start()        
+        // If we wanted to start these processes, we could switch this. As is, the toggles will be off by default
+        //adding.Start()
+        //processing.Start()        
 
-        Framework.application (CollectionApplication.buildInitialModel adding processing) nav (CollectionApplication.update updates) CollectionApplication.appComponent
+        Framework.application (CollectionApplication.buildInitialModel) (CollectionApplication.update adding processing updates) CollectionApplication.appComponent nav
         |> Framework.withDispatcher updates
         |> Framework.withDispatcher adding 
         |> Framework.withDispatcher processing

@@ -64,4 +64,4 @@ module Program =
         ]   
 
     // ----------------------------------   Framework  -----------------------------------     
-    let applicationCore = Framework.application Model.Default Nav.empty update bindToSource
+    let applicationCore = Framework.application Model.Default update bindToSource Nav.empty

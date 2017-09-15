@@ -4,21 +4,26 @@ open System
 open CollectionSample
 open Gjallarhorn
 open Gjallarhorn.Bindable
+open Gjallarhorn.Bindable.Framework
 open Gjallarhorn.Wpf
 
 open Views
 open Gjallarhorn.Bindable.Nav
-open Gjallarhorn.Bindable.Framework
+open System.Threading
+open System.Windows
+open CollectionSample.Requests
 
 // The WPF Platform specific bits of this application need to do 2 things:
 // 1) They create the view (the actual Window)
 // 2) The start the WPF specific version of the framework with the view
 
 
+
+
 module WpfNav =
     open CollectionSample.CollectionApplication
 
-    let displayDialog<'Model,'Submodel,'Nav,'Message,'Window when 'Window :> System.Windows.Window> (viewFn : unit -> 'Window) (model : ISignal<'Submodel>) (comp : IComponent<'Submodel,'Nav,'Message>) (application : ApplicationCore<'Model,'Nav,'Message>) =
+    let displayDialog<'Model,'Submodel,'Nav,'Message,'Window when 'Window :> Window> (viewFn : unit -> 'Window) (model : ISignal<'Submodel>) (comp : IComponent<'Submodel,'Nav,'Message>) (application : ApplicationCore<'Model,'Nav,'Message>) =
         let navigate, dispatch = application.Navigation, application.Update
         let d = viewFn()
         let bindingSource = Bind.createObservableSource<'Message>()        
@@ -28,7 +33,7 @@ module WpfNav =
         |> List.iter ((Observable.subscribe dispatch) >> bindingSource.AddDisposable)
 
         d.DataContext <- bindingSource
-        d.Owner <- System.Windows.Application.Current.MainWindow
+        d.Owner <- Application.Current.MainWindow
         d.ShowDialog() |> ignore
 
 // ----------------------------------  Application  ---------------------------------- 
@@ -56,22 +61,36 @@ let main _ =
             |> List.iter printItem
         | _ -> ()
 
-    let routeNavigation application request =
-        // Map our request "child" component to our app navigation model 
-        // (in this case, by just suppressing child navigation requests),
-        // ss well as to our update model        
-        let requestComponentWrapped = 
-            Request.requestComponent 
-            |> Component.withMappedNavigation Nav.suppress
-            |> Component.withMappedMessages CollectionApplication.Msg.FromRequest
+    //let routeNavigation application request =
+    //    // Map our request "child" component to our app navigation model 
+    //    // (in this case, by just suppressing child navigation requests),
+    //    // ss well as to our update model        
+    //    let requestComponentWrapped = 
+    //        Request.requestComponent 
+    //        |> Component.withMappedNavigation Nav.suppress
+    //        |> Component.withMappedMessages CollectionApplication.Msg.FromRequest
 
+    //    match request with
+    //    | DisplayRequest r -> 
+    //        WpfNav.displayDialog RequestDialog r requestComponentWrapped application        
+
+    let updateNavigation (application : ApplicationCore<_,_,_>) request : UIElement =         
         match request with
+        | Login -> 
+            ProcessControl() :> _
         | DisplayRequest r -> 
-            WpfNav.displayDialog RequestDialog r requestComponentWrapped application        
+            ProcessControl() :> _
+        | StartProcessing (addNew,processElements) -> 
+            application.Update (CollectionApplication.Msg.AddRequests addNew)
+            application.Update (CollectionApplication.Msg.ProcessRequests processElements)
+            ProcessControl() :> _
+
+    let makeWindow () = MainWin()        
+    let navigator = Navigation.singlePage App makeWindow (StartProcessing(true,false)) updateNavigation
 
     // Run using the WPF wrappers around the basic application framework    
-    let app = Program.applicationCore routeNavigation
+    let app = Program.applicationCore navigator.Navigate
     app.AddLogger logger
 
-    Framework.RunApplication (App, MainWin, app)
+    Framework.RunApplication (navigator, app)
     1

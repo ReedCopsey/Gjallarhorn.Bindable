@@ -1,5 +1,9 @@
 ﻿using System.Windows;
 using ElmInspiredOne;
+using Gjallarhorn.Bindable;
+using Gjallarhorn.Bindable.Framework;
+using Gjallarhorn.Wpf.CSharp;
+using Framework = Gjallarhorn.Wpf.Framework;
 
 namespace WpfElmInspiredOneCSharp
 {
@@ -11,7 +15,7 @@ namespace WpfElmInspiredOneCSharp
     {
         private void App_OnStartup(object sender, StartupEventArgs e)
         {
-            Gjallarhorn.Wpf.Framework.RunApplication(() => new MainWindow(), Program.applicationCore);
+            Framework.RunApplication(Navigation.SingleView<Program.Model, Nav.SimpleNavigation<Program.Msg>, Program.Msg, MainWindow>(() => new MainWindow()), Program.applicationCore);
         }
     }
 }
