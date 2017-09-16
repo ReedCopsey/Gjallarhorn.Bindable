@@ -24,3 +24,9 @@ module internal Utilities =
         | _ -> ""
 
     
+[<AutoOpen>]
+/// Provides helpers to get the name of a property from a quotation
+module NameFromQuotations =
+    /// Get the name of a quotation
+    let nameof (expr : Expr) =
+        getPropertyNameFromExpression expr

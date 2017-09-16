@@ -224,6 +224,7 @@ and [<AbstractClass>] ObservableBindingSource<'Message>() =
 and IComponent<'Model,'Nav,'Message> =
     /// The actual function which performs the operation of installing the component to a binding source
     abstract member Install : Dispatch<'Nav> -> BindingSource -> ISignal<'Model> -> IObservable<'Message> list 
+    abstract member AddSubscription : ('Message -> 'Model -> Async<'Message option>) -> unit
 
 /// Routines for constructing and working with Components
 module Component =
@@ -233,29 +234,83 @@ module Component =
             member __.Install (navigation : Dispatch<'NavParent>) (source : BindingSource) (model : ISignal<'Model>)  : IObservable<'Message> list = 
                 let childNav = mapper >> (Option.iter navigation)
                 child.Install childNav source model
+            member __.AddSubscription (subscription : 'Message -> 'Model -> Async<'Message option>) = 
+                child.AddSubscription subscription
 
     /// Component which bubbles up message requests
     type private MsgMapComponent<'Model,'Nav,'MessageChild,'MessageParent>(child : IComponent<'Model,'Nav,'MessageChild>, mapper : 'MessageChild -> 'MessageParent) =        
+        let mutable subscriptions = [] 
+
         interface IComponent<'Model,'Nav,'MessageParent> with
             member __.Install (navigation : Dispatch<'Nav>) (source : BindingSource) (model : ISignal<'Model>)  : IObservable<'MessageParent> list = 
                 let childMsg = child.Install navigation source model
-                childMsg
-                |> List.map (fun o -> Observable.map mapper o)
+                let obs = 
+                    childMsg
+                    |> List.map (fun o -> Observable.map mapper o)
+
+                let disp = Dispatcher<'MessageParent>()
+
+                let handleMessage msg subscription =
+                    async {
+                        let! result = subscription msg model.Value
+                        match result with
+                        | None -> ()
+                        | Some m -> disp.Dispatch m
+                    } |> Async.Start
+
+                let dispatch msg = subscriptions |> List.iter (handleMessage msg)
+                obs |> List.iter (fun o -> o |> Observable.subscribe dispatch |> source.AddDisposable)
+
+                (disp :> _) :: obs
+
+            member __.AddSubscription (subscription : 'MessageParent -> 'Model -> Async<'MessageParent option>) = 
+                subscriptions <- subscription :: subscriptions
 
     /// A component takes a BindingSource and a Signal for a model and returns a list of observable messages
-    type private Component<'Model,'Nav,'Message> internal (bindingFunction) =        
+    type private Component<'Model,'Nav,'Message> internal (bindingFunction) = 
+        let mutable subscriptions = [] 
         interface IComponent<'Model,'Nav,'Message> with
-            member __.Install (navigation : Dispatch<'Nav>) (source : BindingSource) (model : ISignal<'Model>)  : IObservable<'Message> list = bindingFunction navigation source model
+            member __.Install (navigation : Dispatch<'Nav>) (source : BindingSource) (model : ISignal<'Model>)  : IObservable<'Message> list = 
+                let obs = bindingFunction navigation source model
+                let disp = Dispatcher<'Message>()
+
+                let handleMessage msg subscription =
+                    async {
+                        let! result = subscription msg model.Value
+                        match result with
+                        | None -> ()
+                        | Some m -> disp.Dispatch m
+                    } |> Async.Start
+
+                let dispatch msg = subscriptions |> List.iter (handleMessage msg)
+                obs |> List.iter (fun o -> o |> Observable.subscribe dispatch |> source.AddDisposable)
+
+                (disp :> _) :: obs
+
+            member __.AddSubscription (subscription : 'Message -> 'Model -> Async<'Message option>) =
+                subscriptions <- subscription :: subscriptions
 
     /// A component takes a BindingSource and a Signal for a model and returns a list of observable messages
     type private UpdatingComponent<'Model,'Nav,'Message> internal (bindingFunction : Dispatch<'Nav> -> BindingSource -> ISignal<'Model> -> IObservable<'Message> list, update : 'Message -> 'Model -> 'Model) =
-
+        let mutable subscriptions = [] 
         let bind (navigation : Dispatch<'Nav>) (source : BindingSource) (model : ISignal<'Model>)  : IObservable<'Model> list =
             let disp = Dispatcher<'Model>()
 
+            let handleMessage msg subscription =
+                async {
+                    let! result = subscription msg model.Value
+                    match result with
+                    | None -> ()
+                    | Some m -> disp.Dispatch m
+                } |> Async.Start
+                
+            let dispatchSubscriptions msg = 
+                subscriptions |> List.iter (handleMessage msg)
+                msg
+
             let dispatchMessage (messageObservable : IObservable<'Message>) =
                 messageObservable
-                |> Observable.subscribe(fun msg -> update msg model.Value |> disp.Dispatch)
+                |> Observable.subscribe(fun msg -> update msg model.Value |> dispatchSubscriptions |> disp.Dispatch)
                 |> source.AddDisposable
 
             let messages = bindingFunction navigation source model
@@ -265,7 +320,10 @@ module Component =
     
         interface IComponent<'Model,'Nav,'Model> with
             /// The actual function which performs the operation of installing the component to a binding source
-            member __.Install (navigation : Dispatch<'Nav>) (source : BindingSource) (model : ISignal<'Model>)  : IObservable<'Model> list = bind navigation source model
+            member __.Install (navigation : Dispatch<'Nav>) (source : BindingSource) (model : ISignal<'Model>)  : IObservable<'Model> list = 
+                bind navigation source model
+            member __.AddSubscription (subscription : 'Model -> 'Model -> Async<'Model option>) =
+                subscriptions <- subscription :: subscriptions
 
     /// Create a component from a "new API" style of binding list
     let create<'Model,'Nav,'Message> (bindings : (Dispatch<'Nav> -> BindingSource -> ISignal<'Model> -> IObservable<'Message> option) list) =
@@ -282,7 +340,7 @@ module Component =
         UpdatingComponent<'Model,'Nav,'Message>(fn, update) :> IComponent<_,_,_>
 
     /// Create a component from explicit binding generators
-    let fromExplicit (bindings : Dispatch<'Nav> -> BindingSource -> ISignal<'Model> -> IObservable<'Message> list) =
+    let fromExplicit<'Model,'Nav,'Message> (bindings : Dispatch<'Nav> -> BindingSource -> ISignal<'Model> -> IObservable<'Message> list) =
         Component<'Model,'Nav,'Message>(bindings) :> IComponent<_,_,_>
 
     /// Wrap a component with a navigation dispatch mapper
@@ -295,4 +353,9 @@ module Component =
 
     /// Wrap a component with a suppressed navigation dispatcher
     let suppressNavigation<'Model,'NavChild,'NavParent,'Message> childComponent =
-        NavMapComponent<'Model,'NavChild,'NavParent,'Message>(childComponent, fun _ -> None) :> IComponent<_,_,_>    
+        NavMapComponent<'Model,'NavChild,'NavParent,'Message>(childComponent, fun _ -> None) :> IComponent<_,_,_>  
+
+    /// Add a subscription to a component
+    let withSubscription subscription (comp : IComponent<_,_,_>) =
+        comp.AddSubscription subscription
+        comp

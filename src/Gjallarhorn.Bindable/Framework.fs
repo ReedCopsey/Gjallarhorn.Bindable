@@ -79,11 +79,24 @@ module Framework =
     /// Build an application given an initial model, update function, and binding function
     let application model update binding nav = ApplicationCore(model, nav, update, binding)
 
+    /// Subscription which is called any time the model is changed. A dispatcher can be used separately to pump messages back to the application if needed
+    let withSubscription (subscription : 'Model -> unit) (application : ApplicationCore<'Model,_,'Msg>) =
+        let logFn _old _msg newModel =
+            subscription newModel
+        application.AddLogger logFn
+        application
+
     /// Add a dispatch operation from an arbitrary observable to pump messages into the application
     let withDispatcher (dispatcher : System.IObservable<'Msg>) (application : ApplicationCore<_,_,'Msg>) =
         let execute msg = application.UpdateAsync msg |> Async.Start
         dispatcher |> Observable.add execute
         application
+
+    /// Add an execution tracker to this application
+    let withExecutor (executor : Executor<'Model,'Msg>)  (application : ApplicationCore<'Model,_,'Msg>) =
+        application
+        |> withSubscription executor.Subscription
+        |> withDispatcher executor
 
     /// Adds a logger function 
     let withLogger (logger : 'Model -> 'Message -> 'Model -> unit) (application : ApplicationCore<'Model,'Nav,'Message>) =

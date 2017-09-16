@@ -28,13 +28,11 @@ module CollectionApplication =
             Processing = false
         }
     
-    let update (adding : Executor<_>) (processing : Executor<_>) (dispatch : Dispatcher<Msg>) (msg : Msg) (current : Model) = 
+    let update (dispatch : Dispatcher<Msg>) (msg : Msg) (current : Model) = 
         match msg with
         | AddRequests b -> 
-            adding.Executing <- b
-            { current with AddingRequests = adding.Executing }
+            { current with AddingRequests = b }
         | ProcessRequests b -> 
-            processing.Executing <- b
             { current with Processing = b }            
         | Update u -> { current with Requests = Requests.update u current.Requests }
         | Process timeSpan ->

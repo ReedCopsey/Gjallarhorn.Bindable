@@ -51,18 +51,15 @@ module Program =
 
     // Build our core application
     let applicationCore nav =
-        // These are external "executors" which allows us to start and control a process which pumps messages
-        let adding = new Executor<_>(startUpdating)
-        let processing = new Executor<_>(startProcessing)
 
         // This is a dispatcher that lets us pump messages back into the application as needed
         let updates = Dispatcher<CollectionApplication.Msg>()
 
-        // If we wanted to start these processes, we could switch this. As is, the toggles will be off by default
-        //adding.Start()
-        //processing.Start()        
+        // These are external "executors" which allows us to start and control a process which pumps messages
+        let adding = new Executor<CollectionApplication.Model,_>(startUpdating, fun m -> m.AddingRequests)
+        let processing = new Executor<CollectionApplication.Model,_>(startProcessing, fun m -> m.Processing)
 
-        Framework.application (CollectionApplication.buildInitialModel) (CollectionApplication.update adding processing updates) CollectionApplication.appComponent nav
+        Framework.application (CollectionApplication.buildInitialModel) (CollectionApplication.update updates) CollectionApplication.appComponent nav
         |> Framework.withDispatcher updates
-        |> Framework.withDispatcher adding 
-        |> Framework.withDispatcher processing
+        |> Framework.withExecutor adding
+        |> Framework.withExecutor processing

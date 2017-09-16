@@ -19,9 +19,13 @@ type Dispatcher<'Msg> () =
     interface IObservable<'Msg> with
         member __.Subscribe (o : IObserver<'Msg>) = evt.Publish.Subscribe o
 
-/// Manages the execution of an operation that produces messages to be dispatched
-type Executor<'Msg> (startExecuting : Dispatch<'Msg> -> CancellationToken -> unit) = 
+/// Manages the execution of an operation that produces messages to be dispatched.
+/// Constructed from a startup function and (optionally) a subscription which returns a bool for whether we should execute on model changes
+type Executor<'Model,'Msg> (startExecuting : Dispatch<'Msg> -> CancellationToken -> unit, ?subscription : ('Model -> bool)) = 
     let executing = Mutable.create false
+
+    // Default subscription just keeps us in our current executing state
+    let subscription : 'Model -> bool = defaultArg subscription (fun _ -> executing.Value)
     
     let dispatch = Dispatcher<'Msg>()
 
@@ -34,10 +38,14 @@ type Executor<'Msg> (startExecuting : Dispatch<'Msg> -> CancellationToken -> uni
             cts.Cancel()
             cts <- null
 
-    let subscription = executing |> Signal.Subscription.create changeState
+    let trackExecution = executing |> Signal.Subscription.create changeState
 
     /// Used to watch our execution status
     member __.Executing with get () = executing.Value and set(b) = executing.Value <- b
+
+    /// The subscription used for 
+    member internal __.Subscription m = 
+        executing.Value <- subscription m
 
     /// Attempt to start the operation
     member __.Start() = executing.Value <- true
@@ -49,7 +57,7 @@ type Executor<'Msg> (startExecuting : Dispatch<'Msg> -> CancellationToken -> uni
         member __.Subscribe (o : IObserver<'Msg>) = (dispatch :> IObservable<'Msg>).Subscribe o
     interface IDisposable with
         member __.Dispose() = 
-            subscription.Dispose()
+            trackExecution.Dispose()
             if not(isNull cts) then
                 cts.Dispose()
 

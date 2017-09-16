@@ -55,6 +55,7 @@
     <Resource Include="RequestDialog.xaml" />
     <Resource Include="RequestView.xaml" />
     <Resource Include="MainWindow.xaml" />
+    <Resource Include="LoginControl.xaml" />
     <Resource Include="ProcessControl.xaml" />
     <Compile Include="Converters.fs" />
     <Compile Include="Views.fs" />
