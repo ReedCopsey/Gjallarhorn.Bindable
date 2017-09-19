@@ -70,15 +70,16 @@ type private MessageUIFactory<'Model,'Nav,'Message> (title,message) =
 type private ComponentUIFactory<'Model,'Nav,'Message,'Submodel,'Submsg,'FE when 'FE :> FrameworkElement>
         (
             makeElement : unit -> 'FE,
-            modelMapper : 'Model -> 'Submodel,
+            modelMapper : ISignal<'Model> -> ISignal<'Submodel>,
             comp        : IComponent<'Submodel,'Nav,'Submsg>,
-            msgMapper   : 'Submsg -> 'Message
+            msgMapper   : 'Submsg -> 'Message,
+            makeWindows : bool
         ) =
             inherit UIFactory<'Model,'Nav,'Message>()
 
             override __.Create app = 
                 let ui = makeElement () :> FrameworkElement
-                let signal = app.Model |> Signal.map modelMapper                
+                let signal = modelMapper app.Model
                 let source = Bind.createObservableSource<'Submsg> ()
                 let msgs = comp.Install app.Navigation source signal 
 
@@ -86,7 +87,11 @@ type private ComponentUIFactory<'Model,'Nav,'Message,'Submodel,'Submsg,'FE when 
                 |> List.iter (fun msg -> msg |> Observable.subscribe (fun m -> msgMapper m |> app.UpdateAsync |> Async.Start) |> source.AddDisposable)
 
                 ui.DataContext <- source
-                Content ui
+
+                if makeWindows then
+                    ModalDialog (ui :?> Window)
+                else
+                    Content ui
 
 
 type private SinglePageApplicationNavigator<'Model,'Nav,'Message, 'App, 'Win when 'App :> Application and 'Win :> Window> 
@@ -150,22 +155,48 @@ module Navigation =
 
     let singlePage<'Model,'Nav,'Message, 'App, 'Win when 'App :> Application and 'Win :> Window>  appCtor windowCtor initialNav update = SinglePageApplicationNavigator<'Model,'Nav,'Message, 'App, 'Win> (initialNav,appCtor,windowCtor,update) :> INavigator<_,_,_>
 
-    module Generator =
+    module Page =
         let create (makeElement : unit -> 'UIElement) (comp : IComponent<'Model,'Nav,'Message>) =
-            ComponentUIFactory (makeElement, id, comp, id) :> UIFactory<_,_,_>
+            ComponentUIFactory (makeElement, id, comp, id,false) :> UIFactory<_,_,_>
         let ignore<'Model,'Nav,'Message> () = IgnoreUIFactory<_,_,_> () :> UIFactory<'Model,'Nav,'Message>
         let message<'Model,'Nav,'Message> title message = MessageUIFactory<_,_,_> (title, message) :> UIFactory<'Model,'Nav,'Message>
+
+        let fromComponentS
+                (makeElement : unit -> 'UIElement)
+                (modelMapper : ISignal<'Model> -> ISignal<'Submodel>)
+                (comp        : IComponent<'Submodel,'Nav,'Submsg>)
+                (msgMapper   : 'Submsg -> 'Message) =
+                    ComponentUIFactory (makeElement,modelMapper,comp,msgMapper,false) :> UIFactory<_,_,_>
         let fromComponent 
                 (makeElement : unit -> 'UIElement)
                 (modelMapper : 'Model -> 'Submodel)
                 (comp        : IComponent<'Submodel,'Nav,'Submsg>)
                 (msgMapper   : 'Submsg -> 'Message) =
-                    ComponentUIFactory (makeElement,modelMapper,comp,msgMapper) :> UIFactory<_,_,_>
+                    ComponentUIFactory (makeElement,(fun m -> m |> Signal.map modelMapper),comp,msgMapper,false) :> UIFactory<_,_,_>
+
+        let dialogS<'Model,'Nav,'Message,'Submodel,'Submsg,'Win when 'Win :> Window>
+                (makeElement : unit -> 'Win)
+                (modelMapper : ISignal<'Model> -> ISignal<'Submodel>)
+                (comp        : IComponent<'Submodel,'Nav,'Submsg>)
+                (msgMapper   : 'Submsg -> 'Message) =
+                    ComponentUIFactory (makeElement,modelMapper,comp,msgMapper,true) :> UIFactory<_,_,_>
+
+        let dialog<'Model,'Nav,'Message,'Submodel,'Submsg,'Win when 'Win :> Window>
+                (makeElement : unit -> 'Win)
+                (modelMapper : 'Model -> 'Submodel)
+                (comp        : IComponent<'Submodel,'Nav,'Submsg>)
+                (msgMapper   : 'Submsg -> 'Message) =
+                    ComponentUIFactory (makeElement,(fun m -> m |> Signal.map modelMapper),comp,msgMapper,true) :> UIFactory<_,_,_>
 
         let withCallbacks before after (factory : UIFactory<_,_,_>) =
             factory.SetBeforeNav before
             factory.SetAfterNav after
             factory
+
+
+
+
+
 
 namespace Gjallarhorn.Wpf.CSharp
 

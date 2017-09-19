@@ -12,6 +12,7 @@ open Gjallarhorn.Bindable.Nav
 open System.Threading
 open System.Windows
 open CollectionSample.Requests
+open CollectionApplication
 open System.Collections.ObjectModel
 open System.ComponentModel
 
@@ -58,34 +59,41 @@ let main _ =
 
     let logger _ msg _ =
         match msg with 
-        | CollectionApplication.Msg.Update(Requests.Message.Remove(items)) -> 
+        | Msg.Update(Requests.Message.Remove(items)) -> 
             items
             |> List.iter printItem
         | _ -> ()
 
     // Set our add and process states in the application by pumping messages        
-    let setAddAndProcess (application : ApplicationCore<_,_,_>) add proc =
-        application.Update (CollectionApplication.Msg.AddRequests add)
-        application.Update (CollectionApplication.Msg.ProcessRequests proc)
+    let setProcessing (application : ApplicationCore<_,_,_>) add proc =
+        application.Update (Msg.AddRequests add)
+        application.Update (Msg.ProcessRequests proc)
 
     // SPA Navigation takes application + request, and returns a UIFactory, or None if no navigation should occur
-    let updateNavigation (application : ApplicationCore<CollectionApplication.Model,_,_>) request =         
+    let updateNavigation (application : ApplicationCore<Model,_,_>) request : UIFactory<Model,_,_> =         
+        // Grab our current state
+        let add,proc = application.Model.Value.AddingRequests, application.Model.Value.Processing
+        // Before we display, we want to turn off processing, then restore after
+        let before () = setProcessing application false false 
+        let after () = setProcessing application add proc
+
         match request with
         | Login -> 
-            Navigation.Generator.fromComponent LoginControl (fun (m : CollectionApplication.Model) -> m.Credentials) Credentials.credentialComponent CollectionApplication.Msg.UpdateCredentials
+            Navigation.Page.fromComponent LoginControl (fun m -> m.Credentials) Credentials.credentialComponent Msg.UpdateCredentials
+        | ShowRequestDetails r -> 
+            Navigation.Page.message "Request" (sprintf "Request details: Id %A" r.Id)
+            |> Navigation.Page.withCallbacks before after
         | DisplayRequest r -> 
-            // Grab our current state
-            let add,proc = application.Model.Value.AddingRequests, application.Model.Value.Processing
-            // Before we display, we want to turn off processing, then restore after
-            let before () = setAddAndProcess application false false 
-            let after () = setAddAndProcess application add proc
+            let comp = 
+                Request.requestComponent 
+                |> Component.withMappedNavigation Nav.suppress<_,CollectionNav>
 
-            Navigation.Generator.message "Request" (sprintf "Request details: Id %A" r.Value.Id)
-            |> Navigation.Generator.withCallbacks before after
+            Navigation.Page.dialogS RequestDialog (fun _ -> r) comp (Requests.Message.Update >> Msg.Update)
+            |> Navigation.Page.withCallbacks before after
 
         | StartProcessing (addNew,processElements) -> 
-            setAddAndProcess application addNew processElements
-            Navigation.Generator.create ProcessControl CollectionApplication.appComponent
+            setProcessing application addNew processElements
+            Navigation.Page.create ProcessControl appComponent
     
     let navigator = Navigation.singlePage App MainWin Login updateNavigation
 

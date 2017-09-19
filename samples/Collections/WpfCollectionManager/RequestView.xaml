@@ -5,7 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
         mc:Ignorable="d"         
         xmlns:model="clr-namespace:CollectionSample;assembly=CollectionSample"
-        d:DataContext="{x:Static model:Requests.reqd}">
+        d:DesignWidth="400"
+        d:DesignHeight="200"
+        d:DataContext="{x:Static model:RequestModule.reqd}">
     <UserControl.Resources>
         <DataTemplate x:Key="UnselectedRequestTemplate">
             <Grid>
@@ -79,8 +81,10 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="3*" />
                 <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="1" Margin="5" Command="{Binding Edit}" CommandParameter="{Binding SelectedItem.Self, ElementName=listView}">Edit</Button>
+            <Button Grid.Column="1" Margin="5" Command="{Binding Info}" CommandParameter="{Binding SelectedItem.Self.Value, ElementName=listView}">Info</Button>
+            <Button Grid.Column="2" Margin="5" Command="{Binding Edit}" CommandParameter="{Binding SelectedItem.Self, ElementName=listView}">Edit</Button>
         </Grid>
     </Grid>
 </UserControl>

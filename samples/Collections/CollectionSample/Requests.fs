@@ -25,8 +25,9 @@ module Requests =
         {
             Requests : Model
             Edit : VmCmd<CollectionNav>
+            Info : VmCmd<CollectionNav>
         }
-    let reqsd = { Requests = [] ; Edit = Vm.cmd (CollectionNav.DisplayRequest Request.designSignal) }
+    let reqsd = { Requests = [] ; Edit = Vm.cmd (CollectionNav.DisplayRequest Request.designSignal) ; Info = Vm.cmd (CollectionNav.ShowRequestDetails Request.designSignal.Value)}
     
     // Map our child component to our navigation model (in this case, by just suppressing child navigation requests)
     let requestComponentWithNav = Request.requestComponent |> Component.suppressNavigation
@@ -40,4 +41,5 @@ module Requests =
         Component.create<Model,CollectionNav,Message> [
             <@ reqsd.Requests @> |> Bind.collection sorted requestComponentWithNav (fst >> Update)
             <@ reqsd.Edit @> |> Bind.cmdParam CollectionNav.DisplayRequest |> Bind.toNav
+            <@ reqsd.Info @> |> Bind.cmdParam CollectionNav.ShowRequestDetails |> Bind.toNav
         ]         
