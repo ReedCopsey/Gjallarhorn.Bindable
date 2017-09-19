@@ -1,11 +1,17 @@
 ﻿<UserControl
-		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"		     
-        xmlns:local="clr-namespace:Views;assembly=WpfCollectionManager"
+	    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"		
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        mc:Ignorable="d"         
         xmlns:model="clr-namespace:CollectionSample.Model;assembly=CollectionSample"
+        d:DataContext="{x:Static model:CollectionApplication.appd}"
 		x:Name="win">
-    <Grid>
+    <Grid DataContext="{Binding User}">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
@@ -15,10 +21,14 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <CheckBox Grid.Row="0" Grid.Column="0" Margin="5" IsChecked="{Binding Updates.AddingRequests}">Add new requests</CheckBox>
-        <CheckBox Grid.Row="0" Grid.Column="1" Margin="5" IsChecked="{Binding Updates.Processing}">Process handled requests</CheckBox>
+        <TextBlock Text="{Binding Status}" Grid.ColumnSpan="2" Margin="3" />
 
-        <!-- Include our requests -->
-        <local:RequestView Grid.Row="1" Grid.ColumnSpan="2" DataContext="{Binding Requests}" />
+        <TextBlock Text="User:" Grid.Row="1" Grid.Column="0" Margin="3" />
+        <TextBox Text="{Binding User, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1" Margin="3" />
+
+        <TextBlock Text="Password:" Grid.Row="2" Grid.Column="0" Margin="3" />
+        <TextBox Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="1" Margin="3" FontFamily="ms-appx:///Assets/PassDot.ttf#PassDot" />
+
+        <Button Command="{Binding Submit}" IsDefault="True"  Grid.Row="3" Grid.ColumnSpan="2" Margin="20">Submit</Button>
     </Grid>
 </UserControl>

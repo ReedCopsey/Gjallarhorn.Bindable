@@ -77,7 +77,7 @@ let main _ =
     let updateNavigation (application : ApplicationCore<_,_,_>) request : UIElement =         
         match request with
         | Login -> 
-            ProcessControl() :> _
+            LoginControl() :> _
         | DisplayRequest r -> 
             ProcessControl() :> _
         | StartProcessing (addNew,processElements) -> 
@@ -86,7 +86,7 @@ let main _ =
             ProcessControl() :> _
 
     let makeWindow () = MainWin()        
-    let navigator = Navigation.singlePage App makeWindow (StartProcessing(true,false)) updateNavigation
+    let navigator = Navigation.singlePage App makeWindow (Login) updateNavigation
 
     // Run using the WPF wrappers around the basic application framework    
     let app = Program.applicationCore navigator.Navigate

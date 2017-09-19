@@ -60,11 +60,11 @@ module Request =
             | Reject -> { model with Status = Rejected ; StatusUpdated = Some(DateTime.UtcNow) }
 
         // This component works on a model in, and produces a message of updated models out
-        Component.selfUpdating<Request,unit,_> update [
+        Component.create<Request,unit,_> [
             <@ reqd.Id @>       |> Bind.oneWay (fun r -> r.Id)
             <@ reqd.Hours @>    |> Bind.oneWay (fun r -> r.ExpectedHours)
             <@ reqd.Status @>   |> Bind.oneWay (fun r -> r.Status)
             <@ reqd.Accept @>   |> Bind.cmd 
             <@ reqd.Reject @>   |> Bind.cmd 
             <@ reqd.Self @>     |> Bind.self // We bind ourself as a signal, for use with navigation
-        ] 
+        ] |> Component.toSelfUpdating update  

@@ -22,7 +22,9 @@ module Credentials =
     type Message = 
         | TryAuthenticate of user : string * password : string
         | SetAuthenticationStatus of user : string * status : AuthenticationStatus
-
+    
+    // For illustration, we always fail the first round
+    let private loginAttempts = ref 0
     // Subscription which asynchronously handles authentication attempts
     let handleAuthenticationAttempt (msg : Message) _currentModel =
         match msg with
@@ -30,12 +32,14 @@ module Credentials =
             async {
                 // Synth pushing out to some async "verification" for this...
                 do! Async.Sleep 250
+                
+                incr loginAttempts
 
                 let rnd = System.Random ()
                 let result = 
-                    if rnd.NextDouble () > 0.5 then
+                    if !loginAttempts > 1 && rnd.NextDouble () > 0.5 then
                         SetAuthenticationStatus(user, AuthenticationStatus.Approved)
-                    else
+                    else                        
                         SetAuthenticationStatus(user, AuthenticationStatus.InvalidPassword)
 
                 return Some result
@@ -86,7 +90,7 @@ module Credentials =
             submit |> Observable.map (fun _ -> TryAuthenticate(user.Value, pw.Value))
         ]
 
-
     let credentialComponent = 
         Component.fromExplicit<User,CollectionNav,Message> credentialBindings
         |> Component.withSubscription handleAuthenticationAttempt
+        |> Component.toSelfUpdating update 

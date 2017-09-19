@@ -1,5 +1,8 @@
 ﻿namespace CollectionSample
 
+
+open Credentials
+
 open System
 open Gjallarhorn
 open Gjallarhorn.Bindable
@@ -11,6 +14,7 @@ module CollectionApplication =
         | AddRequests of bool
         | ProcessRequests of bool
         | Update of Requests.Message
+        | UpdateCredentials of User
         | Process of TimeSpan        
         with 
             // Helpers we use to convert from "child messages" to this message type
@@ -19,22 +23,29 @@ module CollectionApplication =
 
     // Create an application wide model+ msg + update which composes 
     // multiple models
-    type Model = { Requests : Requests.Model ; AddingRequests : bool ; Processing : bool }
+    type Model = { Requests : Requests.Model ; AddingRequests : bool ; Processing : bool ; Credentials : User }
 
     let buildInitialModel : Model = 
         { 
             Requests = [] 
             AddingRequests = false
             Processing = false
+            Credentials = { User = "" ; AuthenticationStatus = AuthenticationStatus.Unknown }
         }
     
-    let update (dispatch : Dispatcher<Msg>) (msg : Msg) (current : Model) = 
+    let update (nav : Dispatcher<CollectionNav>) (dispatch : Dispatcher<Msg>) (msg : Msg) (current : Model) = 
         match msg with
-        | AddRequests b -> 
-            { current with AddingRequests = b }
-        | ProcessRequests b -> 
-            { current with Processing = b }            
-        | Update u -> { current with Requests = Requests.update u current.Requests }
+        | AddRequests b ->       { current with AddingRequests = b }
+        | ProcessRequests b ->   { current with Processing = b }            
+        | Update u ->            { current with Requests = Requests.update u current.Requests }
+        | UpdateCredentials c -> 
+            
+            match current.Credentials.AuthenticationStatus, c.AuthenticationStatus with
+            | AuthenticationStatus.Approved, _ -> ()
+            | _, AuthenticationStatus.Approved -> nav.Dispatch <| CollectionNav.StartProcessing(true, true)
+            | _ -> ()
+
+            { current with Credentials = c }
         | Process timeSpan ->
             let threshold = DateTime.UtcNow - timeSpan
 
@@ -60,7 +71,7 @@ module CollectionApplication =
     type ProcessVM =
         {
             AddingRequests : bool
-            Processing : bool
+            Processing : bool            
         }
     let procd = { AddingRequests = false ; Processing = false }
 
@@ -75,13 +86,16 @@ module CollectionApplication =
         {
             Requests : Requests.Model
             Updates : Model
+            User : User
         }
-    let appd = { Requests = [] ; Updates = Unchecked.defaultof<_> }
+    let appd = { Requests = [] ; Updates = Unchecked.defaultof<_> ; User = { User = "" ; AuthenticationStatus = Unknown } }
 
     /// Compose our components above into one application level component
     let appComponent =
         Component.create<Model,_,_> [
             <@ appd.Requests @> |> Bind.comp (fun m -> m.Requests) Requests.requestsComponent (fst >> Update)
             <@ appd.Updates @>  |> Bind.comp id externalComponent fst
+            <@ appd.User @>     |> Bind.comp (fun m -> m.Credentials) Credentials.credentialComponent (fst >> UpdateCredentials)
         ] 
+
 

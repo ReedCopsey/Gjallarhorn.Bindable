@@ -2,12 +2,14 @@
 
 open Gjallarhorn
 open Gjallarhorn.Bindable
+open System.Threading
 
 /// The core information required for an application 
 type ApplicationCore<'Model,'Nav,'Message> (initialModel, navUpdate : (ApplicationCore<'Model,'Nav,'Message> -> 'Nav -> unit), update, binding) =             
 
     let model = Mutable.createAsync initialModel
     let logging = Event<_>()
+    let mutable syncContext = SynchronizationContext.Current
 
     let updateLog msg model =
         let orig = model
@@ -17,14 +19,23 @@ type ApplicationCore<'Model,'Nav,'Message> (initialModel, navUpdate : (Applicati
         updated    
    
     /// The current model as a signal
-    member __.Model : ISignal<'Model> = model :> _
+    member __.Model : ISignal<'Model> = model |> Signal.observeOn syncContext
+
+    /// Install the proper synchronization context for navigation operations
+    member __.InstallContext (ctx : SynchronizationContext) =
+        syncContext <- ctx
 
     /// The navigation dispatcher for pumping messages
-    member this.Navigation (msg : 'Nav) = navUpdate this msg
+    member this.Navigation (msg : 'Nav) = 
+        async {
+            do! Async.SwitchToContext syncContext
+            navUpdate this msg
+        } |> Async.Start
 
     /// Used to dispatch new navigation requests asynchronously  
     member private this.TrampolineNavigationDispatch (msg : 'Nav) = 
         async { 
+            do! Async.SwitchToThreadPool ()
             this.Navigation msg
             return ()
         } |> Async.Start
@@ -92,6 +103,12 @@ module Framework =
         dispatcher |> Observable.add execute
         application
 
+    /// Add a dispatch operation from an arbitrary observable to pump navigation requests into the application
+    let withNavigation (dispatcher : System.IObservable<'Nav>)  (application : ApplicationCore<_,'Nav,_>) =
+        let execute msg = application.Navigation msg
+        dispatcher |> Observable.add execute
+        application
+
     /// Add an execution tracker to this application
     let withExecutor (executor : Executor<'Model,'Msg>)  (application : ApplicationCore<'Model,_,'Msg>) =
         application
@@ -107,10 +124,9 @@ module Framework =
     let runApplication<'Model,'Nav,'Message> (applicationInfo : ApplicationSpecification<'Model,'Nav,'Message>) =        
         // Map our state directly into the view context - this gives us something that can be data bound
         let viewContext (ctx : System.Threading.SynchronizationContext) = 
+            applicationInfo.Core.InstallContext ctx
             let source = Bind.createObservableSource<'Message>()                    
-            let model = 
-                applicationInfo.Model 
-                |> Signal.observeOn ctx
+            let model = applicationInfo.Model                 
 
             applicationInfo.Binding.Install applicationInfo.Core.Navigation (source :> BindingSource) model
             |> source.OutputObservables

@@ -54,12 +54,14 @@ module Program =
 
         // This is a dispatcher that lets us pump messages back into the application as needed
         let updates = Dispatcher<CollectionApplication.Msg>()
+        let navigation = Dispatcher<CollectionNav>()
 
         // These are external "executors" which allows us to start and control a process which pumps messages
         let adding = new Executor<CollectionApplication.Model,_>(startUpdating, fun m -> m.AddingRequests)
         let processing = new Executor<CollectionApplication.Model,_>(startProcessing, fun m -> m.Processing)
 
-        Framework.application (CollectionApplication.buildInitialModel) (CollectionApplication.update updates) CollectionApplication.appComponent nav
+        Framework.application (CollectionApplication.buildInitialModel) (CollectionApplication.update navigation updates) CollectionApplication.appComponent nav
+        |> Framework.withNavigation navigation
         |> Framework.withDispatcher updates
         |> Framework.withExecutor adding
         |> Framework.withExecutor processing

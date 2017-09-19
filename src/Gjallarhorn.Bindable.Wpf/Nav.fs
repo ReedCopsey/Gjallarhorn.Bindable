@@ -5,6 +5,7 @@ open System.Windows
 
 open Gjallarhorn.Bindable
 open Gjallarhorn.Bindable.Framework
+open System
 
 type private SingleView<'Model, 'Nav, 'Message, 'App, 'Win when 'App :> Application and 'Win :> Window> private (appCtor : unit -> 'App, windowCtor : unit -> 'Win, show : bool) =
 
@@ -53,7 +54,17 @@ type private SinglePageApplicationNavigator<'Model,'Nav,'Message, 'App, 'Win whe
 
     member __.Update (application: ApplicationCore<'Model,'Nav,'Message>) (nav : 'Nav) : unit =
         let newContent = update application nav
+
+        let oldContent = mainWindow.Content
         mainWindow.Content <- newContent
+        
+        match oldContent with
+        | null -> ()
+        // TODO: Dispose of old binding source?
+        //| :? UIElement as ui ->
+        //    (ui.DataContext :> IDisposable).Dispose()
+        | _ -> ()
+            
 
     interface INavigator<'Model,'Nav,'Message> with
         member this.Run app createCtx = this.Run app createCtx
