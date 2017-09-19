@@ -7,6 +7,7 @@ open Gjallarhorn
 open Gjallarhorn.Bindable
 open Gjallarhorn.Bindable.Framework
 open System
+open System.AssemblyVersionInformation
 
 type private SingleView<'Model, 'Nav, 'Message, 'App, 'Win when 'App :> Application and 'Win :> Window> private (appCtor : unit -> 'App, windowCtor : unit -> 'Win, show : bool) =
 
@@ -38,11 +39,33 @@ type private SingleView<'Model, 'Nav, 'Message, 'App, 'Win when 'App :> Applicat
         // Our navigation does nothing
         member __.Navigate (_app : ApplicationCore<'Model,'Nav,'Message>) (_nav : 'Nav) = ()
 
+type UIType =
+    | Ignore
+    | Content of FrameworkElement
+    | ModalDialog of Window
+    | Message of title : string * message : string
+
 /// Generates the UI, with proper binding contexts installed
 [<AbstractClass>]
 type UIFactory<'Model,'Nav,'Message> () =    
+    let mutable beforeNav = None
+    let mutable afterNav = None
+
     /// Create the specific UI element given the application
-    abstract member Create : ApplicationCore<'Model,'Nav,'Message> -> FrameworkElement
+    abstract member Create : ApplicationCore<'Model,'Nav,'Message> -> UIType
+
+    member __.BeforeNav = defaultArg beforeNav (fun () -> ())
+    member __.AfterNav =  defaultArg afterNav (fun () -> ())
+    member __.SetBeforeNav (handler : unit -> unit) = beforeNav <- Some handler
+    member __.SetAfterNav  (handler : unit -> unit) = afterNav <- Some handler
+
+type private IgnoreUIFactory<'Model,'Nav,'Message> () =
+    inherit UIFactory<'Model,'Nav,'Message>()
+    override __.Create app = Ignore
+
+type private MessageUIFactory<'Model,'Nav,'Message> (title,message) =
+    inherit UIFactory<'Model,'Nav,'Message>()
+    override __.Create app = Message(title,message)
 
 type private ComponentUIFactory<'Model,'Nav,'Message,'Submodel,'Submsg,'FE when 'FE :> FrameworkElement>
         (
@@ -63,7 +86,7 @@ type private ComponentUIFactory<'Model,'Nav,'Message,'Submodel,'Submsg,'FE when 
                 |> List.iter (fun msg -> msg |> Observable.subscribe (fun m -> msgMapper m |> app.UpdateAsync |> Async.Start) |> source.AddDisposable)
 
                 ui.DataContext <- source
-                ui
+                Content ui
 
 
 type private SinglePageApplicationNavigator<'Model,'Nav,'Message, 'App, 'Win when 'App :> Application and 'Win :> Window> 
@@ -71,7 +94,7 @@ type private SinglePageApplicationNavigator<'Model,'Nav,'Message, 'App, 'Win whe
                     initialNavigationState : 'Nav, 
                     appCtor : unit -> 'App, 
                     windowCtor : unit -> 'Win, 
-                    update : ApplicationCore<'Model,'Nav,'Message> -> 'Nav -> UIFactory<'Model,'Nav,'Message> option
+                    update : ApplicationCore<'Model,'Nav,'Message> -> 'Nav -> UIFactory<'Model,'Nav,'Message>
                 ) =
     let ctx = Platform.install true
 
@@ -88,12 +111,13 @@ type private SinglePageApplicationNavigator<'Model,'Nav,'Message, 'App, 'Win whe
         application.Run mainWindow |> ignore
 
     member __.Update (application: ApplicationCore<'Model,'Nav,'Message>) (nav : 'Nav) : unit =
-        let generator = update application nav
-        match generator with
-        | None -> ()
-        | Some factory ->
-            let newContent = factory.Create application
+        let factory = update application nav
+        let newUI = factory.Create application
 
+        factory.BeforeNav ()
+        match newUI with
+        | Ignore -> ()
+        | Content newContent ->
             let oldContent = mainWindow.Content
             mainWindow.Content <- newContent
         
@@ -106,7 +130,13 @@ type private SinglePageApplicationNavigator<'Model,'Nav,'Message, 'App, 'Win whe
                 | _ -> ()
                 fe.DataContext <- null            
             | _ -> ()
+        | Message (title,message) ->
+            MessageBox.Show(mainWindow,message,title) |> ignore
+        | ModalDialog window ->
+            window.Owner <- mainWindow
+            window.ShowDialog() |> ignore
 
+        factory.AfterNav ()
     interface INavigator<'Model,'Nav,'Message> with
         member this.Run app createCtx = this.Run app createCtx
 
@@ -118,17 +148,24 @@ module Navigation =
     let singleView appCtor windowCtor = SingleView<_,_,_,_,_>(appCtor, windowCtor) :> INavigator<_,_,_>
     let singleViewFromWindow windowCtor = SingleView<_,_,_,_,_>.Create(windowCtor) :> INavigator<_,_,_>
 
-    let singlePage appCtor windowCtor initialNav update = SinglePageApplicationNavigator<_,_,_,_,_>(initialNav,appCtor,windowCtor,update) :> INavigator<_,_,_>
+    let singlePage<'Model,'Nav,'Message, 'App, 'Win when 'App :> Application and 'Win :> Window>  appCtor windowCtor initialNav update = SinglePageApplicationNavigator<'Model,'Nav,'Message, 'App, 'Win> (initialNav,appCtor,windowCtor,update) :> INavigator<_,_,_>
 
     module Generator =
         let create (makeElement : unit -> 'UIElement) (comp : IComponent<'Model,'Nav,'Message>) =
             ComponentUIFactory (makeElement, id, comp, id) :> UIFactory<_,_,_>
+        let ignore<'Model,'Nav,'Message> () = IgnoreUIFactory<_,_,_> () :> UIFactory<'Model,'Nav,'Message>
+        let message<'Model,'Nav,'Message> title message = MessageUIFactory<_,_,_> (title, message) :> UIFactory<'Model,'Nav,'Message>
         let fromComponent 
                 (makeElement : unit -> 'UIElement)
                 (modelMapper : 'Model -> 'Submodel)
                 (comp        : IComponent<'Submodel,'Nav,'Submsg>)
                 (msgMapper   : 'Submsg -> 'Message) =
                     ComponentUIFactory (makeElement,modelMapper,comp,msgMapper) :> UIFactory<_,_,_>
+
+        let withCallbacks before after (factory : UIFactory<_,_,_>) =
+            factory.SetBeforeNav before
+            factory.SetAfterNav after
+            factory
 
 namespace Gjallarhorn.Wpf.CSharp
 

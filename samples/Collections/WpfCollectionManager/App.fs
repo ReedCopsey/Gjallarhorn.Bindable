@@ -13,6 +13,7 @@ open System.Threading
 open System.Windows
 open CollectionSample.Requests
 open System.Collections.ObjectModel
+open System.ComponentModel
 
 // The WPF Platform specific bits of this application need to do 2 things:
 // 1) They create the view (the actual Window)
@@ -61,18 +62,30 @@ let main _ =
             items
             |> List.iter printItem
         | _ -> ()
-        
+
+    // Set our add and process states in the application by pumping messages        
+    let setAddAndProcess (application : ApplicationCore<_,_,_>) add proc =
+        application.Update (CollectionApplication.Msg.AddRequests add)
+        application.Update (CollectionApplication.Msg.ProcessRequests proc)
+
     // SPA Navigation takes application + request, and returns a UIFactory, or None if no navigation should occur
-    let updateNavigation (application : ApplicationCore<_,_,_>) request =         
+    let updateNavigation (application : ApplicationCore<CollectionApplication.Model,_,_>) request =         
         match request with
         | Login -> 
-            Some <| Navigation.Generator.fromComponent LoginControl (fun (m : CollectionApplication.Model) -> m.Credentials) Credentials.credentialComponent CollectionApplication.Msg.UpdateCredentials
+            Navigation.Generator.fromComponent LoginControl (fun (m : CollectionApplication.Model) -> m.Credentials) Credentials.credentialComponent CollectionApplication.Msg.UpdateCredentials
         | DisplayRequest r -> 
-            None
+            // Grab our current state
+            let add,proc = application.Model.Value.AddingRequests, application.Model.Value.Processing
+            // Before we display, we want to turn off processing, then restore after
+            let before () = setAddAndProcess application false false 
+            let after () = setAddAndProcess application add proc
+
+            Navigation.Generator.message "Request" (sprintf "Request details: Id %A" r.Value.Id)
+            |> Navigation.Generator.withCallbacks before after
+
         | StartProcessing (addNew,processElements) -> 
-            application.Update (CollectionApplication.Msg.AddRequests addNew)
-            application.Update (CollectionApplication.Msg.ProcessRequests processElements)
-            Some <| Navigation.Generator.create ProcessControl CollectionApplication.appComponent
+            setAddAndProcess application addNew processElements
+            Navigation.Generator.create ProcessControl CollectionApplication.appComponent
     
     let navigator = Navigation.singlePage App MainWin Login updateNavigation
 
