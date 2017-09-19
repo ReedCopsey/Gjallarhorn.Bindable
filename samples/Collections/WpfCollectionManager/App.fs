@@ -9,37 +9,13 @@ open Gjallarhorn.Wpf
 
 open Views
 open Gjallarhorn.Bindable.Nav
-open System.Threading
 open System.Windows
 open CollectionSample.Requests
 open CollectionApplication
-open System.Collections.ObjectModel
-open System.ComponentModel
 
 // The WPF Platform specific bits of this application need to do 2 things:
 // 1) They create the view (the actual Window)
 // 2) The start the WPF specific version of the framework with the view
-
-
-
-
-module WpfNav =
-    open CollectionSample.CollectionApplication
-
-    let displayDialog<'Model,'Submodel,'Nav,'Message,'Window when 'Window :> Window> (viewFn : unit -> 'Window) (model : ISignal<'Submodel>) (comp : IComponent<'Submodel,'Nav,'Message>) (application : ApplicationCore<'Model,'Nav,'Message>) =
-        let navigate, dispatch = application.Navigation, application.Update
-        let d = viewFn()
-        let bindingSource = Bind.createObservableSource<'Message>()        
-        let messages = comp.Install navigate bindingSource model
-
-        messages
-        |> List.iter ((Observable.subscribe dispatch) >> bindingSource.AddDisposable)
-
-        d.DataContext <- bindingSource
-        d.Owner <- Application.Current.MainWindow
-        d.ShowDialog() |> ignore
-
-// ----------------------------------  Application  ---------------------------------- 
 [<STAThread>]
 [<EntryPoint>]
 let main _ =  
