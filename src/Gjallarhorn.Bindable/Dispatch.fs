@@ -16,6 +16,13 @@ type Dispatcher<'Msg> () =
     /// Trigger our message to be dispatched
     member __.Dispatch msg = trigger msg
 
+    /// Trigger our message to be dispatched
+    member __.DispatchAsync (msg : Async<'Msg>) =
+        async {
+            let! m = msg
+            trigger m
+        } |> Async.Start
+
     interface IObservable<'Msg> with
         member __.Subscribe (o : IObserver<'Msg>) = evt.Publish.Subscribe o
 

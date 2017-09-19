@@ -82,7 +82,7 @@ module Credentials =
 
         Bind.Explicit.twoWayMutable source (nameof <@ cd.Password @>) pw
 
-        let canSubmit = Signal.map3 (fun (u : string) (p : string) (m : User) -> u.Length > 0 && p.Length > 0 && m.AuthenticationStatus <> AuthenticationStatus.Querying) user pw model
+        let canSubmit = Signal.map3 (fun (u : string) (p : string) (m : User) -> u.Length > 0 && p.Length > 0 && m.AuthenticationStatus <> AuthenticationStatus.Querying && m.AuthenticationStatus <> AuthenticationStatus.Approved) user pw model
         let submit = Bind.Explicit.createCommandChecked (nameof <@ cd.Submit @>) canSubmit source
 
         [

@@ -39,10 +39,16 @@ module CollectionApplication =
         | ProcessRequests b ->   { current with Processing = b }            
         | Update u ->            { current with Requests = Requests.update u current.Requests }
         | UpdateCredentials c -> 
-            
             match current.Credentials.AuthenticationStatus, c.AuthenticationStatus with
-            | AuthenticationStatus.Approved, _ -> ()
-            | _, AuthenticationStatus.Approved -> nav.Dispatch <| CollectionNav.StartProcessing(true, true)
+            // If we weren't approved before, and are now, navigate us to start processing requests
+            | old, AuthenticationStatus.Approved when old <> AuthenticationStatus.Approved -> 
+                // Add slight delay so you see UI update
+                async {
+                    do! Async.Sleep 1500
+                    return CollectionNav.StartProcessing(true, true)
+                }
+                |> nav.DispatchAsync 
+            // Otherwise, do nothing here
             | _ -> ()
 
             { current with Credentials = c }
