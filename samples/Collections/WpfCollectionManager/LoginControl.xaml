@@ -5,9 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
         mc:Ignorable="d"         
         xmlns:model="clr-namespace:CollectionSample.Model;assembly=CollectionSample"
-        d:DataContext="{x:Static model:CollectionApplication.appd}"
+        d:DataContext="{x:Static model:Credentials.cd}"
 		x:Name="win">
-    <Grid DataContext="{Binding User}">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />

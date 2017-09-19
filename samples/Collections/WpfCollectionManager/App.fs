@@ -12,6 +12,7 @@ open Gjallarhorn.Bindable.Nav
 open System.Threading
 open System.Windows
 open CollectionSample.Requests
+open System.Collections.ObjectModel
 
 // The WPF Platform specific bits of this application need to do 2 things:
 // 1) They create the view (the actual Window)
@@ -60,33 +61,20 @@ let main _ =
             items
             |> List.iter printItem
         | _ -> ()
-
-    //let routeNavigation application request =
-    //    // Map our request "child" component to our app navigation model 
-    //    // (in this case, by just suppressing child navigation requests),
-    //    // ss well as to our update model        
-    //    let requestComponentWrapped = 
-    //        Request.requestComponent 
-    //        |> Component.withMappedNavigation Nav.suppress
-    //        |> Component.withMappedMessages CollectionApplication.Msg.FromRequest
-
-    //    match request with
-    //    | DisplayRequest r -> 
-    //        WpfNav.displayDialog RequestDialog r requestComponentWrapped application        
-
-    let updateNavigation (application : ApplicationCore<_,_,_>) request : UIElement =         
+        
+    // SPA Navigation takes application + request, and returns a UIFactory, or None if no navigation should occur
+    let updateNavigation (application : ApplicationCore<_,_,_>) request =         
         match request with
         | Login -> 
-            LoginControl() :> _
+            Some <| Navigation.Generator.fromComponent LoginControl (fun (m : CollectionApplication.Model) -> m.Credentials) Credentials.credentialComponent CollectionApplication.Msg.UpdateCredentials
         | DisplayRequest r -> 
-            ProcessControl() :> _
+            None
         | StartProcessing (addNew,processElements) -> 
             application.Update (CollectionApplication.Msg.AddRequests addNew)
             application.Update (CollectionApplication.Msg.ProcessRequests processElements)
-            ProcessControl() :> _
-
-    let makeWindow () = MainWin()        
-    let navigator = Navigation.singlePage App makeWindow (Login) updateNavigation
+            Some <| Navigation.Generator.create ProcessControl CollectionApplication.appComponent
+    
+    let navigator = Navigation.singlePage App MainWin Login updateNavigation
 
     // Run using the WPF wrappers around the basic application framework    
     let app = Program.applicationCore navigator.Navigate
