@@ -23,25 +23,18 @@ module Credentials =
         | TryAuthenticate of user : string * password : string
         | SetAuthenticationStatus of user : string * status : AuthenticationStatus
     
-    // For illustration, we always fail the first round
-    let private loginAttempts = ref 0
     // Subscription which asynchronously handles authentication attempts
     let handleAuthenticationAttempt (msg : Message) _currentModel =
         match msg with
-        | TryAuthenticate(user,_pass) ->
+        | TryAuthenticate(user,password) ->
             async {
-                // Synth pushing out to some async "verification" for this...
+                // Synth pushing out to some async "verification" for this...                
                 do! Async.Sleep 250
                 
-                incr loginAttempts
-
-                let rnd = System.Random ()
                 let result = 
-                    if !loginAttempts > 1 && rnd.NextDouble () > 0.5 then
-                        SetAuthenticationStatus(user, AuthenticationStatus.Approved)
-                    else                        
-                        SetAuthenticationStatus(user, AuthenticationStatus.InvalidPassword)
-
+                    match user, password with
+                    | u, "Gjallarhorn" when u.Length >= 3 -> SetAuthenticationStatus(user, AuthenticationStatus.Approved)
+                    | _ ->                                   SetAuthenticationStatus(user, AuthenticationStatus.InvalidPassword)
                 return Some result
             } 
         | _ -> async { return None }
@@ -55,12 +48,11 @@ module Credentials =
 
     type CredentialViewModel =
         {
-            User     : string
-            Password : string
+            User     : string            
             Status   : string
-            Submit   : VmCmd<DateTime>
+            Submit   : VmCmd<string>
         }
-    let cd = { User = "Test User" ; Password = "Test pass" ; Status = "Enter credentials..." ; Submit = Vm.cmd DateTime.Now }
+    let cd = { User = "Test User" ; Status = "Enter credentials..." ; Submit = Vm.cmd "Sample Password" }
     
     // Create the component for the Requests as a whole.
     // Note that this uses BindingCollection to map the collection to individual request -> messages,
@@ -74,20 +66,16 @@ module Credentials =
             | Querying -> "Checking password... Please wait."
 
         let status = model |> Signal.map (fun m -> statusToString m.AuthenticationStatus)
-
-        let pw = Mutable.create ""
-
+        
         Bind.Explicit.oneWay source (nameof <@ cd.Status @>) status
-        let user = Bind.Explicit.twoWay source (nameof <@ cd.User @>) (model |> Signal.map (fun m -> m.User) )
+        let user = Bind.Explicit.twoWay source (nameof <@ cd.User @>) (model |> Signal.map (fun m -> m.User) )        
 
-        Bind.Explicit.twoWayMutable source (nameof <@ cd.Password @>) pw
-
-        let canSubmit = Signal.map3 (fun (u : string) (p : string) (m : User) -> u.Length > 0 && p.Length > 0 && m.AuthenticationStatus <> AuthenticationStatus.Querying && m.AuthenticationStatus <> AuthenticationStatus.Approved) user pw model
-        let submit = Bind.Explicit.createCommandChecked (nameof <@ cd.Submit @>) canSubmit source
+        let canSubmit = Signal.map2 (fun (u : string) (m : User) -> u.Length > 0 && m.AuthenticationStatus <> AuthenticationStatus.Querying && m.AuthenticationStatus <> AuthenticationStatus.Approved) user model
+        let submit = Bind.Explicit.createCommandParamChecked (nameof <@ cd.Submit @>) canSubmit source
 
         [
             // On click, submit 
-            submit |> Observable.map (fun _ -> TryAuthenticate(user.Value, pw.Value))
+            submit |> Observable.map (fun pw -> TryAuthenticate(user.Value, pw))
         ]
 
     let credentialComponent = 

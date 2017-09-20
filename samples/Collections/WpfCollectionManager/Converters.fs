@@ -1,8 +1,10 @@
 ﻿namespace CollectionManager.Views
 
 open CollectionSample
+open System.Security
 open System.Windows
 open System.Windows.Media
+open System.Windows.Controls
 
 module internal Converters =    
     let makeBrush (color : Color) =
@@ -19,5 +21,12 @@ module internal Converters =
         | Unknown -> Colors.Transparent    
         |> makeBrush
 
+    let secToStr (sec : SecureString) _ =
+        // Note: This violates security rules in place via a secure string by converting to normal string - use at your own risk.
+        System.Net.NetworkCredential("", sec).Password        
+
 type StatusToColorConverter () =
      inherit FsXaml.Converter<RequestStatus, Brush>(Converters.statusToColor, Brushes.Transparent)
+
+type SecureStringToStringConverter () =
+     inherit FsXaml.Converter<SecureString, string>(Converters.secToStr, null)

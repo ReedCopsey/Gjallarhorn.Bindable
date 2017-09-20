@@ -4,11 +4,15 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
         mc:Ignorable="d"         
-        xmlns:model="clr-namespace:CollectionSample.Model;assembly=CollectionSample"
+        d:DesignWidth="400"
+        d:DesignHeight="200"
+        xmlns:model="clr-namespace:CollectionSample;assembly=CollectionSample"
+        xmlns:local="clr-namespace:CollectionManager.Views;assembly=WpfCollectionManager"
         d:DataContext="{x:Static model:Credentials.cd}"
 		x:Name="win">
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -21,14 +25,28 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <TextBlock Text="{Binding Status}" Grid.ColumnSpan="2" Margin="3" />
+        <TextBlock Text="{Binding Status}" Grid.ColumnSpan="2" Margin="3" FontSize="15" >
+            <TextBlock.Style>
+                <Style TargetType="TextBlock">
+                    <Style.Triggers>
+                        <Trigger Property="Text" Value="Password incorrect. Please re-enter:">
+                            <Setter Property="Foreground" Value="Red" />
+                        </Trigger>
+                        <Trigger Property="Text" Value="Approved">
+                            <Setter Property="Foreground" Value="Green" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
 
         <TextBlock Text="User:" Grid.Row="1" Grid.Column="0" Margin="3" />
         <TextBox Text="{Binding User, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1" Margin="3" />
 
         <TextBlock Text="Password:" Grid.Row="2" Grid.Column="0" Margin="3" />
-        <TextBox Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="1" Margin="3" FontFamily="ms-appx:///Assets/PassDot.ttf#PassDot" />
+        <PasswordBox x:Name="pw"  Grid.Row="2" Grid.Column="1" Margin="3" />
 
-        <Button Command="{Binding Submit}" IsDefault="True"  Grid.Row="3" Grid.ColumnSpan="2" Margin="20">Submit</Button>
+        <TextBlock Text="Use any username of 3 or more characters. Password is: Gjallarhorn " Grid.Row="3" Grid.ColumnSpan="2" Margin="3" Foreground="Blue"/>
+        <Button Command="{Binding Submit}" CommandParameter="{Binding Path=Password, ElementName=win, Converter={StaticResource stringConverter}}" IsDefault="True"  Grid.Row="4" Grid.ColumnSpan="2" Margin="20">Submit</Button>
     </Grid>
 </UserControl>

@@ -4,6 +4,7 @@
   xmlns:local="clr-namespace:CollectionManager.Views;assembly=WpfCollectionManager">
     <Application.Resources>
         <local:StatusToColorConverter x:Key="statusToColor" />
+        <local:SecureStringToStringConverter x:Key="stringConverter" />
         <Style TargetType="{x:Type Rectangle}" x:Key="statusRectangle" >
             <Setter Property="HorizontalAlignment" Value="Stretch" />
             <Setter Property="VerticalAlignment" Value="Stretch" />
