@@ -7,7 +7,6 @@ open Gjallarhorn
 open Gjallarhorn.Bindable
 open Gjallarhorn.Bindable.Framework
 open System
-open System.AssemblyVersionInformation
 
 type private SingleView<'Model, 'Nav, 'Message, 'App, 'Win when 'App :> Application and 'Win :> Window> private (appCtor : unit -> 'App, windowCtor : unit -> 'Win, show : bool) =
 

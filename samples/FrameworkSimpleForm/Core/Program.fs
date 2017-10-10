@@ -1,5 +1,7 @@
 ﻿namespace SimpleForm
 
+open System
+
 open Gjallarhorn
 open Gjallarhorn.Bindable
 open Gjallarhorn.Bindable.Framework
@@ -25,6 +27,7 @@ module Program =
     type Msg = 
         | FirstName of string
         | LastName of string        
+        | FullName of first : string * last : string
         | Clear
 
     // Union type of navigation operations
@@ -36,6 +39,7 @@ module Program =
         match msg with
         | FirstName f -> { model with FirstName = f }
         | LastName l -> { model with LastName = l }        
+        | FullName (f,l) -> { FirstName = f ; LastName = l }
         | Clear -> Model.Default
 
     // Our "ViewModel". This is optional, but allows you to avoid using "magic strings", as well as enables design time XAML in C# projects
@@ -52,16 +56,33 @@ module Program =
 
     // ----------------------------------    Binding    ---------------------------------- 
     // Create a function that binds a model to a source, and outputs messages
-    let bindToSource =    
+    let bindToSource _nav source (model : ISignal<Model>) : IObservable<Msg> list = 
         // Composable validation - Can be written inline as well
         let validLast = notNullOrWhitespace >> notEqual "Copsey" 
         let validFull = notNullOrWhitespace >> fixErrorsWithMessage "Please enter a valid name"
 
-        Component.create<Model,_,Msg> [
-            <@ d.FirstName @>  |> Bind.twoWayValidated (fun m -> m.FirstName) notNullOrWhitespace FirstName
-            <@ d.LastName @>   |> Bind.twoWayValidated (fun m -> m.LastName) validLast LastName
-            <@ d.FullName @>   |> Bind.oneWayValidated (fun m -> m.FirstName + " " + m.LastName) validFull
-        ]   
+        // Bind the first and last name to the view 2-way with validation
+        let first = 
+            model
+            |> Signal.map (fun m -> m.FirstName)
+            |> Bind.Explicit.twoWayValidated source (nameof <@ d.FirstName @>) notNullOrWhitespace 
+        let last = 
+            model
+            |> Signal.map (fun m -> m.LastName)
+            |> Bind.Explicit.twoWayValidated source (nameof <@ d.LastName @>) validLast         
+        // Display the full name with validation
+        model
+        |> Signal.map (fun m -> m.FirstName + " " + m.LastName)
+        |> Bind.Explicit.toViewValidated source (nameof <@ d.FullName @>) validFull 
+
+        
+        // Create our output observables
+        [
+            // Map the two validation results (string option) together into a signal that's only Some when both are Some (valid)
+            // then pipe into an observable message that filters out None (invalid states)
+            Signal.mapOption2 (fun f l -> f,l) first last
+            |> Observable.choose (Option.map FullName)
+        ]           
 
     // ----------------------------------   Framework  -----------------------------------     
-    let applicationCore = Framework.application Model.Default update bindToSource Nav.empty
+    let applicationCore = Framework.application Model.Default update (Component.fromExplicit bindToSource) Nav.empty
