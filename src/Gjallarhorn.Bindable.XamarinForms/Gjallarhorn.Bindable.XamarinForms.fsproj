@@ -101,7 +101,6 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <Import Project="..\..\.paket\paket.targets" />
   <Choose>
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.5' Or $(TargetFrameworkVersion) == 'v4.5.1' Or $(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3' Or $(TargetFrameworkVersion) == 'v4.6' Or $(TargetFrameworkVersion) == 'v4.6.1' Or $(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3' Or $(TargetFrameworkVersion) == 'v4.7' Or $(TargetFrameworkVersion) == 'v5.0')">
       <ItemGroup>
@@ -432,4 +431,5 @@
   </Choose>
   <Import Project="..\..\packages\Xamarin.Android.Support.Vector.Drawable\build\Xamarin.Android.Support.Vector.Drawable.targets" Condition="Exists('..\..\packages\Xamarin.Android.Support.Vector.Drawable\build\Xamarin.Android.Support.Vector.Drawable.targets')" Label="Paket" />
   <Import Project="..\..\packages\Xamarin.Forms\build\$(__paket__Xamarin_Forms_targets).targets" Condition="Exists('..\..\packages\Xamarin.Forms\build\$(__paket__Xamarin_Forms_targets).targets')" Label="Paket" />
+  <Import Project="..\..\.paket\paket.targets" />
 </Project>

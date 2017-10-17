@@ -56,7 +56,6 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <Import Project="..\..\.paket\paket.targets" />
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="Utilities.fs" />
@@ -141,4 +140,5 @@
       </ItemGroup>
     </When>
   </Choose>
+  <Import Project="..\..\.paket\paket.targets" />
 </Project>
