@@ -37,9 +37,9 @@ module Requests =
     // using the component defined previously, then maps this to the model-wide update message.
     let requestsComponent = //source (model : ISignal<Requests>) =
         let sorted (requests : Model) = requests |> List.sortBy (fun r -> r.Created)        
-                   
+        let hasRequests = List.isEmpty >> not           
         Component.create<Model,CollectionNav,Message> [
             <@ reqsd.Requests @> |> Bind.collection sorted requestComponentWithNav (fst >> Update)
-            <@ reqsd.Edit @> |> Bind.cmdParam CollectionNav.DisplayRequest |> Bind.toNav
-            <@ reqsd.Info @> |> Bind.cmdParam CollectionNav.ShowRequestDetails |> Bind.toNav
+            <@ reqsd.Edit @> |> Bind.cmdParamIf hasRequests CollectionNav.DisplayRequest |> Bind.toNav
+            <@ reqsd.Info @> |> Bind.cmdParamIf hasRequests CollectionNav.ShowRequestDetails |> Bind.toNav
         ]         
