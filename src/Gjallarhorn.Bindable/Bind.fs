@@ -526,6 +526,16 @@ module Bind =
             | _ -> failwith "Bad expression"        
             |> Some
 
+    /// Creates a parameterized ICommand (one way property) to a binding source by name which outputs a specific message
+    let cmdParamIf<'Model, 'Nav, 'Param, 'Msg> canExecute (setter : 'Param -> 'Msg) (name : Expr<VmCmd<'Msg>>) : Dispatch<'Nav> -> BindingSource -> ISignal<'Model> -> IObservable<'Msg> option =
+        fun nav (source : BindingSource) (signal : ISignal<'Model>) ->
+            let name = getPropertyNameFromExpression name
+            let canExecuteSignal = signal |> Signal.map canExecute
+            let cmd = Explicit.createCommandParamChecked<'Param> name canExecuteSignal source
+            cmd
+            |> Observable.map setter
+            |> Some
+
     /// Bind a component as a two-way property, acting as a reducer for messages from the component
     let comp<'Model,'Nav,'Msg,'Submodel,'Submsg> (getter : 'Model -> 'Submodel) (componentVm : IComponent<'Submodel, 'Nav, 'Submsg>) (mapper : 'Submsg * 'Submodel -> 'Msg) (name : Expr<'Submodel>) =
         fun nav (source : BindingSource) (signal : ISignal<'Model>) ->
