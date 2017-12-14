@@ -1,3 +1,7 @@
+#### 1.0.0-beta5 - Dec 14th 2017
+* Added navigation system
+* Breaking changes to API related to new navigation support
+
 #### 1.0.0-beta4 - Sept 7th 2017
 * Fixed possible race condition in message pumping
 
