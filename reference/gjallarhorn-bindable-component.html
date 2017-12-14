@@ -55,15 +55,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '40', 40)" onmouseover="showTip(event, '40', 40)">
-            fromBindings bindings
+          <code onmouseout="hideTip(event, '43', 43)" onmouseover="showTip(event, '43', 43)">
+            create bindings
           </code>
-          <div class="tip" id="40">
-            <strong>Signature:</strong> bindings:(BindingSource -&gt; ISignal&lt;&#39;Model&gt; -&gt; IObservable&lt;&#39;Message&gt; option) list -&gt; Component&lt;&#39;Model,&#39;Message&gt;<br />
-                          <strong>Type parameters:</strong> 'Model, 'Message          </div>
+          <div class="tip" id="43">
+            <strong>Signature:</strong> bindings:(Dispatch&lt;&#39;Nav&gt; -&gt; BindingSource -&gt; ISignal&lt;&#39;Model&gt; -&gt; IObservable&lt;&#39;Message&gt; option) list -&gt; IComponent&lt;&#39;Model,&#39;Nav,&#39;Message&gt;<br />
+                          <strong>Type parameters:</strong> 'Model, 'Nav, 'Message          </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/BindingSource.fs#L226-226" class="github-link">
+            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/BindingSource.fs#L331-331" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -75,19 +75,119 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '41', 41)" onmouseover="showTip(event, '41', 41)">
+          <code onmouseout="hideTip(event, '44', 44)" onmouseover="showTip(event, '44', 44)">
             fromExplicit bindings
           </code>
-          <div class="tip" id="41">
-            <strong>Signature:</strong> bindings:(BindingSource -&gt; ISignal&lt;&#39;Model&gt; -&gt; IObservable&lt;&#39;Message&gt; list) -&gt; Component&lt;&#39;Model,&#39;Message&gt;<br />
-                          <strong>Type parameters:</strong> 'Model, 'Message          </div>
+          <div class="tip" id="44">
+            <strong>Signature:</strong> bindings:(Dispatch&lt;&#39;Nav&gt; -&gt; BindingSource -&gt; ISignal&lt;&#39;Model&gt; -&gt; IObservable&lt;&#39;Message&gt; list) -&gt; IComponent&lt;&#39;Model,&#39;Nav,&#39;Message&gt;<br />
+                          <strong>Type parameters:</strong> 'Model, 'Nav, 'Message          </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/BindingSource.fs#L233-233" class="github-link">
+            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/BindingSource.fs#L338-338" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
           <p>Create a component from explicit binding generators</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '45', 45)" onmouseover="showTip(event, '45', 45)">
+            suppressNavigation childComponent
+          </code>
+          <div class="tip" id="45">
+            <strong>Signature:</strong> childComponent:IComponent&lt;&#39;Model,&#39;NavChild,&#39;Message&gt; -&gt; IComponent&lt;&#39;Model,&#39;NavParent,&#39;Message&gt;<br />
+                          <strong>Type parameters:</strong> 'Model, 'NavChild, 'NavParent, 'Message          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/BindingSource.fs#L354-354" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Wrap a component with a suppressed navigation dispatcher</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '46', 46)" onmouseover="showTip(event, '46', 46)">
+            toSelfUpdating update childComponent
+          </code>
+          <div class="tip" id="46">
+            <strong>Signature:</strong> update:(&#39;Message -&gt; &#39;Model -&gt; &#39;Model) -&gt; childComponent:IComponent&lt;&#39;Model,&#39;Nav,&#39;Message&gt; -&gt; IComponent&lt;&#39;Model,&#39;Nav,&#39;Model&gt;<br />
+                          <strong>Type parameters:</strong> 'Model, 'Nav, 'Message          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/BindingSource.fs#L342-342" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Convert a component to a self updating component</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '47', 47)" onmouseover="showTip(event, '47', 47)">
+            withMappedMessages mapper childComponent
+          </code>
+          <div class="tip" id="47">
+            <strong>Signature:</strong> mapper:(&#39;MessageChild -&gt; &#39;MessageParent) -&gt; childComponent:IComponent&lt;&#39;Model,&#39;Nav,&#39;MessageChild&gt; -&gt; IComponent&lt;&#39;Model,&#39;Nav,&#39;MessageParent&gt;<br />
+                          <strong>Type parameters:</strong> 'Model, 'Nav, 'MessageChild, 'MessageParent          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/BindingSource.fs#L350-350" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Wrap a component with a message mapper</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '48', 48)" onmouseover="showTip(event, '48', 48)">
+            withMappedNavigation (...)
+          </code>
+          <div class="tip" id="48">
+            <strong>Signature:</strong> mapper:(&#39;NavChild -&gt; &#39;NavParent option) -&gt; childComponent:IComponent&lt;&#39;Model,&#39;NavChild,&#39;Message&gt; -&gt; IComponent&lt;&#39;Model,&#39;NavParent,&#39;Message&gt;<br />
+                          <strong>Type parameters:</strong> 'Model, 'NavChild, 'NavParent, 'Message          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/BindingSource.fs#L346-346" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Wrap a component with a navigation dispatch mapper</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '49', 49)" onmouseover="showTip(event, '49', 49)">
+            withSubscription subscription comp
+          </code>
+          <div class="tip" id="49">
+            <strong>Signature:</strong> subscription:(&#39;?8043 -&gt; &#39;?8044 -&gt; Async&lt;&#39;?8043 option&gt;) -&gt; comp:IComponent&lt;&#39;?8044,&#39;?8045,&#39;?8043&gt; -&gt; IComponent&lt;&#39;?8044,&#39;?8045,&#39;?8043&gt;<br />
+                          <strong>Type parameters:</strong> '?8043, '?8044, '?8045          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/BindingSource.fs#L358-358" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Add a subscription to a component</p>
 
 
         </td>

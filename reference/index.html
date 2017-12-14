@@ -54,14 +54,6 @@ This uses reflection, and INotifyPropertyChanged to update the signal as needed.
         </tr>
         <tr>
           <td class="type-name">
-            <a href="gjallarhorn-bindable-component-2.html">Component<'Model, 'Message></a>
-          </td>
-          <td class="xmldoc"><p>A component takes a BindingSource and a Signal for a model and returns a list of observable messages</p>
-
-</td>
-        </tr>
-        <tr>
-          <td class="type-name">
             <a href="gjallarhorn-bindable-dispatch-1.html">Dispatch<'Msg></a>
           </td>
           <td class="xmldoc"><p>Represents a Dispatch of a single message</p>
@@ -78,9 +70,18 @@ This uses reflection, and INotifyPropertyChanged to update the signal as needed.
         </tr>
         <tr>
           <td class="type-name">
-            <a href="gjallarhorn-bindable-executor-1.html">Executor<'Msg></a>
+            <a href="gjallarhorn-bindable-executor-2.html">Executor<'Model, 'Msg></a>
           </td>
-          <td class="xmldoc"><p>Manages the execution of an operation that produces messages to be dispatched</p>
+          <td class="xmldoc"><p>Manages the execution of an operation that produces messages to be dispatched.
+Constructed from a startup function and (optionally) a subscription which returns a bool for whether we should execute on model changes</p>
+
+</td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="gjallarhorn-bindable-icomponent-3.html">IComponent<'Model, 'Nav, 'Message></a>
+          </td>
+          <td class="xmldoc"><p>A component takes a BindingSource and a Signal for a model and returns a list of observable messages</p>
 
 </td>
         </tr>
@@ -141,6 +142,22 @@ This uses reflection, and INotifyPropertyChanged to update the signal as needed.
         </tr>
         <tr>
           <td class="module-name">
+            <a href="gjallarhorn-bindable-namefromquotations.html">NameFromQuotations</a>
+          </td>
+          <td class="xmldoc"><p>Provides helpers to get the name of a property from a quotation</p>
+
+</td>
+        </tr>
+        <tr>
+          <td class="module-name">
+            <a href="gjallarhorn-bindable-nav.html">Nav</a>
+          </td>
+          <td class="xmldoc"><p>Routines for working with Navigation</p>
+
+</td>
+        </tr>
+        <tr>
+          <td class="module-name">
             <a href="gjallarhorn-bindable-vm.html">Vm</a>
           </td>
           <td class="xmldoc"><p>Utilities for generation of ViewModel types and instances</p>
@@ -160,7 +177,7 @@ This uses reflection, and INotifyPropertyChanged to update the signal as needed.
     <tbody>
         <tr>
           <td class="type-name">
-            <a href="gjallarhorn-bindable-framework-applicationcore-2.html">ApplicationCore<'Model, 'Message></a>
+            <a href="gjallarhorn-bindable-framework-applicationcore-3.html">ApplicationCore<'Model, 'Nav, 'Message></a>
           </td>
           <td class="xmldoc"><p>The core information required for an application</p>
 
@@ -168,7 +185,7 @@ This uses reflection, and INotifyPropertyChanged to update the signal as needed.
         </tr>
         <tr>
           <td class="type-name">
-            <a href="gjallarhorn-bindable-framework-applicationspecification-2.html">ApplicationSpecification<'Model, 'Message></a>
+            <a href="gjallarhorn-bindable-framework-applicationspecification-3.html">ApplicationSpecification<'Model, 'Nav, 'Message></a>
           </td>
           <td class="xmldoc"><p>Full specification required to run an application</p>
 
@@ -181,6 +198,12 @@ This uses reflection, and INotifyPropertyChanged to update the signal as needed.
           <td class="xmldoc"><p>Alias for a function to create a data context</p>
 
 </td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="gjallarhorn-bindable-framework-inavigator-3.html">INavigator<'Model, 'Nav, 'Message></a>
+          </td>
+          <td class="xmldoc"></td>
         </tr>
     </tbody>
   </table>
@@ -216,6 +239,20 @@ This uses reflection, and INotifyPropertyChanged to update the signal as needed.
 
 </td>
         </tr>
+        <tr>
+          <td class="type-name">
+            <a href="gjallarhorn-wpf-uifactory-3.html">UIFactory<'Model, 'Nav, 'Message></a>
+          </td>
+          <td class="xmldoc"><p>Generates the UI, with proper binding contexts installed</p>
+
+</td>
+        </tr>
+        <tr>
+          <td class="type-name">
+            <a href="gjallarhorn-wpf-uitype.html">UIType</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
     </tbody>
   </table>
   <table class="table table-bordered module-list">
@@ -225,11 +262,40 @@ This uses reflection, and INotifyPropertyChanged to update the signal as needed.
     <tbody>
         <tr>
           <td class="module-name">
+            <a href="gjallarhorn-wpf-app.html">App</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="module-name">
+            <a href="gjallarhorn-wpf-navigation.html">Navigation</a>
+          </td>
+          <td class="xmldoc"></td>
+        </tr>
+        <tr>
+          <td class="module-name">
             <a href="gjallarhorn-wpf-platform.html">Platform</a>
           </td>
           <td class="xmldoc"><p>Platform installation</p>
 
 </td>
+        </tr>
+    </tbody>
+  </table>
+
+    </div>
+  <h2>Gjallarhorn.Wpf.CSharp Namespace</h2>
+    <div>
+      <table class="table table-bordered type-list">
+    <thead>
+      <tr><td>Type</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td class="type-name">
+            <a href="gjallarhorn-wpf-csharp-navigation.html">Navigation</a>
+          </td>
+          <td class="xmldoc"></td>
         </tr>
     </tbody>
   </table>

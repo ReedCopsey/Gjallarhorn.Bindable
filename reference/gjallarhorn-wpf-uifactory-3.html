@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8"/>
-    <title>ObservableBindingSource<'Message> - Gjallarhorn.Bindable</title>
+    <title>UIFactory<'Model, 'Nav, 'Message> - Gjallarhorn.Bindable</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content=""/>
     <meta name="author" content="Reed Copsey, Jr."/>
@@ -35,12 +35,12 @@
 
 
 
-<h1>ObservableBindingSource<'Message></h1>
+<h1>UIFactory<'Model, 'Nav, 'Message></h1>
 <p>
-  <span>Namespace: Gjallarhorn.Bindable</span><br />
+  <span>Namespace: Gjallarhorn.Wpf</span><br />
 </p>
 <div class="xmldoc">
-<p>Base class for binding sources, used by platform specific libraries to share implementation details</p>
+<p>Generates the UI, with proper binding contexts installed</p>
 
 </div>
   <h3>Constructors</h3>
@@ -52,15 +52,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '92', 92)" onmouseover="showTip(event, '92', 92)">
+          <code onmouseout="hideTip(event, '115', 115)" onmouseover="showTip(event, '115', 115)">
             new()
           </code>
-          <div class="tip" id="92">
-            <strong>Signature:</strong> unit -&gt; ObservableBindingSource&lt;&#39;Message&gt;<br />
+          <div class="tip" id="115">
+            <strong>Signature:</strong> unit -&gt; UIFactory&lt;&#39;Model,&#39;Nav,&#39;Message&gt;<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/BindingSource.fs#L188-188" class="github-link">
+            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable.Wpf/Nav.fs#L49-49" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -79,19 +79,58 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '93', 93)" onmouseover="showTip(event, '93', 93)">
-            OutputObservable(obs)
+          <code onmouseout="hideTip(event, '116', 116)" onmouseover="showTip(event, '116', 116)">
+            AfterNav
           </code>
-          <div class="tip" id="93">
-            <strong>Signature:</strong> obs:IObservable&lt;&#39;Message&gt; -&gt; unit<br />
+          <div class="tip" id="116">
+            <strong>Signature:</strong> unit -&gt; unit<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/BindingSource.fs#L211-211" class="github-link">
+            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable.Wpf/Nav.fs#L57-57" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>Outputs values by subscribing to changes on an observable</p>
+          
+              <p>CompiledName: <code>get_AfterNav</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '117', 117)" onmouseover="showTip(event, '117', 117)">
+            BeforeNav
+          </code>
+          <div class="tip" id="117">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable.Wpf/Nav.fs#L56-56" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
+              <p>CompiledName: <code>get_BeforeNav</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '118', 118)" onmouseover="showTip(event, '118', 118)">
+            Create(arg1)
+          </code>
+          <div class="tip" id="118">
+            <strong>Signature:</strong> ApplicationCore&lt;&#39;Model,&#39;Nav,&#39;Message&gt; -&gt; UIType<br />
+              <strong>Modifiers:</strong> abstract<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable.Wpf/Nav.fs#L54-54" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Create the specific UI element given the application</p>
 
 
         </td>
@@ -99,41 +138,37 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '94', 94)" onmouseover="showTip(event, '94', 94)">
-            OutputObservables(obs)
+          <code onmouseout="hideTip(event, '119', 119)" onmouseover="showTip(event, '119', 119)">
+            SetAfterNav(handler)
           </code>
-          <div class="tip" id="94">
-            <strong>Signature:</strong> (obs:IObservable&lt;&#39;Message&gt; list) -&gt; unit<br />
+          <div class="tip" id="119">
+            <strong>Signature:</strong> (handler:(unit -&gt; unit)) -&gt; unit<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/BindingSource.fs#L216-216" class="github-link">
+            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable.Wpf/Nav.fs#L59-59" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>Outputs values by subscribing to changes on a list of observables</p>
-
-
+          
         </td>
       </tr>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '95', 95)" onmouseover="showTip(event, '95', 95)">
-            OutputValue(value)
+          <code onmouseout="hideTip(event, '120', 120)" onmouseover="showTip(event, '120', 120)">
+            SetBeforeNav(handler)
           </code>
-          <div class="tip" id="95">
-            <strong>Signature:</strong> value:&#39;Message -&gt; unit<br />
+          <div class="tip" id="120">
+            <strong>Signature:</strong> (handler:(unit -&gt; unit)) -&gt; unit<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/BindingSource.fs#L208-208" class="github-link">
+            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable.Wpf/Nav.fs#L58-58" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>Outputs a value through it's observable implementation</p>
-
-
+          
         </td>
       </tr>
     </tbody>

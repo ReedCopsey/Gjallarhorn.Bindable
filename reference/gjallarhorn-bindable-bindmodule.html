@@ -91,14 +91,14 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '1', 1)" onmouseover="showTip(event, '1', 1)">
-            cmd name source _signal
+            cmd name nav source _signal
           </code>
           <div class="tip" id="1">
-            <strong>Signature:</strong> name:Expr&lt;VmCmd&lt;&#39;Msg&gt;&gt; -&gt; source:BindingSource -&gt; _signal:ISignal&lt;&#39;Model&gt; -&gt; IObservable&lt;&#39;Msg&gt; option<br />
-                          <strong>Type parameters:</strong> 'Model, 'Msg          </div>
+            <strong>Signature:</strong> name:Expr&lt;VmCmd&lt;&#39;Msg&gt;&gt; -&gt; nav:Dispatch&lt;&#39;Nav&gt; -&gt; source:BindingSource -&gt; _signal:ISignal&lt;&#39;Model&gt; -&gt; IObservable&lt;&#39;Msg&gt; option<br />
+                          <strong>Type parameters:</strong> 'Model, 'Nav, 'Msg          </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/Bind.fs#L493-493" class="github-link">
+            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/Bind.fs#L498-498" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -111,14 +111,14 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '2', 2)" onmouseover="showTip(event, '2', 2)">
-            cmdIf canExecute name source signal
+            cmdIf canExecute name nav source signal
           </code>
           <div class="tip" id="2">
-            <strong>Signature:</strong> canExecute:(&#39;Model -&gt; bool) -&gt; name:Expr&lt;VmCmd&lt;&#39;Msg&gt;&gt; -&gt; source:BindingSource -&gt; signal:ISignal&lt;&#39;Model&gt; -&gt; IObservable&lt;&#39;Msg&gt; option<br />
-                          <strong>Type parameters:</strong> 'Model, 'Msg          </div>
+            <strong>Signature:</strong> canExecute:(&#39;Model -&gt; bool) -&gt; name:Expr&lt;VmCmd&lt;&#39;Msg&gt;&gt; -&gt; nav:Dispatch&lt;&#39;Nav&gt; -&gt; source:BindingSource -&gt; signal:ISignal&lt;&#39;Model&gt; -&gt; IObservable&lt;&#39;Msg&gt; option<br />
+                          <strong>Type parameters:</strong> 'Model, 'Nav, 'Msg          </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/Bind.fs#L513-513" class="github-link">
+            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/Bind.fs#L518-518" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -131,14 +131,14 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '3', 3)" onmouseover="showTip(event, '3', 3)">
-            cmdParam setter name source _signal
+            cmdParam setter name nav source _signal
           </code>
           <div class="tip" id="3">
-            <strong>Signature:</strong> setter:(&#39;Param -&gt; &#39;Msg) -&gt; name:Expr&lt;VmCmd&lt;&#39;Msg&gt;&gt; -&gt; source:BindingSource -&gt; _signal:ISignal&lt;&#39;Model&gt; -&gt; IObservable&lt;&#39;Msg&gt; option<br />
-                          <strong>Type parameters:</strong> 'Model, 'Param, 'Msg          </div>
+            <strong>Signature:</strong> setter:(&#39;Param -&gt; &#39;Msg) -&gt; name:Expr&lt;VmCmd&lt;&#39;Msg&gt;&gt; -&gt; nav:Dispatch&lt;&#39;Nav&gt; -&gt; source:BindingSource -&gt; _signal:ISignal&lt;&#39;Model&gt; -&gt; IObservable&lt;&#39;Msg&gt; option<br />
+                          <strong>Type parameters:</strong> 'Model, 'Nav, 'Param, 'Msg          </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/Bind.fs#L504-504" class="github-link">
+            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/Bind.fs#L509-509" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -151,14 +151,34 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '4', 4)" onmouseover="showTip(event, '4', 4)">
-            collection (...)
+            cmdParamIf (...)
           </code>
           <div class="tip" id="4">
-            <strong>Signature:</strong> getter:(&#39;Model -&gt; &#39;SubmodelCollection) -&gt; collectionVm:Component&lt;&#39;Submodel,&#39;Submsg&gt; -&gt; mapper:(&#39;Submsg * &#39;Submodel -&gt; &#39;Msg) -&gt; name:Expr&lt;&#39;SubmodelCollection&gt; -&gt; source:BindingSource -&gt; signal:ISignal&lt;&#39;Model&gt; -&gt; IObservable&lt;&#39;Msg&gt; option<br />
-                          <strong>Type parameters:</strong> 'Model, 'Msg, 'Submodel, 'SubmodelCollection, 'Submsg          </div>
+            <strong>Signature:</strong> canExecute:(&#39;Model -&gt; bool) -&gt; setter:(&#39;Param -&gt; &#39;Msg) -&gt; name:Expr&lt;VmCmd&lt;&#39;Msg&gt;&gt; -&gt; nav:Dispatch&lt;&#39;Nav&gt; -&gt; source:BindingSource -&gt; signal:ISignal&lt;&#39;Model&gt; -&gt; IObservable&lt;&#39;Msg&gt; option<br />
+                          <strong>Type parameters:</strong> 'Model, 'Nav, 'Param, 'Msg          </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/Bind.fs#L535-535" class="github-link">
+            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/Bind.fs#L530-530" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Creates a parameterized ICommand (one way property) to a binding source by name which outputs a specific message</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '5', 5)" onmouseover="showTip(event, '5', 5)">
+            collection (...)
+          </code>
+          <div class="tip" id="5">
+            <strong>Signature:</strong> getter:(&#39;Model -&gt; &#39;SubmodelCollection) -&gt; collectionVm:IComponent&lt;&#39;Submodel,&#39;Nav,&#39;Submsg&gt; -&gt; mapper:(&#39;Submsg * &#39;Submodel -&gt; &#39;Msg) -&gt; name:Expr&lt;&#39;SubmodelCollection&gt; -&gt; nav:Dispatch&lt;&#39;Nav&gt; -&gt; source:BindingSource -&gt; signal:ISignal&lt;&#39;Model&gt; -&gt; IObservable&lt;&#39;Msg&gt; option<br />
+                          <strong>Type parameters:</strong> 'Model, 'Nav, 'Msg, 'Submodel, 'SubmodelCollection, 'Submsg          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/Bind.fs#L550-550" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -170,15 +190,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '5', 5)" onmouseover="showTip(event, '5', 5)">
+          <code onmouseout="hideTip(event, '6', 6)" onmouseover="showTip(event, '6', 6)">
             comp (...)
           </code>
-          <div class="tip" id="5">
-            <strong>Signature:</strong> getter:(&#39;Model -&gt; &#39;Submodel) -&gt; componentVm:Component&lt;&#39;Submodel,&#39;Submsg&gt; -&gt; mapper:(&#39;Submsg * &#39;Submodel -&gt; &#39;Msg) -&gt; name:Expr&lt;&#39;Submodel&gt; -&gt; source:BindingSource -&gt; signal:ISignal&lt;&#39;Model&gt; -&gt; IObservable&lt;&#39;Msg&gt; option<br />
-                          <strong>Type parameters:</strong> 'Model, 'Msg, 'Submodel, 'Submsg          </div>
+          <div class="tip" id="6">
+            <strong>Signature:</strong> getter:(&#39;Model -&gt; &#39;Submodel) -&gt; componentVm:IComponent&lt;&#39;Submodel,&#39;Nav,&#39;Submsg&gt; -&gt; mapper:(&#39;Submsg * &#39;Submodel -&gt; &#39;Msg) -&gt; name:Expr&lt;&#39;Submodel&gt; -&gt; nav:Dispatch&lt;&#39;Nav&gt; -&gt; source:BindingSource -&gt; signal:ISignal&lt;&#39;Model&gt; -&gt; IObservable&lt;&#39;Msg&gt; option<br />
+                          <strong>Type parameters:</strong> 'Model, 'Nav, 'Msg, 'Submodel, 'Submsg          </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/Bind.fs#L525-525" class="github-link">
+            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/Bind.fs#L540-540" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -190,15 +210,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '6', 6)" onmouseover="showTip(event, '6', 6)">
+          <code onmouseout="hideTip(event, '7', 7)" onmouseover="showTip(event, '7', 7)">
             createObservableSource ()
           </code>
-          <div class="tip" id="6">
+          <div class="tip" id="7">
             <strong>Signature:</strong> unit -&gt; ObservableBindingSource&lt;&#39;a&gt;<br />
                           <strong>Type parameters:</strong> 'a          </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/Bind.fs#L59-59" class="github-link">
+            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/Bind.fs#L58-58" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -210,15 +230,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '7', 7)" onmouseover="showTip(event, '7', 7)">
+          <code onmouseout="hideTip(event, '8', 8)" onmouseover="showTip(event, '8', 8)">
             createSource ()
           </code>
-          <div class="tip" id="7">
+          <div class="tip" id="8">
             <strong>Signature:</strong> unit -&gt; BindingSource<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/Bind.fs#L62-62" class="github-link">
+            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/Bind.fs#L61-61" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -230,15 +250,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '8', 8)" onmouseover="showTip(event, '8', 8)">
-            oneWay getter name source signal
+          <code onmouseout="hideTip(event, '9', 9)" onmouseover="showTip(event, '9', 9)">
+            oneWay getter name nav source signal
           </code>
-          <div class="tip" id="8">
-            <strong>Signature:</strong> getter:(&#39;Model -&gt; &#39;Prop) -&gt; name:Expr&lt;&#39;Prop&gt; -&gt; source:BindingSource -&gt; signal:ISignal&lt;&#39;Model&gt; -&gt; IObservable&lt;&#39;Msg&gt; option<br />
-                          <strong>Type parameters:</strong> 'Model, 'Prop, 'Msg          </div>
+          <div class="tip" id="9">
+            <strong>Signature:</strong> getter:(&#39;Model -&gt; &#39;Prop) -&gt; name:Expr&lt;&#39;Prop&gt; -&gt; nav:Dispatch&lt;&#39;Nav&gt; -&gt; source:BindingSource -&gt; signal:ISignal&lt;&#39;Model&gt; -&gt; IObservable&lt;&#39;Msg&gt; option<br />
+                          <strong>Type parameters:</strong> 'Model, 'Nav, 'Prop, 'Msg          </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/Bind.fs#L459-459" class="github-link">
+            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/Bind.fs#L458-458" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -250,15 +270,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '9', 9)" onmouseover="showTip(event, '9', 9)">
+          <code onmouseout="hideTip(event, '10', 10)" onmouseover="showTip(event, '10', 10)">
             oneWayValidated (...)
           </code>
-          <div class="tip" id="9">
-            <strong>Signature:</strong> getter:(&#39;Model -&gt; &#39;Prop) -&gt; validation:Validation&lt;&#39;Prop,&#39;Prop&gt; -&gt; name:Expr&lt;&#39;Prop&gt; -&gt; source:BindingSource -&gt; signal:ISignal&lt;&#39;Model&gt; -&gt; IObservable&lt;&#39;Msg&gt; option<br />
-                          <strong>Type parameters:</strong> 'Model, 'Prop, 'Msg          </div>
+          <div class="tip" id="10">
+            <strong>Signature:</strong> getter:(&#39;Model -&gt; &#39;Prop) -&gt; validation:Validation&lt;&#39;Prop,&#39;Prop&gt; -&gt; name:Expr&lt;&#39;Prop&gt; -&gt; nav:Dispatch&lt;&#39;Nav&gt; -&gt; source:BindingSource -&gt; signal:ISignal&lt;&#39;Model&gt; -&gt; IObservable&lt;&#39;Msg&gt; option<br />
+                          <strong>Type parameters:</strong> 'Model, 'Nav, 'Prop, 'Msg          </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/Bind.fs#L466-466" class="github-link">
+            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/Bind.fs#L471-471" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -270,15 +290,35 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '10', 10)" onmouseover="showTip(event, '10', 10)">
-            toExplicit source model list
+          <code onmouseout="hideTip(event, '11', 11)" onmouseover="showTip(event, '11', 11)">
+            self name nav source signal
           </code>
-          <div class="tip" id="10">
-            <strong>Signature:</strong> source:BindingSource -&gt; model:ISignal&lt;&#39;Model&gt; -&gt; list:(BindingSource -&gt; ISignal&lt;&#39;Model&gt; -&gt; IObservable&lt;&#39;Msg&gt; option) list -&gt; IObservable&lt;&#39;Msg&gt; list<br />
-                          <strong>Type parameters:</strong> 'Model, 'Msg          </div>
+          <div class="tip" id="11">
+            <strong>Signature:</strong> name:Expr&lt;ISignal&lt;&#39;Model&gt;&gt; -&gt; nav:Dispatch&lt;&#39;Nav&gt; -&gt; source:BindingSource -&gt; signal:ISignal&lt;&#39;Model&gt; -&gt; IObservable&lt;&#39;Msg&gt; option<br />
+                          <strong>Type parameters:</strong> 'Model, 'Nav, 'Msg          </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/Bind.fs#L545-545" class="github-link">
+            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/Bind.fs#L465-465" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Add a watched signal that is our entire model to a binding source by name</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '12', 12)" onmouseover="showTip(event, '12', 12)">
+            toExplicit nav source model list
+          </code>
+          <div class="tip" id="12">
+            <strong>Signature:</strong> nav:Dispatch&lt;&#39;Nav&gt; -&gt; source:BindingSource -&gt; model:ISignal&lt;&#39;Model&gt; -&gt; list:(Dispatch&lt;&#39;Nav&gt; -&gt; BindingSource -&gt; ISignal&lt;&#39;Model&gt; -&gt; IObservable&lt;&#39;Msg&gt; option) list -&gt; IObservable&lt;&#39;Msg&gt; list<br />
+                          <strong>Type parameters:</strong> 'Model, 'Nav, 'Msg          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/Bind.fs#L560-560" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -290,15 +330,35 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '11', 11)" onmouseover="showTip(event, '11', 11)">
-            twoWay getter setter name source signal
+          <code onmouseout="hideTip(event, '13', 13)" onmouseover="showTip(event, '13', 13)">
+            toNav navBinding nav source signal
           </code>
-          <div class="tip" id="11">
-            <strong>Signature:</strong> getter:(&#39;Model -&gt; &#39;Prop) -&gt; setter:(&#39;Prop -&gt; &#39;Msg) -&gt; name:Expr&lt;&#39;Prop&gt; -&gt; source:BindingSource -&gt; signal:ISignal&lt;&#39;Model&gt; -&gt; IObservable&lt;&#39;Msg&gt; option<br />
-                          <strong>Type parameters:</strong> 'Model, 'Prop, 'Msg          </div>
+          <div class="tip" id="13">
+            <strong>Signature:</strong> navBinding:(Dispatch&lt;&#39;Nav&gt; -&gt; BindingSource -&gt; ISignal&lt;&#39;Model&gt; -&gt; IObservable&lt;&#39;Nav&gt; option) -&gt; nav:Dispatch&lt;&#39;Nav&gt; -&gt; source:BindingSource -&gt; signal:ISignal&lt;&#39;Model&gt; -&gt; IObservable&lt;&#39;Msg&gt; option<br />
+                          <strong>Type parameters:</strong> 'Model, 'Nav, 'Msg          </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/Bind.fs#L473-473" class="github-link">
+            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/Bind.fs#L566-566" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Creates an ICommand (one way property) to a binding source by name which outputs a specific message</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '14', 14)" onmouseover="showTip(event, '14', 14)">
+            twoWay (...)
+          </code>
+          <div class="tip" id="14">
+            <strong>Signature:</strong> getter:(&#39;Model -&gt; &#39;Prop) -&gt; setter:(&#39;Prop -&gt; &#39;Msg) -&gt; name:Expr&lt;&#39;Prop&gt; -&gt; nav:Dispatch&lt;&#39;Nav&gt; -&gt; source:BindingSource -&gt; signal:ISignal&lt;&#39;Model&gt; -&gt; IObservable&lt;&#39;Msg&gt; option<br />
+                          <strong>Type parameters:</strong> 'Model, 'Nav, 'Prop, 'Msg          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/Bind.fs#L478-478" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -310,15 +370,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '12', 12)" onmouseover="showTip(event, '12', 12)">
+          <code onmouseout="hideTip(event, '15', 15)" onmouseover="showTip(event, '15', 15)">
             twoWayValidated (...)
           </code>
-          <div class="tip" id="12">
-            <strong>Signature:</strong> getter:(&#39;Model -&gt; &#39;Prop) -&gt; validation:Validation&lt;&#39;Prop,&#39;Prop&gt; -&gt; setter:(&#39;Prop -&gt; &#39;Msg) -&gt; name:Expr&lt;&#39;Prop&gt; -&gt; source:BindingSource -&gt; signal:ISignal&lt;&#39;Model&gt; -&gt; IObservable&lt;&#39;Msg&gt; option<br />
-                          <strong>Type parameters:</strong> 'Model, 'Prop, 'Msg          </div>
+          <div class="tip" id="15">
+            <strong>Signature:</strong> getter:(&#39;Model -&gt; &#39;Prop) -&gt; validation:Validation&lt;&#39;Prop,&#39;Prop&gt; -&gt; setter:(&#39;Prop -&gt; &#39;Msg) -&gt; name:Expr&lt;&#39;Prop&gt; -&gt; nav:Dispatch&lt;&#39;Nav&gt; -&gt; source:BindingSource -&gt; signal:ISignal&lt;&#39;Model&gt; -&gt; IObservable&lt;&#39;Msg&gt; option<br />
+                          <strong>Type parameters:</strong> 'Model, 'Nav, 'Prop, 'Msg          </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/Bind.fs#L483-483" class="github-link">
+            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/Bind.fs#L488-488" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>

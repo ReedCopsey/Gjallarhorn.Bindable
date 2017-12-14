@@ -55,15 +55,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '43', 43)" onmouseover="showTip(event, '43', 43)">
-            application model update binding
+          <code onmouseout="hideTip(event, '55', 55)" onmouseover="showTip(event, '55', 55)">
+            application model update binding nav
           </code>
-          <div class="tip" id="43">
-            <strong>Signature:</strong> model:&#39;?7389 -&gt; update:(&#39;?7390 -&gt; &#39;?7389 -&gt; &#39;?7389) -&gt; binding:Component&lt;&#39;?7389,&#39;?7390&gt; -&gt; ApplicationCore&lt;&#39;?7389,&#39;?7390&gt;<br />
-                          <strong>Type parameters:</strong> '?7389, '?7390          </div>
+          <div class="tip" id="55">
+            <strong>Signature:</strong> model:&#39;?7471 -&gt; update:(&#39;?7472 -&gt; &#39;?7471 -&gt; &#39;?7471) -&gt; binding:IComponent&lt;&#39;?7471,&#39;?7473,&#39;?7472&gt; -&gt; nav:(ApplicationCore&lt;&#39;?7471,&#39;?7473,&#39;?7472&gt; -&gt; &#39;?7473 -&gt; unit) -&gt; ApplicationCore&lt;&#39;?7471,&#39;?7473,&#39;?7472&gt;<br />
+                          <strong>Type parameters:</strong> '?7471, '?7472, '?7473          </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/Framework.fs#L67-67" class="github-link">
+            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/Framework.fs#L91-91" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -75,15 +75,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '44', 44)" onmouseover="showTip(event, '44', 44)">
+          <code onmouseout="hideTip(event, '56', 56)" onmouseover="showTip(event, '56', 56)">
             runApplication applicationInfo
           </code>
-          <div class="tip" id="44">
-            <strong>Signature:</strong> applicationInfo:ApplicationSpecification&lt;&#39;Model,&#39;Message&gt; -&gt; unit<br />
-                          <strong>Type parameters:</strong> 'Model, 'Message          </div>
+          <div class="tip" id="56">
+            <strong>Signature:</strong> applicationInfo:ApplicationSpecification&lt;&#39;Model,&#39;Nav,&#39;Message&gt; -&gt; unit<br />
+                          <strong>Type parameters:</strong> 'Model, 'Nav, 'Message          </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/Framework.fs#L81-81" class="github-link">
+            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/Framework.fs#L124-124" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -95,15 +95,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '45', 45)" onmouseover="showTip(event, '45', 45)">
+          <code onmouseout="hideTip(event, '57', 57)" onmouseover="showTip(event, '57', 57)">
             withDispatcher dispatcher application
           </code>
-          <div class="tip" id="45">
-            <strong>Signature:</strong> dispatcher:IObservable&lt;&#39;Msg&gt; -&gt; application:ApplicationCore&lt;&#39;?7393,&#39;Msg&gt; -&gt; ApplicationCore&lt;&#39;?7393,&#39;Msg&gt;<br />
-                          <strong>Type parameters:</strong> 'Msg, '?7393          </div>
+          <div class="tip" id="57">
+            <strong>Signature:</strong> dispatcher:IObservable&lt;&#39;Msg&gt; -&gt; application:ApplicationCore&lt;&#39;?7480,&#39;?7481,&#39;Msg&gt; -&gt; ApplicationCore&lt;&#39;?7480,&#39;?7481,&#39;Msg&gt;<br />
+                          <strong>Type parameters:</strong> 'Msg, '?7480, '?7481          </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/Framework.fs#L70-70" class="github-link">
+            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/Framework.fs#L101-101" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -115,19 +115,79 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '46', 46)" onmouseover="showTip(event, '46', 46)">
-            withLogger logger application
+          <code onmouseout="hideTip(event, '58', 58)" onmouseover="showTip(event, '58', 58)">
+            withExecutor executor application
           </code>
-          <div class="tip" id="46">
-            <strong>Signature:</strong> logger:(&#39;Model -&gt; &#39;Message -&gt; &#39;Model -&gt; unit) -&gt; application:ApplicationCore&lt;&#39;Model,&#39;Message&gt; -&gt; ApplicationCore&lt;&#39;Model,&#39;Message&gt;<br />
-                          <strong>Type parameters:</strong> 'Model, 'Message          </div>
+          <div class="tip" id="58">
+            <strong>Signature:</strong> executor:Executor&lt;&#39;Model,&#39;Msg&gt; -&gt; application:ApplicationCore&lt;&#39;Model,&#39;?7489,&#39;Msg&gt; -&gt; ApplicationCore&lt;&#39;Model,&#39;?7489,&#39;Msg&gt;<br />
+                          <strong>Type parameters:</strong> 'Model, 'Msg, '?7489          </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/Framework.fs#L76-76" class="github-link">
+            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/Framework.fs#L113-113" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Add an execution tracker to this application</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '59', 59)" onmouseover="showTip(event, '59', 59)">
+            withLogger logger application
+          </code>
+          <div class="tip" id="59">
+            <strong>Signature:</strong> logger:(&#39;Model -&gt; &#39;Message -&gt; &#39;Model -&gt; unit) -&gt; application:ApplicationCore&lt;&#39;Model,&#39;Nav,&#39;Message&gt; -&gt; ApplicationCore&lt;&#39;Model,&#39;Nav,&#39;Message&gt;<br />
+                          <strong>Type parameters:</strong> 'Model, 'Message, 'Nav          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/Framework.fs#L119-119" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
           <p>Adds a logger function</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '60', 60)" onmouseover="showTip(event, '60', 60)">
+            withNavigation dispatcher application
+          </code>
+          <div class="tip" id="60">
+            <strong>Signature:</strong> dispatcher:IObservable&lt;&#39;Nav&gt; -&gt; application:ApplicationCore&lt;&#39;?7484,&#39;Nav,&#39;?7485&gt; -&gt; ApplicationCore&lt;&#39;?7484,&#39;Nav,&#39;?7485&gt;<br />
+                          <strong>Type parameters:</strong> 'Nav, '?7484, '?7485          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/Framework.fs#L107-107" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Add a dispatch operation from an arbitrary observable to pump navigation requests into the application</p>
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '61', 61)" onmouseover="showTip(event, '61', 61)">
+            withSubscription (...)
+          </code>
+          <div class="tip" id="61">
+            <strong>Signature:</strong> subscription:(&#39;Model -&gt; unit) -&gt; application:ApplicationCore&lt;&#39;Model,&#39;?7476,&#39;Msg&gt; -&gt; ApplicationCore&lt;&#39;Model,&#39;?7476,&#39;Msg&gt;<br />
+                          <strong>Type parameters:</strong> 'Model, '?7476, 'Msg          </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/Framework.fs#L94-94" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Subscription which is called any time the model is changed. A dispatcher can be used separately to pump messages back to the application if needed</p>
 
 
         </td>

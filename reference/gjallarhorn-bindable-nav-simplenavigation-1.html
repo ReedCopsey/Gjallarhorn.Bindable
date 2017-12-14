@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8"/>
-    <title>Vm - Gjallarhorn.Bindable</title>
+    <title>SimpleNavigation<'Message> - Gjallarhorn.Bindable</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content=""/>
     <meta name="author" content="Reed Copsey, Jr."/>
@@ -35,41 +35,53 @@
 
 
 
-<h1>Vm</h1>
+<h1>SimpleNavigation<'Message></h1>
 <p>
   <span>Namespace: Gjallarhorn.Bindable</span><br />
+  <span>Parent Module: <a href="gjallarhorn-bindable-nav.html">Nav</a></span>
 </p>
 <div class="xmldoc">
-<p>Utilities for generation of ViewModel types and instances</p>
-
 </div>
-
-<!-- Render nested types and modules, if there are any -->
-
-  <h3>Functions and values</h3>
+  <h3>Union Cases</h3>
   <table class="table table-bordered member-list">
     <thead>
-      <tr><td>Function or value</td><td>Description</td></tr>
+      <tr><td>Union Case</td><td>Description</td></tr>
     </thead>
     <tbody>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '54', 54)" onmouseover="showTip(event, '54', 54)">
-            cmd msg
+          <code onmouseout="hideTip(event, '79', 79)" onmouseover="showTip(event, '79', 79)">
+            Prompt(question,title,response)
           </code>
-          <div class="tip" id="54">
-            <strong>Signature:</strong> msg:&#39;?7888 -&gt; VmCmd&lt;&#39;?7888&gt;<br />
-                          <strong>Type parameters:</strong> '?7888          </div>
+          <div class="tip" id="79">
+            <strong>Signature:</strong> string * string * PromptResponse -&gt; &#39;Message<br />
+                      </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/ViewModel.fs#L30-30" class="github-link">
+            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/Framework.fs#L151-151" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>Create a VmCmd (ICommand) for a VM type via a supplied Message</p>
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
 
-
+          <code onmouseout="hideTip(event, '80', 80)" onmouseover="showTip(event, '80', 80)">
+            ShowMessage(message,title)
+          </code>
+          <div class="tip" id="80">
+            <strong>Signature:</strong> string * string<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/Framework.fs#L150-150" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          
         </td>
       </tr>
     </tbody>

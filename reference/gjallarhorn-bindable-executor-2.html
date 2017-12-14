@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8"/>
-    <title>ObservableBindingSource<'Message> - Gjallarhorn.Bindable</title>
+    <title>Executor<'Model, 'Msg> - Gjallarhorn.Bindable</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content=""/>
     <meta name="author" content="Reed Copsey, Jr."/>
@@ -35,12 +35,13 @@
 
 
 
-<h1>ObservableBindingSource<'Message></h1>
+<h1>Executor<'Model, 'Msg></h1>
 <p>
   <span>Namespace: Gjallarhorn.Bindable</span><br />
 </p>
 <div class="xmldoc">
-<p>Base class for binding sources, used by platform specific libraries to share implementation details</p>
+<p>Manages the execution of an operation that produces messages to be dispatched.
+Constructed from a startup function and (optionally) a subscription which returns a bool for whether we should execute on model changes</p>
 
 </div>
   <h3>Constructors</h3>
@@ -52,15 +53,15 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '92', 92)" onmouseover="showTip(event, '92', 92)">
-            new()
+          <code onmouseout="hideTip(event, '85', 85)" onmouseover="showTip(event, '85', 85)">
+            new(startExecuting, subscription)
           </code>
-          <div class="tip" id="92">
-            <strong>Signature:</strong> unit -&gt; ObservableBindingSource&lt;&#39;Message&gt;<br />
+          <div class="tip" id="85">
+            <strong>Signature:</strong> (startExecuting:(Dispatch&lt;&#39;Msg&gt; -&gt; CancellationToken -&gt; unit) * subscription:(&#39;Model -&gt; bool) option) -&gt; Executor&lt;&#39;Model,&#39;Msg&gt;<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/BindingSource.fs#L188-188" class="github-link">
+            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/Dispatch.fs#L31-31" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
@@ -79,19 +80,61 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '93', 93)" onmouseover="showTip(event, '93', 93)">
-            OutputObservable(obs)
+          <code onmouseout="hideTip(event, '86', 86)" onmouseover="showTip(event, '86', 86)">
+            Executing()
           </code>
-          <div class="tip" id="93">
-            <strong>Signature:</strong> obs:IObservable&lt;&#39;Message&gt; -&gt; unit<br />
+          <div class="tip" id="86">
+            <strong>Signature:</strong> unit -&gt; bool<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/BindingSource.fs#L211-211" class="github-link">
+            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/Dispatch.fs#L51-51" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>Outputs values by subscribing to changes on an observable</p>
+          <p>Used to watch our execution status</p>
+
+
+              <p>CompiledName: <code>set_Executing</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '87', 87)" onmouseover="showTip(event, '87', 87)">
+            Executing()
+          </code>
+          <div class="tip" id="87">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/Dispatch.fs#L51-51" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Used to watch our execution status</p>
+
+
+              <p>CompiledName: <code>get_Executing</code></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '88', 88)" onmouseover="showTip(event, '88', 88)">
+            Start()
+          </code>
+          <div class="tip" id="88">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/Dispatch.fs#L58-58" class="github-link">
+              <img src="../content/img/github.png" class="normal" />
+              <img src="../content/img/github-blue.png" class="hover" />
+            </a>
+          <p>Attempt to start the operation</p>
 
 
         </td>
@@ -99,39 +142,19 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '94', 94)" onmouseover="showTip(event, '94', 94)">
-            OutputObservables(obs)
+          <code onmouseout="hideTip(event, '89', 89)" onmouseover="showTip(event, '89', 89)">
+            Stop()
           </code>
-          <div class="tip" id="94">
-            <strong>Signature:</strong> (obs:IObservable&lt;&#39;Message&gt; list) -&gt; unit<br />
+          <div class="tip" id="89">
+            <strong>Signature:</strong> unit -&gt; unit<br />
                       </div>
         </td>
         <td class="xmldoc">
-            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/BindingSource.fs#L216-216" class="github-link">
+            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/Dispatch.fs#L61-61" class="github-link">
               <img src="../content/img/github.png" class="normal" />
               <img src="../content/img/github-blue.png" class="hover" />
             </a>
-          <p>Outputs values by subscribing to changes on a list of observables</p>
-
-
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '95', 95)" onmouseover="showTip(event, '95', 95)">
-            OutputValue(value)
-          </code>
-          <div class="tip" id="95">
-            <strong>Signature:</strong> value:&#39;Message -&gt; unit<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-            <a href="http://github.com/ReedCopsey/Gjallarhorn.Bindable/tree/master/src/Gjallarhorn.Bindable/BindingSource.fs#L208-208" class="github-link">
-              <img src="../content/img/github.png" class="normal" />
-              <img src="../content/img/github-blue.png" class="hover" />
-            </a>
-          <p>Outputs a value through it's observable implementation</p>
+          <p>Attempt to stop the operation</p>
 
 
         </td>
