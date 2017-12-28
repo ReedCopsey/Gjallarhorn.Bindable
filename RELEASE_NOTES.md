@@ -1,3 +1,6 @@
+#### 1.0.0-beta6 - Dec 28th 2017
+* Fixed issue which caused side-effecting bindings to fire 2x
+
 #### 1.0.0-beta5 - Dec 14th 2017
 * Added navigation system
 * Breaking changes to API related to new navigation support

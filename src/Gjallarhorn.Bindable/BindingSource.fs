@@ -282,10 +282,14 @@ module Component =
                         | Some m -> disp.Dispatch m
                     } |> Async.Start
 
-                let dispatch msg = subscriptions |> List.iter (handleMessage msg)
-                obs |> List.iter (fun o -> o |> Observable.subscribe dispatch |> source.AddDisposable)
+                let dispatch msg = subscriptions |> List.iter (handleMessage msg)                
+                
+                // Mapping with side effect to avoid multiple subscriptions to source observables.
+                // If observable generation has side effects, this prevents 2x side effect from occuring
+                // due to binding installation. See Issue #9 for details.
+                let r = obs |> List.map (fun o -> o |> Observable.map (fun v -> dispatch v ; v))
 
-                (disp :> _) :: obs
+                (disp :> IObservable<'Message>) :: r
 
             member __.AddSubscription (subscription : 'Message -> 'Model -> Async<'Message option>) =
                 subscriptions <- subscription :: subscriptions
