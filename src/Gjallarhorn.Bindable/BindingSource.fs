@@ -259,9 +259,9 @@ module Component =
                     } |> Async.Start
 
                 let dispatch msg = subscriptions |> List.iter (handleMessage msg)
-                obs |> List.iter (fun o -> o |> Observable.subscribe dispatch |> source.AddDisposable)
+                let r = obs |> List.map (fun o -> o |> Observable.map (fun v -> dispatch v ; v))
 
-                (disp :> _) :: obs
+                (disp :> IObservable<'MessageParent>) :: r
 
             member __.AddSubscription (subscription : 'MessageParent -> 'Model -> Async<'MessageParent option>) = 
                 subscriptions <- subscription :: subscriptions
