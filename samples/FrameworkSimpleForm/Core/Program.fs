@@ -1,4 +1,4 @@
-﻿namespace SimpleForm
+namespace SimpleForm
 
 open System
 

@@ -192,6 +192,7 @@ module Bind =
             | Move of oldIndex:int * newIndex:int * orig:ObservableBindingSource<'Message>
 
         type internal BoundCollection<'Model,'Nav,'Message,'Coll when 'Model : equality and 'Coll :> System.Collections.Generic.IEnumerable<'Model>> (collection : ISignal<'Coll>, nav, comp : IComponent<'Model,'Nav,'Message>) as self =
+        //type BoundCollection<'Model,'Nav,'Message,'Coll when 'Model : equality and 'Coll :> System.Collections.Generic.IEnumerable<'Model>> (collection : ISignal<'Coll>, nav, comp : IComponent<'Model,'Nav,'Message>) as self =
             [<Literal>] 
             let maxChangesBeforeReset = 5
 

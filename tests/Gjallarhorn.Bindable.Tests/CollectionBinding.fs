@@ -42,7 +42,7 @@ type CollectionBindingTest() =
     let ignoreComp = intComponent ignore
     let ignoreNav = ignore
 
-    [<TestFixtureSetUp>]
+    [<OneTimeSetUp>]
     member __.Initialize() =
         Gjallarhorn.Wpf.Platform.install(false) |> ignore
 

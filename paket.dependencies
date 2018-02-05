@@ -1,28 +1,28 @@
 group Main
-  source https://nuget.org/api/v2
-  
+  source https://api.nuget.org/v3/index.json
+  framework:netstandard2
   redirects: on
-
-  framework: net461, net45, portable-net45+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1
-
-  nuget Gjallarhorn >= 1.1.0
+	
   nuget SourceLink.Fake
   nuget FAKE
   nuget FSharp.Formatting
-  nuget FsXaml.WPF
   nuget Xamarin.Forms
-  nuget FSharp.Core >= 4.0.0.1
-
+  nuget FSharp.Core ~> 4.3
+  nuget Microsoft.Build.Utilities.Core >= 15.5
   github fsharp/FAKE modules/Octokit/Octokit.fsx
 
+
 group Test
-  source https://nuget.org/api/v2
+  source https://api.nuget.org/v3/index.json
+    framework: netcoreapp2.0
+	nuget Microsoft.NET.Test.Sdk 15.5.0 
+	nuget NUnit 3.9.0 
+	nuget NUnit3TestAdapter 3.9.0 
+	nuget NUnit.ConsoleRunner ~> 3
+	nuget FSharp.Core 4.3.3
 
-  redirects: on
-
-  framework: net461, net45, portable-net45+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1
-  
-  nuget Gjallarhorn >= 1.1.0
-  nuget NUnit ~> 2
-  nuget NUnit.Runners ~> 2
-  nuget FSharp.Core >= 4.0.0.1
+group WpfSamples
+  source https://api.nuget.org/v3/index.json
+  framework: net461
+  nuget FsXaml.Wpf
+  nuget FSharp.Core 4.3.3
