@@ -34,9 +34,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Gjallarhorn">
-      <HintPath>..\..\..\..\Gjallarhorn\bin\Gjallarhorn.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />

@@ -8,6 +8,7 @@ group Main
   nuget FSharp.Formatting
   nuget Xamarin.Forms
   nuget FSharp.Core ~> 4.3
+  nuget Gjallarhorn_mtnrbq 2.0.0-alpha
   nuget Microsoft.Build.Utilities.Core >= 15.5
   github fsharp/FAKE modules/Octokit/Octokit.fsx
 
@@ -20,9 +21,11 @@ group Test
 	nuget NUnit3TestAdapter 3.9.0 
 	nuget NUnit.ConsoleRunner ~> 3
 	nuget FSharp.Core 4.3.3
+  nuget Gjallarhorn_mtnrbq 2.0.0-alpha
 
 group WpfSamples
   source https://api.nuget.org/v3/index.json
   framework: net461
   nuget FsXaml.Wpf
   nuget FSharp.Core 4.3.3
+  nuget Gjallarhorn_mtnrbq 2.0.0-alpha

@@ -26,6 +26,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DocumentationFile>bin\Debug\WpfCollectionManager.XML</DocumentationFile>
     <Prefer32Bit>true</Prefer32Bit>
+    <NoWarn>nu1703</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -40,7 +41,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Gjallarhorn">
-      <HintPath>..\..\..\..\Gjallarhorn\bin\Gjallarhorn.dll</HintPath>
+      <HintPath>..\..\..\packages\Gjallarhorn_mtnrbq\lib\netstandard2.0\Gjallarhorn.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="PresentationCore" />

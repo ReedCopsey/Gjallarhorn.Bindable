@@ -39,9 +39,6 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Gjallarhorn">
-      <HintPath>..\..\..\..\Gjallarhorn\bin\Gjallarhorn.dll</HintPath>
-    </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />

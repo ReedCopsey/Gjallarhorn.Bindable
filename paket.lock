@@ -10,6 +10,8 @@ NUGET
       FSharpVSPowerTools.Core (>= 2.3 < 2.4)
     FSharpVSPowerTools.Core (2.3)
       FSharp.Compiler.Service (>= 2.0.0.3)
+    Gjallarhorn_mtnrbq (2.0.0-alpha)
+      FSharp.Core (>= 4.3.3)
     Microsoft.Build.Framework (15.5.180)
       System.Collections (>= 4.0.11)
       System.Diagnostics.Debug (>= 4.0.11)
@@ -404,6 +406,8 @@ RESTRICTION: == netcoreapp2.0
 NUGET
   remote: https://api.nuget.org/v3/index.json
     FSharp.Core (4.3.3)
+    Gjallarhorn_mtnrbq (2.0.0-alpha)
+      FSharp.Core (>= 4.3.3)
     Microsoft.CodeCoverage (1.0.3)
     Microsoft.CSharp (4.4.1)
     Microsoft.DotNet.InternalAbstractions (1.0)
@@ -893,3 +897,4 @@ NUGET
   remote: https://api.nuget.org/v3/index.json
     FSharp.Core (4.3.3)
     FsXaml.Wpf (3.1.6)
+    Gjallarhorn_mtnrbq (2.0.0-alpha)

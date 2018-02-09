@@ -26,10 +26,5 @@
   <ItemGroup>
     <ProjectReference Include="..\Gjallarhorn.Bindable\Gjallarhorn.Bindable.fsproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Reference Include="Gjallarhorn">
-      <HintPath>..\..\..\Gjallarhorn\bin\Gjallarhorn.dll</HintPath>
-    </Reference>
-  </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

@@ -31,9 +31,6 @@
     <ProjectReference Include="..\Gjallarhorn.Bindable\Gjallarhorn.Bindable.fsproj" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Gjallarhorn">
-      <HintPath>..\..\..\Gjallarhorn\bin\Gjallarhorn.dll</HintPath>
-    </Reference>
     <Reference Include="PresentationCore">
       <HintPath>$(LocalReferenceAssemblies)\PresentationCore.dll</HintPath>
     </Reference>
