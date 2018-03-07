@@ -41,7 +41,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Gjallarhorn">
-      <HintPath>..\..\..\packages\Gjallarhorn_mtnrbq\lib\netstandard2.0\Gjallarhorn.dll</HintPath>
+      <HintPath>..\..\..\packages\Gjallarhorn\lib\netstandard2.0\Gjallarhorn.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="PresentationCore" />

@@ -127,7 +127,7 @@
     <When Condition="$(TargetFrameworkIdentifier) == '.NETStandard' And $(TargetFrameworkVersion) == 'v2.0'">
       <ItemGroup>
         <Reference Include="Gjallarhorn">
-          <HintPath>..\..\..\..\packages\Gjallarhorn_mtnrbq\lib\netstandard2.0\Gjallarhorn.dll</HintPath>
+          <HintPath>..\..\..\..\packages\Gjallarhorn\lib\netstandard2.0\Gjallarhorn.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
