@@ -61,7 +61,7 @@ type BindingSourceTest() =
             else
                 Some "Value must contain at least a first and last name"
 
-    [<TestFixtureSetUp>]
+    [<OneTimeSetUp>]
     member __.Initialize() =
         Gjallarhorn.Wpf.Platform.install(false) |> ignore
 
@@ -113,7 +113,7 @@ type BindingSourceTest() =
     member __.``BindingSource\twoWay raises property changed`` () =
         let v1 = Mutable.create 1
         let v2 = Signal.map (fun i -> i+1) v1
-        use dynamicVm = new DesktopBindingSource<obj>() :> BindingSource
+        use dynamicVm = new Gjallarhorn.Wpf.  DesktopBindingSource<obj>() :> BindingSource
         Bind.Explicit.twoWay dynamicVm "Test" v2 |> ignore
 
         let obs = PropertyChangedObserver(dynamicVm)    

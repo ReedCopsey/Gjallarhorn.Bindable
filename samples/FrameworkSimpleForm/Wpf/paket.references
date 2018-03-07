@@ -1,4 +1,4 @@
-group Main
+group WpfSamples
     FSharp.Core
     FsXaml.Wpf
-    Gjallarhorn
+    Gjallarhorn_mtnrbq

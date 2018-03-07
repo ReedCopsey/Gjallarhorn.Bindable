@@ -13,9 +13,11 @@ open System.Windows.Input
 do ()
 
 type internal IPropertyBag =
+//type IPropertyBag =
     abstract member CustomProperties : Dictionary<string,PropertyDescriptor * IValueHolder>
 
 type [<TypeDescriptionProvider(typeof<BindingSourceTypeDescriptorProvider>)>] internal DesktopBindingSource<'b>() =
+//type [<TypeDescriptionProvider(typeof<BindingSourceTypeDescriptorProvider>)>] DesktopBindingSource<'b>() =
     inherit ObservableBindingSource<'b>()    
 
     let customProps = Dictionary<string, PropertyDescriptor * IValueHolder>()
@@ -39,7 +41,8 @@ type [<TypeDescriptionProvider(typeof<BindingSourceTypeDescriptorProvider>)>] in
 
 /// [omit]
 /// Internal type used to allow dynamic binding sources to be generated.        
-and internal BindingSourceTypeDescriptorProvider(parent) =
+//and internal BindingSourceTypeDescriptorProvider(parent) =
+and BindingSourceTypeDescriptorProvider(parent) =
     inherit TypeDescriptionProvider(parent)
 
     let mutable td = null, null
@@ -56,6 +59,7 @@ and internal BindingSourceTypeDescriptorProvider(parent) =
             desc
 
 and [<AllowNullLiteral>] internal BindingSourceTypeDescriptor(parent, inst : IPropertyBag) =
+//and [<AllowNullLiteral>] BindingSourceTypeDescriptor(parent, inst : IPropertyBag) =
     inherit CustomTypeDescriptor(parent)
 
     override __.GetProperties() =
@@ -70,6 +74,7 @@ and [<AllowNullLiteral>] internal BindingSourceTypeDescriptor(parent, inst : IPr
         PropertyDescriptorCollection(props)
 
 and internal BindingSourcePropertyDescriptor<'a>(name : string) =
+//and BindingSourcePropertyDescriptor<'a>(name : string) =
     inherit PropertyDescriptor(name, [| |])
 
     override __.ComponentType = typeof<IPropertyBag>
