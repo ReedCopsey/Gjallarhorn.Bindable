@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>Gjallarhorn.ReferenceDocumentation</RootNamespace>
     <AssemblyName>Gjallarhorn.ReferenceDocumentation</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <TargetFSharpCoreVersion>4.4.1.0</TargetFSharpCoreVersion>
     <Name>Gjallarhorn.ReferenceDocumentation</Name>
     <TargetFrameworkProfile />
@@ -93,10 +93,10 @@
   -->
   <Import Project="..\..\.paket\paket.targets" />
   <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETStandard' And $(TargetFrameworkVersion) == 'v2.0'">
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.7.1'">
       <ItemGroup>
         <Reference Include="FSharp.Core">
-          <HintPath>..\..\packages\FSharp.Core\lib\netstandard1.6\FSharp.Core.dll</HintPath>
+          <HintPath>..\..\packages\wpfsamples\FSharp.Core\lib\net45\FSharp.Core.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
@@ -104,10 +104,10 @@
     </When>
   </Choose>
   <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETStandard' And $(TargetFrameworkVersion) == 'v2.0'">
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.7.1'">
       <ItemGroup>
         <Reference Include="Gjallarhorn">
-          <HintPath>..\..\packages\Gjallarhorn\lib\netstandard2.0\Gjallarhorn.dll</HintPath>
+          <HintPath>..\..\packages\wpfsamples\Gjallarhorn\lib\netstandard2.0\Gjallarhorn.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
