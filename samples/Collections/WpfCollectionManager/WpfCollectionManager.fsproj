@@ -9,7 +9,7 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>WpfCollectionManager</RootNamespace>
     <AssemblyName>WpfCollectionManager</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TargetFSharpCoreVersion>4.4.0.0</TargetFSharpCoreVersion>
     <Name>WpfCollectionManager</Name>
@@ -40,9 +40,6 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Gjallarhorn">
-      <HintPath>..\..\..\packages\Gjallarhorn\lib\netstandard2.0\Gjallarhorn.dll</HintPath>
-    </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -108,7 +105,7 @@
   -->
   <Import Project="..\..\..\.paket\paket.restore.targets" />
   <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.6.1'">
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.7.1'">
       <ItemGroup>
         <Reference Include="FSharp.Core">
           <HintPath>..\..\..\packages\wpfsamples\FSharp.Core\lib\net45\FSharp.Core.dll</HintPath>
@@ -119,7 +116,7 @@
     </When>
   </Choose>
   <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.6.1'">
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.7.1'">
       <ItemGroup>
         <Reference Include="UIAutomationTypes">
           <Paket>True</Paket>
@@ -131,6 +128,17 @@
         </Reference>
         <Reference Include="FsXaml.Wpf.TypeProvider">
           <HintPath>..\..\..\packages\wpfsamples\FsXaml.Wpf\lib\net45\FsXaml.Wpf.TypeProvider.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
+  <Choose>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.7.1'">
+      <ItemGroup>
+        <Reference Include="Gjallarhorn">
+          <HintPath>..\..\..\packages\wpfsamples\Gjallarhorn\lib\netstandard2.0\Gjallarhorn.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
