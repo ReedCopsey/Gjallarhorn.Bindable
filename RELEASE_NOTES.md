@@ -1,3 +1,7 @@
+#### 1.0.0-beta7 - Mar 9th 2018
+* Moved to NETStandard 2.0
+* Upgrade to new Gjallarhorn
+
 #### 1.0.0-beta6 - Dec 28th 2017
 * Fixed issue which caused side-effecting bindings to fire 2x
 
