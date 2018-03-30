@@ -1,14 +1,12 @@
 ﻿namespace Gjallarhorn.Wpf
 
-open System
 open System.Threading
 open System.Windows.Threading
-open Gjallarhorn
 open Gjallarhorn.Bindable
-open System.Windows.Media.Media3D
 
 /// Platform installation
 module Platform =
+
     // Gets, and potentially installs, the WPF synchronization context
     let private installAndGetSynchronizationContext () =
         match SynchronizationContext.Current with
