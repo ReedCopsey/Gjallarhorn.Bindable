@@ -123,7 +123,7 @@ type BindingSource() as self =
         | _ -> ()
 
     /// Track an InOut type
-    member this.TrackInOut<'a,'b,'c> (name, inout : InOut<'a,'b>) =
+    member this.TrackInOut<'a,'b,'c  when 'a : equality and 'b : equality> (name, inout : InOut<'a,'b>) =
         this.TrackObservable (name, inout.UpdateStream)
         this.AddReadWriteProperty (name, Func<_>(inout.GetValue), Action<_>(inout.SetValue))
 

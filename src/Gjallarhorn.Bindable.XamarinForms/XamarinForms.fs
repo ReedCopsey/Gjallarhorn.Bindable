@@ -27,7 +27,7 @@ module Framework =
         do         
             self.MainPage <- page
 
-    type XamarinApplicationInfo<'Model,'Nav,'Message> = 
+    type XamarinApplicationInfo<'Model,'Nav,'Message when 'Model : equality> = 
         { 
             Core : Framework.ApplicationCore<'Model, 'Nav, 'Message>
             View : Page

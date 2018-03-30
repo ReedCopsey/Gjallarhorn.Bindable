@@ -8,7 +8,7 @@ open Gjallarhorn.Bindable
 open Gjallarhorn.Bindable.Framework
 open System
 
-type private SingleView<'Model, 'Nav, 'Message, 'App, 'Win when 'App :> Application and 'Win :> Window> private (appCtor : unit -> 'App, windowCtor : unit -> 'Win, show : bool) =
+type private SingleView<'Model, 'Nav, 'Message, 'App, 'Win when 'Model : equality and 'App :> Application and 'Win :> Window> private (appCtor : unit -> 'App, windowCtor : unit -> 'Win, show : bool) =
 
     new(appCtor : unit -> 'App, windowCtor : unit -> 'Win) = SingleView(appCtor, windowCtor, false)
     static member Create(windowCtor : unit -> 'Win) =
@@ -32,7 +32,7 @@ type private SingleView<'Model, 'Nav, 'Message, 'App, 'Win when 'App :> Applicat
         win.DataContext <- dataContext     
         app.Run win |> ignore
 
-    interface INavigator<'Model,'Nav,'Message> with
+    interface INavigator<'Model, 'Nav, 'Message> with
         member this.Run _app createCtx = this.Run createCtx
 
         // Our navigation does nothing
@@ -46,7 +46,7 @@ type UIType =
 
 /// Generates the UI, with proper binding contexts installed
 [<AbstractClass>]
-type UIFactory<'Model,'Nav,'Message> () =    
+type UIFactory<'Model,'Nav,'Message when 'Model : equality> () =    
     let mutable beforeNav = None
     let mutable afterNav = None
 
@@ -58,15 +58,15 @@ type UIFactory<'Model,'Nav,'Message> () =
     member __.SetBeforeNav (handler : unit -> unit) = beforeNav <- Some handler
     member __.SetAfterNav  (handler : unit -> unit) = afterNav <- Some handler
 
-type private IgnoreUIFactory<'Model,'Nav,'Message> () =
+type private IgnoreUIFactory<'Model,'Nav,'Message when 'Model : equality> () =
     inherit UIFactory<'Model,'Nav,'Message>()
     override __.Create app = Ignore
 
-type private MessageUIFactory<'Model,'Nav,'Message> (title,message) =
+type private MessageUIFactory<'Model,'Nav,'Message when 'Model : equality> (title,message) =
     inherit UIFactory<'Model,'Nav,'Message>()
     override __.Create app = Message(title,message)
 
-type private ComponentUIFactory<'Model,'Nav,'Message,'Submodel,'Submsg,'FE when 'FE :> FrameworkElement>
+type private ComponentUIFactory<'Model,'Nav,'Message,'Submodel,'Submsg,'FE when 'Model : equality and 'FE :> FrameworkElement>
         (
             makeElement : unit -> 'FE,
             modelMapper : ISignal<'Model> -> ISignal<'Submodel>,
@@ -93,7 +93,7 @@ type private ComponentUIFactory<'Model,'Nav,'Message,'Submodel,'Submsg,'FE when 
                     Content ui
 
 
-type private SinglePageApplicationNavigator<'Model,'Nav,'Message, 'App, 'Win when 'App :> Application and 'Win :> Window> 
+type private SinglePageApplicationNavigator<'Model,'Nav,'Message, 'App, 'Win when 'Model : equality and 'App :> Application and 'Win :> Window> 
                 (
                     initialNavigationState : 'Nav, 
                     appCtor : unit -> 'App, 
@@ -152,13 +152,13 @@ module Navigation =
     let singleView appCtor windowCtor = SingleView<_,_,_,_,_>(appCtor, windowCtor) :> INavigator<_,_,_>
     let singleViewFromWindow windowCtor = SingleView<_,_,_,_,_>.Create(windowCtor) :> INavigator<_,_,_>
 
-    let singlePage<'Model,'Nav,'Message, 'App, 'Win when 'App :> Application and 'Win :> Window>  appCtor windowCtor initialNav update = SinglePageApplicationNavigator<'Model,'Nav,'Message, 'App, 'Win> (initialNav,appCtor,windowCtor,update) :> INavigator<_,_,_>
+    let singlePage<'Model,'Nav,'Message, 'App, 'Win when 'Model : equality and 'App :> Application and 'Win :> Window>  appCtor windowCtor initialNav update = SinglePageApplicationNavigator<'Model,'Nav,'Message, 'App, 'Win> (initialNav,appCtor,windowCtor,update) :> INavigator<_,_,_>
 
     module Page =
         let create (makeElement : unit -> 'UIElement) (comp : IComponent<'Model,'Nav,'Message>) =
             ComponentUIFactory (makeElement, id, comp, id,false) :> UIFactory<_,_,_>
-        let ignore<'Model,'Nav,'Message> () = IgnoreUIFactory<_,_,_> () :> UIFactory<'Model,'Nav,'Message>
-        let message<'Model,'Nav,'Message> title message = MessageUIFactory<_,_,_> (title, message) :> UIFactory<'Model,'Nav,'Message>
+        let ignore<'Model,'Nav,'Message when 'Model : equality> () = IgnoreUIFactory<_,_,_> () :> UIFactory<'Model,'Nav,'Message>
+        let message<'Model,'Nav,'Message when 'Model : equality> title message = MessageUIFactory<_,_,_> (title, message) :> UIFactory<'Model,'Nav,'Message>
 
         let fromComponentS
                 (makeElement : unit -> 'UIElement)
@@ -173,14 +173,14 @@ module Navigation =
                 (msgMapper   : 'Submsg -> 'Message) =
                     ComponentUIFactory (makeElement,(fun m -> m |> Signal.map modelMapper),comp,msgMapper,false) :> UIFactory<_,_,_>
 
-        let dialogS<'Model,'Nav,'Message,'Submodel,'Submsg,'Win when 'Win :> Window>
+        let dialogS<'Model,'Nav,'Message,'Submodel,'Submsg,'Win when 'Model : equality and 'Win :> Window>
                 (makeElement : unit -> 'Win)
                 (modelMapper : ISignal<'Model> -> ISignal<'Submodel>)
                 (comp        : IComponent<'Submodel,'Nav,'Submsg>)
                 (msgMapper   : 'Submsg -> 'Message) =
                     ComponentUIFactory (makeElement,modelMapper,comp,msgMapper,true) :> UIFactory<_,_,_>
 
-        let dialog<'Model,'Nav,'Message,'Submodel,'Submsg,'Win when 'Win :> Window>
+        let dialog<'Model,'Nav,'Message,'Submodel,'Submsg,'Win when 'Model : equality and 'Win :> Window>
                 (makeElement : unit -> 'Win)
                 (modelMapper : 'Model -> 'Submodel)
                 (comp        : IComponent<'Submodel,'Nav,'Submsg>)
@@ -193,10 +193,6 @@ module Navigation =
             factory
 
 
-
-
-
-
 namespace Gjallarhorn.Wpf.CSharp
 
 open Gjallarhorn.Bindable
@@ -207,5 +203,5 @@ open System.Windows
 
 type Navigation =
     static member SingleView (app : System.Func<#Application>, win : System.Func<#Window>) = Navigation.singleView app.Invoke win.Invoke
-    static member SingleView<'Model,'Nav,'Message,'Win when 'Win :> Window> (win : System.Func<'Win>) = Navigation.singleViewFromWindow win.Invoke :> INavigator<'Model,'Nav,'Message>
+    static member SingleView<'Model,'Nav,'Message,'Win when 'Model : equality and 'Win :> Window> (win : System.Func<'Win>) = Navigation.singleViewFromWindow win.Invoke :> INavigator<'Model,'Nav,'Message>
     

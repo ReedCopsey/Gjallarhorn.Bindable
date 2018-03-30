@@ -5,7 +5,7 @@ open Gjallarhorn.Bindable
 open System.Threading
 
 /// The core information required for an application 
-type ApplicationCore<'Model,'Nav,'Message> (initialModel, navUpdate : (ApplicationCore<'Model,'Nav,'Message> -> 'Nav -> unit), update, binding) =             
+type ApplicationCore<'Model,'Nav,'Message when 'Model : equality> (initialModel, navUpdate : (ApplicationCore<'Model,'Nav,'Message> -> 'Nav -> unit), update, binding) =             
 
     let model = Mutable.createAsync initialModel
     let logging = Event<_>()
@@ -59,7 +59,7 @@ type ApplicationCore<'Model,'Nav,'Message> (initialModel, navUpdate : (Applicati
     member this.AddLogger logger =
         this.UpdateLog.Add (fun (o,msg,n) -> logger o msg n)        
 
-type INavigator<'Model, 'Nav, 'Message> =
+type INavigator<'Model, 'Nav, 'Message when 'Model : equality> =
     abstract member Run : ApplicationCore<'Model,'Nav,'Message> -> (System.Threading.SynchronizationContext -> ObservableBindingSource<'Message>) -> unit
     abstract member Navigate : ApplicationCore<'Model,'Nav,'Message> -> 'Nav -> unit
 
@@ -67,7 +67,7 @@ type INavigator<'Model, 'Nav, 'Message> =
 type CreateDataContext<'Message> = System.Threading.SynchronizationContext -> ObservableBindingSource<'Message>
 
 /// Full specification required to run an application
-type ApplicationSpecification<'Model,'Nav,'Message> = 
+type ApplicationSpecification<'Model,'Nav,'Message when 'Model : equality> = 
     { 
         /// The application core
         Core : ApplicationCore<'Model,'Nav,'Message>
@@ -121,7 +121,7 @@ module Framework =
         application        
     
     /// Run an application given the full ApplicationSpecification            
-    let runApplication<'Model,'Nav,'Message> (applicationInfo : ApplicationSpecification<'Model,'Nav,'Message>) =        
+    let runApplication<'Model,'Nav,'Message when 'Model : equality> (applicationInfo : ApplicationSpecification<'Model,'Nav,'Message>) =        
         // Map our state directly into the view context - this gives us something that can be data bound
         let viewContext (ctx : System.Threading.SynchronizationContext) = 
             applicationInfo.Core.InstallContext ctx
@@ -151,7 +151,7 @@ module Nav =
         | Prompt of question : string * title : string * response : (PromptResponse -> 'Message)
 
     /// A predefined, typed navigation dispatch which does nothing
-    let empty<'Model,'Message> (_ : Framework.ApplicationCore<'Model,SimpleNavigation<'Message>,'Message>) (_ : SimpleNavigation<'Message>) = ()   
+    let empty<'Model,'Message when 'Model : equality> (_ : Framework.ApplicationCore<'Model,SimpleNavigation<'Message>,'Message>) (_ : SimpleNavigation<'Message>) = ()   
 
     /// Create a mapper to bubble from a child navigation to a parent navigation
     let bubble<'ChildNav,'ParentNav> (mapper : 'ChildNav -> 'ParentNav option) (parent : Dispatch<'ParentNav>) : Dispatch<'ChildNav> =

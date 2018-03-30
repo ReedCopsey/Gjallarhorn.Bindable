@@ -44,7 +44,7 @@ module App =
 [<AbstractClass;Sealed>]
 type Framework =
     /// Run an application given an Application generator, Window generator, and other required information
-    static member RunApplication<'Model,'Nav,'Message> (navigator : Framework.INavigator<'Model,'Nav,'Message>, applicationInfo : Framework.ApplicationCore<'Model,'Nav,'Message>) =        
+    static member RunApplication<'Model,'Nav,'Message when 'Model : equality> (navigator : Framework.INavigator<'Model,'Nav,'Message>, applicationInfo : Framework.ApplicationCore<'Model,'Nav,'Message>) =        
         Framework.Framework.runApplication (App.toApplicationSpecification navigator applicationInfo) 
     
     ///// Run an application using Application.Current and a function to construct the main window
