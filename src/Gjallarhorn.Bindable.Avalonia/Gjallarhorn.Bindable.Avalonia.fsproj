@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\Gjallarhorn.Bindable.XamarinForms\RefTypeBindingTarget.fs" Link="RefTypeBindingTarget.fs" />
+    <Compile Include="CustomPropertyAccessor.fs" />
     <Compile Include="Avalonia.fs" />
     <Compile Include="Nav.fs" />
   </ItemGroup>

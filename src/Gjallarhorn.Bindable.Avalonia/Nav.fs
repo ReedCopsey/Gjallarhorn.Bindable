@@ -30,8 +30,7 @@ type private SingleView<'Model, 'Nav, 'Message, 'App, 'Win when 'Model : equalit
         let app = appCtor()
         // Construct main window and set data context
         let win = windowCtor()
-        win.DataContext <- dataContext     
-        win.Show ()
+        win.DataContext <- dataContext             
         app.Run win |> ignore
 
     interface INavigator<'Model, 'Nav, 'Message> with

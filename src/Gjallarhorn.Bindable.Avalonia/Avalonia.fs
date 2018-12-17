@@ -3,14 +3,17 @@ namespace Gjallarhorn.Avalonia
 open System
 open System.Threading
 open Avalonia
+open Avalonia.Data.Core.Plugins
 open Avalonia.Threading
 open Avalonia.Logging.Serilog
 open Gjallarhorn.Bindable
 
 /// Platform installation
 module Platform =
+    open Avalonia.Data.Core
+
     let private creation (typ : System.Type) =
-        let sourceType = typedefof<Gjallarhorn.Bindable.Internal.DynProperty.RefTypeBindingTarget<_>>.MakeGenericType([|typ|])
+        let sourceType = typedefof<Gjallarhorn.Avalonia.Internal.AvaloniaBindingTarget<_>>.MakeGenericType([|typ|])
         System.Activator.CreateInstance(sourceType) 
     
     // Gets, and potentially installs, the WPF synchronization context
@@ -21,6 +24,8 @@ module Platform =
     /// Installs Avalonia targets for binding into Gjallarhorn
     [<CompiledName("Install")>]
     let install installSynchronizationContext =        
+        ExpressionObserver.PropertyAccessors.Insert(0, Gjallarhorn.Avalonia.Internal.DynamicPropertyAccessorPlugin() :> IPropertyAccessorPlugin)
+
         Gjallarhorn.Bindable.Bind.Implementation.installCreationFunction (fun _ -> creation typeof<obj>) creation
 
         match installSynchronizationContext with

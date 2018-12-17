@@ -16,10 +16,10 @@ let main _ =
     let app () =
         AppBuilder.Configure<App>().UsePlatformDetect().LogToDebug().SetupWithoutStarting().Instance                
 
-    let a = app ()
-    let w = MainWindow()
-    w.Show ()
-    a.Run w
-    // let v = Navigation.singleView app MainWindow, Program.applicationCore
-    // Framework.RunApplication v
+    //let a = app ()
+    //let w = MainWindow()
+    //w.Show ()
+    //a.Run w
+    let v = Navigation.singleView app MainWindow, Program.applicationCore
+    Framework.RunApplication v
     1
