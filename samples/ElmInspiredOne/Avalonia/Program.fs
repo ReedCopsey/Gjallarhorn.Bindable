@@ -13,13 +13,6 @@ open Avalonia.Logging.Serilog
 [<STAThread>]
 [<EntryPoint>]
 let main _ =         
-    let app () =
-        AppBuilder.Configure<App>().UsePlatformDetect().LogToDebug().SetupWithoutStarting().Instance                
-
-    //let a = app ()
-    //let w = MainWindow()
-    //w.Show ()
-    //a.Run w
-    let v = Navigation.singleView app MainWindow, Program.applicationCore
-    Framework.RunApplication v
+    let app () = AppBuilder.Configure<App>().UsePlatformDetect().LogToDebug().SetupWithoutStarting().Instance                            
+    Framework.RunApplication (Navigation.singleView app MainWindow, Program.applicationCore)
     1
