@@ -6,7 +6,7 @@ open System.Threading
 /// Platform installation
 module Platform =
     let private creation (typ : System.Type) =
-        let sourceType = typedefof<Gjallarhorn.XamarinForms.RefTypeBindingTarget<_>>.MakeGenericType([|typ|])
+        let sourceType = typedefof<Gjallarhorn.Bindable.Internal.DynProperty.RefTypeBindingTarget<_>>.MakeGenericType([|typ|])
         System.Activator.CreateInstance(sourceType) 
 
     /// Installs Xamarin Forms targets for binding into Gjallarhorn

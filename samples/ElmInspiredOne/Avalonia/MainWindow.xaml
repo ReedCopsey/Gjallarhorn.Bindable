@@ -1,0 +1,15 @@
+﻿<Window
+  	xmlns="https://github.com/avaloniaui"
+	  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"     
+	  Title="Elm Architecture Sample One"
+    MinWidth="400"
+    MinHeight="100"
+    SizeToContent="WidthAndHeight">
+  <Grid RowDefinitions="*,*" ColumnDefinitions="*,*">
+    <TextBlock Grid.Row="0" Grid.Column="0" Margin="5">Current:</TextBlock>
+    <!--<TextBox Text="{Binding Current, Mode=OneWay}" IsReadOnly="True" Grid.Row="0" Grid.Column="1" Margin="5" />
+
+    <Button Command="{Binding Increment}" Margin="5" Grid.Row="1" Grid.Column="0">Increment</Button>
+    <Button Command="{Binding Decrement}" Margin="5" Grid.Row="1" Grid.Column="1">Decrement</Button>-->
+  </Grid>
+</Window>

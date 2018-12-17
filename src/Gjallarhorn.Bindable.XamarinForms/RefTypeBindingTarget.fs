@@ -1,4 +1,4 @@
-﻿namespace Gjallarhorn.XamarinForms
+﻿namespace Gjallarhorn.Bindable.Internal.DynProperty
 
 open Gjallarhorn
 open Gjallarhorn.Bindable

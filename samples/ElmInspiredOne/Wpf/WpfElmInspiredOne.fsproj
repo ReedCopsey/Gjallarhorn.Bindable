@@ -9,7 +9,7 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>WpfElmInspiredOne</RootNamespace>
     <AssemblyName>WpfElmInspiredOne</AssemblyName>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TargetFSharpCoreVersion>4.3.1.0</TargetFSharpCoreVersion>
     <Name>WpfElmInspiredOne</Name>
@@ -38,42 +38,6 @@
     <DocumentationFile>bin\Release\WpfElmInspiredOne.XML</DocumentationFile>
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="Gjallarhorn">
-      <HintPath>..\..\..\..\..\..\source\repos\Gjallarhorn\bin\Gjallarhorn.dll</HintPath>
-    </Reference>
-    <Reference Include="mscorlib" />
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Numerics" />
-    <Reference Include="System.Windows" />
-    <Reference Include="System.Xaml" />
-    <Reference Include="WindowsBase" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="MainWindow.xaml" />
-    <Compile Include="Program.fs" />
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\src\Gjallarhorn.Bindable.Wpf\Gjallarhorn.Bindable.Wpf.fsproj">
-      <Name>Gjallarhorn.Bindable.Wpf</Name>
-      <Project>{FB784D20-9375-4587-A189-0D1FBF3E2640}</Project>
-      <Private>True</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\src\Gjallarhorn.Bindable\Gjallarhorn.Bindable.fsproj">
-      <Name>Gjallarhorn.Bindable</Name>
-      <Project>{EDA3EC39-0AFB-4A05-9926-D128B9325420}</Project>
-      <Private>True</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\ElmInspiredOne\ElmInspiredOne.fsproj">
-      <Name>ElmInspiredOne (samples\ElmInspiredOne\ElmInspiredOne\ElmInspiredOne)</Name>
-      <Project>{7BDAE80E-995F-45D9-B034-CCF4FE226314}</Project>
-      <Private>True</Private>
-    </ProjectReference>
-  </ItemGroup>
   <PropertyGroup>
     <MinimumVisualStudioVersion Condition="'$(MinimumVisualStudioVersion)' == ''">11</MinimumVisualStudioVersion>
   </PropertyGroup>
@@ -99,15 +63,7 @@
   -->
   <Import Project="..\..\..\.paket\paket.targets" />
   <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.7.1'">
-      <ItemGroup>
-        <Reference Include="FSharp.Core">
-          <HintPath>..\..\..\packages\wpfsamples\FSharp.Core\lib\net45\FSharp.Core.dll</HintPath>
-          <Private>True</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.7.1'" />
   </Choose>
   <Choose>
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.7.1'">
@@ -131,4 +87,49 @@
       </ItemGroup>
     </When>
   </Choose>
+  <ItemGroup>
+    <Resource Include="MainWindow.xaml" />
+    <Compile Include="Program.fs" />
+    <None Include="App.config" />
+    <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="FSharp.Core">
+      <HintPath>..\..\..\packages\FSharp.Core.4.3.4\lib\net45\FSharp.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="FsXaml.Wpf">
+      <HintPath>..\..\..\packages\FsXaml.Wpf.3.1.6\lib\net45\FsXaml.Wpf.dll</HintPath>
+    </Reference>
+    <Reference Include="FsXaml.Wpf.TypeProvider">
+      <HintPath>..\..\..\packages\FsXaml.Wpf.3.1.6\lib\net45\FsXaml.Wpf.TypeProvider.dll</HintPath>
+    </Reference>
+    <Reference Include="Gjallarhorn">
+      <HintPath>..\..\..\packages\Gjallarhorn.1.2.1\lib\netstandard2.0\Gjallarhorn.dll</HintPath>
+    </Reference>
+    <Reference Include="mscorlib" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Windows" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+    <ProjectReference Include="..\..\..\src\Gjallarhorn.Bindable.Wpf\Gjallarhorn.Bindable.Wpf.fsproj">
+      <Name>Gjallarhorn.Bindable.Wpf</Name>
+      <Project>{FB784D20-9375-4587-A189-0D1FBF3E2640}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\src\Gjallarhorn.Bindable\Gjallarhorn.Bindable.fsproj">
+      <Name>Gjallarhorn.Bindable</Name>
+      <Project>{EDA3EC39-0AFB-4A05-9926-D128B9325420}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\ElmInspiredOne\ElmInspiredOne.fsproj">
+      <Name>ElmInspiredOne (samples\ElmInspiredOne\ElmInspiredOne\ElmInspiredOne)</Name>
+      <Project>{7BDAE80E-995F-45D9-B034-CCF4FE226314}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+  </ItemGroup>
 </Project>

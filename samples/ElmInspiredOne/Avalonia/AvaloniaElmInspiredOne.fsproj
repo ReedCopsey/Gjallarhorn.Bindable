@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\..\..\packages\Avalonia.Native.0.7.0\build\netstandard2.0\Avalonia.Native.props" Condition="Exists('..\..\..\packages\Avalonia.Native.0.7.0\build\netstandard2.0\Avalonia.Native.props')" />
+  <Import Project="..\..\..\packages\SharpGen.Runtime.COM.1.1.0\build\netstandard1.1\SharpGen.Runtime.COM.props" Condition="Exists('..\..\..\packages\SharpGen.Runtime.COM.1.1.0\build\netstandard1.1\SharpGen.Runtime.COM.props')" />
+  <Import Project="..\..\..\packages\Avalonia.0.7.0\build\Avalonia.props" Condition="Exists('..\..\..\packages\Avalonia.0.7.0\build\Avalonia.props')" />
+  <Import Project="..\..\..\packages\SharpGen.Runtime.1.1.0\build\SharpGen.Runtime.props" Condition="Exists('..\..\..\packages\SharpGen.Runtime.1.1.0\build\SharpGen.Runtime.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>e82c066b-232f-460c-9566-eb3dd3b3dce4</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>AvaloniaElmInspiredOne</RootNamespace>
+    <AssemblyName>AvaloniaElmInspiredOne</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+    <UseStandardResourceNames>true</UseStandardResourceNames>
+    <Name>AvaloniaElmInspiredOne</Name>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <Tailcalls>false</Tailcalls>
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <WarningLevel>3</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DocumentationFile>bin\$(Configuration)\$(AssemblyName).XML</DocumentationFile>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <Tailcalls>true</Tailcalls>
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <WarningLevel>3</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DocumentationFile>bin\$(Configuration)\$(AssemblyName).XML</DocumentationFile>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <MinimumVisualStudioVersion Condition="'$(MinimumVisualStudioVersion)' == ''">11</MinimumVisualStudioVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(FSharpTargetsPath)' == '' AND Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\FSharp\Microsoft.FSharp.Targets') ">
+    <FSharpTargetsPath>$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\FSharp\Microsoft.FSharp.Targets</FSharpTargetsPath>
+  </PropertyGroup>
+  <Import Project="$(FSharpTargetsPath)" />
+  <Import Project="..\..\..\packages\SkiaSharp.1.60.0\build\net45\SkiaSharp.targets" Condition="Exists('..\..\..\packages\SkiaSharp.1.60.0\build\net45\SkiaSharp.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\..\..\packages\SkiaSharp.1.60.0\build\net45\SkiaSharp.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\SkiaSharp.1.60.0\build\net45\SkiaSharp.targets'))" />
+    <Error Condition="!Exists('..\..\..\packages\Avalonia.Skia.Linux.Natives.1.60.0.1\build\net45\Avalonia.Skia.Linux.Natives.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\Avalonia.Skia.Linux.Natives.1.60.0.1\build\net45\Avalonia.Skia.Linux.Natives.targets'))" />
+    <Error Condition="!Exists('..\..\..\packages\SharpGen.Runtime.1.1.0\build\SharpGen.Runtime.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\SharpGen.Runtime.1.1.0\build\SharpGen.Runtime.props'))" />
+    <Error Condition="!Exists('..\..\..\packages\Avalonia.0.7.0\build\Avalonia.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\Avalonia.0.7.0\build\Avalonia.props'))" />
+    <Error Condition="!Exists('..\..\..\packages\SharpGen.Runtime.COM.1.1.0\build\netstandard1.1\SharpGen.Runtime.COM.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\SharpGen.Runtime.COM.1.1.0\build\netstandard1.1\SharpGen.Runtime.COM.props'))" />
+    <Error Condition="!Exists('..\..\..\packages\Avalonia.Native.0.7.0\build\netstandard2.0\Avalonia.Native.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\Avalonia.Native.0.7.0\build\netstandard2.0\Avalonia.Native.props'))" />
+  </Target>
+  <Import Project="..\..\..\packages\Avalonia.Skia.Linux.Natives.1.60.0.1\build\net45\Avalonia.Skia.Linux.Natives.targets" Condition="Exists('..\..\..\packages\Avalonia.Skia.Linux.Natives.1.60.0.1\build\net45\Avalonia.Skia.Linux.Natives.targets')" />
+  <ItemGroup>
+    <Compile Include="MainTypes.fs" />
+    <Compile Include="Program.fs" />
+    <None Include="App.config" />
+    <Content Include="packages.config" />
+    <EmbeddedResource Include="MainWindow.xaml" />
+    <EmbeddedResource Include="App.xaml" />
+    <None Include="libSkiaSharp.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Avalonia.Animation">
+      <HintPath>..\..\..\packages\Avalonia.0.7.0\lib\net461\Avalonia.Animation.dll</HintPath>
+    </Reference>
+    <Reference Include="Avalonia.Base">
+      <HintPath>..\..\..\packages\Avalonia.0.7.0\lib\net461\Avalonia.Base.dll</HintPath>
+    </Reference>
+    <Reference Include="Avalonia.Controls">
+      <HintPath>..\..\..\packages\Avalonia.0.7.0\lib\net461\Avalonia.Controls.dll</HintPath>
+    </Reference>
+    <Reference Include="Avalonia.DesignerSupport">
+      <HintPath>..\..\..\packages\Avalonia.0.7.0\lib\net461\Avalonia.DesignerSupport.dll</HintPath>
+    </Reference>
+    <Reference Include="Avalonia.Desktop">
+      <HintPath>..\..\..\packages\Avalonia.Desktop.0.7.0\lib\netstandard2.0\Avalonia.Desktop.dll</HintPath>
+    </Reference>
+    <Reference Include="Avalonia.DesktopRuntime">
+      <HintPath>..\..\..\packages\Avalonia.0.7.0\lib\net461\Avalonia.DesktopRuntime.dll</HintPath>
+    </Reference>
+    <Reference Include="Avalonia.Diagnostics">
+      <HintPath>..\..\..\packages\Avalonia.0.7.0\lib\net461\Avalonia.Diagnostics.dll</HintPath>
+    </Reference>
+    <Reference Include="Avalonia.Direct2D1">
+      <HintPath>..\..\..\packages\Avalonia.Direct2D1.0.7.0\lib\netstandard2.0\Avalonia.Direct2D1.dll</HintPath>
+    </Reference>
+    <Reference Include="Avalonia.Gtk3">
+      <HintPath>..\..\..\packages\Avalonia.Gtk3.0.7.0\lib\netstandard2.0\Avalonia.Gtk3.dll</HintPath>
+    </Reference>
+    <Reference Include="Avalonia.Input">
+      <HintPath>..\..\..\packages\Avalonia.0.7.0\lib\net461\Avalonia.Input.dll</HintPath>
+    </Reference>
+    <Reference Include="Avalonia.Interactivity">
+      <HintPath>..\..\..\packages\Avalonia.0.7.0\lib\net461\Avalonia.Interactivity.dll</HintPath>
+    </Reference>
+    <Reference Include="Avalonia.Layout">
+      <HintPath>..\..\..\packages\Avalonia.0.7.0\lib\net461\Avalonia.Layout.dll</HintPath>
+    </Reference>
+    <Reference Include="Avalonia.Logging.Serilog">
+      <HintPath>..\..\..\packages\Avalonia.0.7.0\lib\net461\Avalonia.Logging.Serilog.dll</HintPath>
+    </Reference>
+    <Reference Include="Avalonia.Markup">
+      <HintPath>..\..\..\packages\Avalonia.0.7.0\lib\net461\Avalonia.Markup.dll</HintPath>
+    </Reference>
+    <Reference Include="Avalonia.Markup.Xaml">
+      <HintPath>..\..\..\packages\Avalonia.0.7.0\lib\net461\Avalonia.Markup.Xaml.dll</HintPath>
+    </Reference>
+    <Reference Include="Avalonia.Native">
+      <HintPath>..\..\..\packages\Avalonia.Native.0.7.0\lib\netstandard2.0\Avalonia.Native.dll</HintPath>
+    </Reference>
+    <Reference Include="Avalonia.OpenGL">
+      <HintPath>..\..\..\packages\Avalonia.0.7.0\lib\net461\Avalonia.OpenGL.dll</HintPath>
+    </Reference>
+    <Reference Include="Avalonia.Remote.Protocol">
+      <HintPath>..\..\..\packages\Avalonia.Remote.Protocol.0.7.0\lib\netstandard2.0\Avalonia.Remote.Protocol.dll</HintPath>
+    </Reference>
+    <Reference Include="Avalonia.Skia">
+      <HintPath>..\..\..\packages\Avalonia.Skia.0.7.0\lib\netstandard2.0\Avalonia.Skia.dll</HintPath>
+    </Reference>
+    <Reference Include="Avalonia.Styling">
+      <HintPath>..\..\..\packages\Avalonia.0.7.0\lib\net461\Avalonia.Styling.dll</HintPath>
+    </Reference>
+    <Reference Include="Avalonia.Themes.Default">
+      <HintPath>..\..\..\packages\Avalonia.0.7.0\lib\net461\Avalonia.Themes.Default.dll</HintPath>
+    </Reference>
+    <Reference Include="Avalonia.Visuals">
+      <HintPath>..\..\..\packages\Avalonia.0.7.0\lib\net461\Avalonia.Visuals.dll</HintPath>
+    </Reference>
+    <Reference Include="Avalonia.Win32">
+      <HintPath>..\..\..\packages\Avalonia.Win32.0.7.0\lib\netstandard2.0\Avalonia.Win32.dll</HintPath>
+    </Reference>
+    <Reference Include="FSharp.Core">
+      <HintPath>..\..\..\packages\FSharp.Core.4.3.4\lib\net45\FSharp.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Gjallarhorn">
+      <HintPath>..\..\..\packages\Gjallarhorn.1.2.1\lib\netstandard2.0\Gjallarhorn.dll</HintPath>
+    </Reference>
+    <Reference Include="JetBrains.Annotations">
+      <HintPath>..\..\..\packages\JetBrains.Annotations.10.3.0\lib\net\JetBrains.Annotations.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Win32.Primitives">
+      <HintPath>..\..\..\packages\Microsoft.Win32.Primitives.4.3.0\lib\net46\Microsoft.Win32.Primitives.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="mscorlib" />
+    <Reference Include="Serilog">
+      <HintPath>..\..\..\packages\Serilog.2.5.0\lib\net46\Serilog.dll</HintPath>
+    </Reference>
+    <Reference Include="Serilog.Sinks.Debug">
+      <HintPath>..\..\..\packages\Serilog.Sinks.Debug.1.0.0\lib\netstandard1.0\Serilog.Sinks.Debug.dll</HintPath>
+    </Reference>
+    <Reference Include="Serilog.Sinks.Trace">
+      <HintPath>..\..\..\packages\Serilog.Sinks.Trace.2.1.0\lib\net45\Serilog.Sinks.Trace.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX">
+      <HintPath>..\..\..\packages\SharpDX.4.0.1\lib\net45\SharpDX.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.Direct2D1">
+      <HintPath>..\..\..\packages\SharpDX.Direct2D1.4.0.1\lib\net45\SharpDX.Direct2D1.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.Direct3D11">
+      <HintPath>..\..\..\packages\SharpDX.Direct3D11.4.0.1\lib\net45\SharpDX.Direct3D11.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.DXGI">
+      <HintPath>..\..\..\packages\SharpDX.DXGI.4.0.1\lib\net45\SharpDX.DXGI.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpGen.Runtime">
+      <HintPath>..\..\..\packages\SharpGen.Runtime.1.1.0\lib\netstandard2.0\SharpGen.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpGen.Runtime.COM">
+      <HintPath>..\..\..\packages\SharpGen.Runtime.COM.1.1.0\lib\netstandard1.1\SharpGen.Runtime.COM.dll</HintPath>
+    </Reference>
+    <Reference Include="SkiaSharp">
+      <HintPath>..\..\..\packages\SkiaSharp.1.60.0\lib\net45\SkiaSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.AppContext">
+      <HintPath>..\..\..\packages\System.AppContext.4.3.0\lib\net46\System.AppContext.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Buffers">
+      <HintPath>..\..\..\packages\System.Buffers.4.4.0\lib\netstandard2.0\System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel.Annotations">
+      <HintPath>..\..\..\packages\System.ComponentModel.Annotations.4.5.0\lib\net461\System.ComponentModel.Annotations.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Console">
+      <HintPath>..\..\..\packages\System.Console.4.3.0\lib\net46\System.Console.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Core" />
+    <Reference Include="System.Diagnostics.DiagnosticSource">
+      <HintPath>..\..\..\packages\System.Diagnostics.DiagnosticSource.4.3.0\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Drawing.Common">
+      <HintPath>..\..\..\packages\System.Drawing.Common.4.5.0\lib\net461\System.Drawing.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Globalization.Calendars">
+      <HintPath>..\..\..\packages\System.Globalization.Calendars.4.3.0\lib\net46\System.Globalization.Calendars.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.IO.Compression">
+      <HintPath>..\..\..\packages\System.IO.Compression.4.3.0\lib\net46\System.IO.Compression.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.IO.Compression.ZipFile">
+      <HintPath>..\..\..\packages\System.IO.Compression.ZipFile.4.3.0\lib\net46\System.IO.Compression.ZipFile.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.IO.FileSystem">
+      <HintPath>..\..\..\packages\System.IO.FileSystem.4.3.0\lib\net46\System.IO.FileSystem.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.IO.FileSystem.Primitives">
+      <HintPath>..\..\..\packages\System.IO.FileSystem.Primitives.4.3.0\lib\net46\System.IO.FileSystem.Primitives.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Memory">
+      <HintPath>..\..\..\packages\System.Memory.4.5.1\lib\netstandard2.0\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http">
+      <HintPath>..\..\..\packages\System.Net.Http.4.3.0\lib\net46\System.Net.Http.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Sockets">
+      <HintPath>..\..\..\packages\System.Net.Sockets.4.3.0\lib\net46\System.Net.Sockets.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <Private>True</Private>
+      <SpecificVersion>True</SpecificVersion>
+    </Reference>
+    <Reference Include="System.Reactive">
+      <HintPath>..\..\..\packages\System.Reactive.4.0.0\lib\net46\System.Reactive.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe">
+      <HintPath>..\..\..\packages\System.Runtime.CompilerServices.Unsafe.4.5.0\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.InteropServices.RuntimeInformation">
+      <HintPath>..\..\..\packages\System.Runtime.InteropServices.RuntimeInformation.4.3.0\lib\net45\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Algorithms">
+      <HintPath>..\..\..\packages\System.Security.Cryptography.Algorithms.4.3.0\lib\net461\System.Security.Cryptography.Algorithms.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Encoding">
+      <HintPath>..\..\..\packages\System.Security.Cryptography.Encoding.4.3.0\lib\net46\System.Security.Cryptography.Encoding.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Primitives">
+      <HintPath>..\..\..\packages\System.Security.Cryptography.Primitives.4.3.0\lib\net46\System.Security.Cryptography.Primitives.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.X509Certificates">
+      <HintPath>..\..\..\packages\System.Security.Cryptography.X509Certificates.4.3.0\lib\net461\System.Security.Cryptography.X509Certificates.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
+      <HintPath>..\..\..\packages\System.ValueTuple.4.5.0\lib\net461\System.ValueTuple.dll</HintPath>
+      <Private>True</Private>
+      <SpecificVersion>True</SpecificVersion>
+    </Reference>
+    <Reference Include="System.Windows" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xml.ReaderWriter">
+      <HintPath>..\..\..\packages\System.Xml.ReaderWriter.4.3.0\lib\net46\System.Xml.ReaderWriter.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <ProjectReference Include="..\..\..\src\Gjallarhorn.Bindable.Avalonia\Gjallarhorn.Bindable.Avalonia.fsproj">
+      <Name>Gjallarhorn.Bindable.Avalonia</Name>
+      <Project>{e380a570-756e-41e1-83eb-31b5b2a44850}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\src\Gjallarhorn.Bindable\Gjallarhorn.Bindable.fsproj">
+      <Name>Gjallarhorn.Bindable</Name>
+      <Project>{eda3ec39-0afb-4a05-9926-d128b9325420}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\ElmInspiredOne\ElmInspiredOne.fsproj">
+      <Name>ElmInspiredOne (samples\ElmInspiredOne\ElmInspiredOne\ElmInspiredOne)</Name>
+      <Project>{7bdae80e-995f-45d9-b034-ccf4fe226314}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+  </ItemGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
