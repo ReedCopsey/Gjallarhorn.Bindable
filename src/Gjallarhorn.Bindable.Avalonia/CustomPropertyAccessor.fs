@@ -37,9 +37,7 @@ type DynamicPropertyAccessor (weakRef : WeakReference, name : string) =
     override __.Value =
         let vh = getVH ()
         let v = fst vh
-        let value = v.GetValue ()
-        System.Diagnostics.Debug.WriteLine (sprintf "Getting property %s: %A" name value)
-        value
+        v.GetValue ()
     override __.SetValue (obj, _) =
         let vh = getVH ()
         let v = fst vh
@@ -69,10 +67,7 @@ type DynamicPropertyAccessorPlugin () =
     interface IPropertyAccessorPlugin with
         member __.Match (obj, name) =
             match obj with
-            | :? IAvaloniaBindingTarget as target -> 
-                let exists = target.GetProperty name |> Option.isSome
-                System.Diagnostics.Debug.WriteLine (sprintf "Checking property %s: %b" name exists)
-                exists
+            | :? IAvaloniaBindingTarget as target -> target.GetProperty name |> Option.isSome
             | _ -> false
 
         member __.Start (wr, name) = new DynamicPropertyAccessor(wr, name) :> _
