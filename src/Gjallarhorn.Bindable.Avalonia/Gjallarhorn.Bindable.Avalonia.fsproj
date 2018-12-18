@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="AssemblyInfo.fs" />
     <Compile Include="CustomPropertyAccessor.fs" />
     <Compile Include="Avalonia.fs" />
     <Compile Include="Nav.fs" />

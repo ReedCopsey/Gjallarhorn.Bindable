@@ -72,6 +72,9 @@
     <Content Include="packages.config" />
     <EmbeddedResource Include="MainWindow.xaml" />
     <EmbeddedResource Include="App.xaml" />
+    <None Include="libSkiaSharp.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Avalonia.Animation">
