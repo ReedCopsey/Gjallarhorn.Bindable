@@ -23,9 +23,23 @@ group Test
 	nuget FSharp.Core ~> 4.3
   nuget Gjallarhorn >= 1.2.1
 
+group UiTest
+  source https://api.nuget.org/v3/index.json
+    framework: net461
+    storage:none
+    nuget Gu.Wpf.UiAutomation
+    nuget Microsoft.NET.Test.Sdk 15.5.0 
+    nuget NUnit 3.9.0 
+    nuget NUnit3TestAdapter 3.9.0 
+    nuget NUnit.ConsoleRunner ~> 3
+    nuget FSharp.Core ~> 4.3
+    nuget Gjallarhorn >= 1.2.1
+
 group WpfSamples
   source https://api.nuget.org/v3/index.json
   framework: net471
   nuget FsXaml.Wpf
   nuget FSharp.Core ~> 4.3
   nuget Gjallarhorn >= 1.2.1
+  nuget FsXaml.Wpf.Blend
+  nuget System.Windows.Interactivity.WPF

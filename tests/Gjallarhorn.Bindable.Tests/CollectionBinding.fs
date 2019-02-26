@@ -323,7 +323,7 @@ type CollectionBindingTest() =
             obs.[NotifyCollectionChangedAction.Move]            
             |> List.map (fun v -> v.OldStartingIndex)            
         Assert.AreEqual([ 1 ; 3 ; 2 ; 4 ], l.Value)
-        Assert.AreEqual([ 1 ], changes)
+        Assert.AreEqual([ 2 ], changes)
         Assert.AreEqual(0, !count) // original 3 & 5 get overwritten
 
     [<Test>]
@@ -342,5 +342,5 @@ type CollectionBindingTest() =
             obs.[NotifyCollectionChangedAction.Move]            
             |> List.map (fun v -> v.OldStartingIndex)            
         Assert.AreEqual([ 2 ; 1 ; 3 ; 4 ], l.Value)
-        Assert.AreEqual([ 0 ], changes)
+        Assert.AreEqual([ 1 ], changes)
         Assert.AreEqual(0, !count) // original 3 & 5 get overwritten

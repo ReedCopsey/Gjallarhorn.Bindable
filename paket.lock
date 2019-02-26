@@ -881,11 +881,33 @@ NUGET
       System.Xml.XmlDocument (>= 4.3)
       System.Xml.XPath (>= 4.3)
 
+GROUP UiTest
+STORAGE: NONE
+RESTRICTION: == net461
+NUGET
+  remote: https://api.nuget.org/v3/index.json
+    FSharp.Core (4.6.2)
+    Gjallarhorn (1.2.3)
+      FSharp.Core (>= 4.3.4)
+    Gu.Wpf.UiAutomation (0.2.7)
+    Microsoft.CodeCoverage (15.9)
+    Microsoft.NET.Test.Sdk (15.5)
+      Microsoft.CodeCoverage (>= 1.0.3)
+      Microsoft.TestPlatform.TestHost (>= 15.5)
+    Microsoft.TestPlatform.TestHost (15.9)
+    NUnit (3.9)
+    NUnit.ConsoleRunner (3.9)
+    NUnit3TestAdapter (3.9)
+
 GROUP WpfSamples
 RESTRICTION: == net471
 NUGET
   remote: https://api.nuget.org/v3/index.json
     FSharp.Core (4.3.4)
     FsXaml.Wpf (3.1.6)
+    FsXaml.Wpf.Blend (3.1.6)
+      FsXaml.Wpf (>= 3.1.6)
+      System.Windows.Interactivity.WPF (>= 2.0.20525)
     Gjallarhorn (1.2.2)
       FSharp.Core (>= 4.3.2)
+    System.Windows.Interactivity.WPF (2.0.20525)
