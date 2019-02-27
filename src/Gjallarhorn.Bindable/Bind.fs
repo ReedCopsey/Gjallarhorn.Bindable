@@ -212,7 +212,7 @@ module Bind =
                     | Reset -> NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset)
                     | Add(i,item) -> NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item, i)
                     | Remove(i,item) -> NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, item, i)
-                    | Move(o,n,item) -> NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Move, [|item|],n,o)
+                    | Move(oldIndex,newIndex,item) -> NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Move, [|item|], newIndex, oldIndex)
 
                 if args <> null then
                     collectionChanged.Trigger(self, args)

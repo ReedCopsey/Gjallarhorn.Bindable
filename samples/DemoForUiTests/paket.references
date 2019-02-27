@@ -2,5 +2,3 @@ group WpfSamples
     FSharp.Core
     FsXaml.Wpf
     Gjallarhorn
-    FsXaml.Wpf.Blend    
-    System.Windows.Interactivity.WPF

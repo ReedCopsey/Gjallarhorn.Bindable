@@ -905,9 +905,5 @@ NUGET
   remote: https://api.nuget.org/v3/index.json
     FSharp.Core (4.3.4)
     FsXaml.Wpf (3.1.6)
-    FsXaml.Wpf.Blend (3.1.6)
-      FsXaml.Wpf (>= 3.1.6)
-      System.Windows.Interactivity.WPF (>= 2.0.20525)
     Gjallarhorn (1.2.2)
       FSharp.Core (>= 4.3.2)
-    System.Windows.Interactivity.WPF (2.0.20525)

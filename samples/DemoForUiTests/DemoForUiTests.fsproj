@@ -2,14 +2,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net471</TargetFramework>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <NoWarn>NU1701</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Program.fs" />
-    <Compile Include="View.fs" />
     <None Include="App.config" />
     <Resource Include="MainWindow.xaml" />
   </ItemGroup>
