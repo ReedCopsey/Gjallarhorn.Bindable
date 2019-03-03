@@ -10,7 +10,9 @@
   <ItemGroup>
     <Compile Include="Program.fs" />
     <None Include="App.config" />
-    <Resource Include="MainWindow.xaml" />
+    <EmbeddedResource Include="MainWindow.xaml">
+      <LogicalName>MainWindow.xaml</LogicalName>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\Gjallarhorn.Bindable.Wpf\Gjallarhorn.Bindable.Wpf.fsproj" />
