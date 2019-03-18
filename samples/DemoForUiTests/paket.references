@@ -1,0 +1,4 @@
+group WpfSamples
+    FSharp.Core
+    FsXaml.Wpf
+    Gjallarhorn

@@ -1,0 +1,7 @@
+group UiTest
+  Microsoft.NET.Test.Sdk
+  NUnit
+  NUnit3TestAdapter
+  FSharp.Core
+  Gjallarhorn
+  Gu.Wpf.UiAutomation
