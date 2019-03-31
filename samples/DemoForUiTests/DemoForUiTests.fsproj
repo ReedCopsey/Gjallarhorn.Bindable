@@ -8,11 +8,24 @@
     <NoWarn>NU1701</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Program.fs" />
-    <None Include="App.config" />
+    <EmbeddedResource Include="MenuView.xaml">
+      <LogicalName>MenuView.xaml</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Issue24.xaml">
+      <LogicalName>Issue24.xaml</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Issue21.xaml">
+      <LogicalName>Issue21.xaml</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StartPage.xaml">
+      <LogicalName>StartPage.xaml</LogicalName>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainWindow.xaml">
       <LogicalName>MainWindow.xaml</LogicalName>
     </EmbeddedResource>
+    <Compile Include="Views.fs" />
+    <Compile Include="Program.fs" />
+    <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\Gjallarhorn.Bindable.Wpf\Gjallarhorn.Bindable.Wpf.fsproj" />

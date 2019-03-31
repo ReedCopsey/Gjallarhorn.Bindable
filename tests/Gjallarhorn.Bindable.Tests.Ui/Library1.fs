@@ -20,6 +20,10 @@ module Collection =
 
         Assert.AreEqual("Ui tests", window.Title)
         
+        let issue21Btn = window.FindButton("Issue21")
+        issue21Btn.Click()
+        Wait.For(TimeSpan.FromSeconds(1.0))
+
         let btn = window.FindButton("1")
         btn.Click()
 
