@@ -14,6 +14,9 @@
     <EmbeddedResource Include="Issue24.xaml">
       <LogicalName>Issue24.xaml</LogicalName>
     </EmbeddedResource>
+    <EmbeddedResource Include="Issue24Dialog.xaml">
+      <LogicalName>Issue24Dialog.xaml</LogicalName>
+    </EmbeddedResource>
     <EmbeddedResource Include="Issue21.xaml">
       <LogicalName>Issue21.xaml</LogicalName>
     </EmbeddedResource>
@@ -33,6 +36,7 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="PresentationCore" />
+    <Reference Include="UIAutomationTypes" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />

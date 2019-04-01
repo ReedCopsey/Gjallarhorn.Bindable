@@ -33,3 +33,41 @@ module Collection =
 
         application.Close() |> ignore
         Assert.IsTrue(application.HasExited)
+
+    [<Test>]
+    let ``issue: #24 - ModalDialog doesn't call dispose for the DataContext of a window. #24``() = 
+        let current = TestContext.CurrentContext.WorkDirectory
+        let path = Path.GetFullPath(Path.Combine(current, "..", "..", "..", "..", "..", appPath))
+        Assert.True(File.Exists(path))
+
+        use application = Application.AttachOrLaunch(path)
+        let window = application.GetMainWindow(new Nullable<TimeSpan>(TimeSpan.FromSeconds(15.0)))
+
+        Assert.AreEqual("Ui tests", window.Title)
+        
+        let issue24Btn = window.FindButton("Issue24")
+        issue24Btn.Click()
+        Wait.For(TimeSpan.FromSeconds(1.0))
+
+        let lb = window.FindListBox()
+        Assert.AreEqual(5, lb.Items.Count)
+
+        let addBtn = window.FindButton("AddRandom")
+        addBtn.Click()
+
+        Wait.For(TimeSpan.FromSeconds(1.0))
+        Assert.AreEqual(window.ModalWindows.Count, 1)
+
+        let dialogWnd = window.ModalWindows |> Seq.head
+        
+        Assert.IsTrue(dialogWnd.Title.StartsWith("Current length"))
+
+        let confirmBtn = dialogWnd.FindButton("Confirm")
+        confirmBtn.Click()
+
+        Wait.For(TimeSpan.FromSeconds(1.0))
+
+        Assert.AreEqual(6, lb.Items.Count)
+
+        application.Close() |> ignore
+        Assert.IsTrue(application.HasExited)

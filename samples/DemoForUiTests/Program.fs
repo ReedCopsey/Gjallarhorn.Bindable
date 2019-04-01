@@ -53,8 +53,9 @@ module MenuComponent =
 module Issue21Component = 
     type Cell = { Value : int }
     type Cells = { Items : Cell list; IsOrdered : bool }
-
+    [<RequireQualifiedAccess>]
     type CellsMsg = | Move of Cell | New of int
+    [<RequireQualifiedAccess>]
     type CellMsg = | Click
 
     let rnd = Random()
@@ -73,12 +74,12 @@ module Issue21Component =
 
     let update msg model =
         match msg with
-        | Move value ->
+        | CellsMsg.Move value ->
             let nitems = value :: List.except [ value ] model.Items
             let sorted = nitems |> List.sort
             if nitems = sorted then { Items = nitems ; IsOrdered = true }
             else { model with Items = nitems }
-        | New count -> create count
+        | CellsMsg.New count -> create count
 
     type ViewModel = 
         {
@@ -100,32 +101,77 @@ module Issue21Component =
         Component.create [
             <@ init.Items @> |> Bind.collection (fun m -> m.Items) cellComponent (snd >> CellsMsg.Move)
             <@ init.IsOrdered @> |> Bind.oneWay (fun m -> m.IsOrdered)
-        ]         
+        ]
+
+module Issue24Component = 
+    type Values = { Items : int list; SelectedIndex : int }
+    [<RequireQualifiedAccess>]
+    type ValuesMsg = 
+        | Click of int
+        | Add of int
+    [<RequireQualifiedAccess>]
+    type ValuesNavMsg = 
+        | AddRequest
+    let update msg model =
+        match msg with
+        | ValuesMsg.Click value ->
+            { model with SelectedIndex = value }
+        | ValuesMsg.Add value ->
+            let ind = model.Items.Length
+            { SelectedIndex = ind; Items = model.Items @ [ value ] }
+        
+    type ViewModel = 
+        {
+            Model : Values
+            AddRequest : VmCmd<ValuesNavMsg>
+            Add : VmCmd<ValuesMsg>
+        }
+
+    let values = [ 0..4 ] 
+    let init = { Items = values; SelectedIndex = values |> List.last }
+    let d = {
+        Model = init
+        AddRequest  = Vm.cmd ValuesNavMsg.AddRequest
+        Add = Vm.cmd (ValuesMsg.Add 0)
+    }
+ 
+    let valuesComponent =
+        Component.create [
+            <@ init.Items @> |> Bind.oneWay (fun m -> m.Items)
+            <@ init.SelectedIndex @> |> Bind.twoWay (fun m -> m.SelectedIndex) ValuesMsg.Click
+            <@ d.AddRequest @> |> Bind.cmd |> Bind.toNav
+            <@ d.Add @> |> Bind.cmd
+        ]
 
 open MenuComponent
 open Issue21Component
+open Issue24Component
 
 module Program = 
 
     type Model = {
         Menu : Menu
         Cells : Cells
+        Values : Values
     }
 
     [<RequireQualifiedAccess>]
     type NavMessages = 
         | Issue21
         | Issue24
+        | Issue24Dialog
         | StartPage
 
     [<RequireQualifiedAccess>]
     type Msg = 
         | MenuMsg of MenuItemMsg
         | Issue21Msg of CellsMsg
+        | Issue24Msg of ValuesMsg
 
     let defModel = {
         Menu = MenuComponent.defMenu
         Cells = Issue21Component.init
+        Values = Issue24Component.init
     }
 
     let emptyComponent : IComponent<Model, NavMessages, Msg> = 
@@ -146,6 +192,12 @@ module Program =
         |> Component.suppressNavigation
         |> Component.withMappedMessages Msg.Issue21Msg
 
+    let valuesComponent' = 
+        valuesComponent
+        |> Component.withMappedNavigation
+            (function| ValuesNavMsg.AddRequest -> Some NavMessages.Issue24Dialog)
+        |> Component.withMappedMessages Msg.Issue24Msg
+
     let appComp =
         Component.create<Model, NavMessages, Msg> [
             <@ defModel.Menu @> |> Bind.comp (fun m -> m.Menu) menuComponent' fst
@@ -158,8 +210,11 @@ module Program =
             { model with Cells = cells }
         | Msg.MenuMsg msg ->
             menuToNavigation msg |> nav.Dispatch
-            let menu = MenuComponent.update model.Menu msg 
+            let menu = MenuComponent.update model.Menu msg
             { model with Menu = menu }
+        | Msg.Issue24Msg msg ->
+            let values = Issue24Component.update msg model.Values
+            { model with Values = values }
 
     let applicationCore nav = 
         let n = Dispatcher<NavMessages>()
@@ -171,14 +226,15 @@ open Program
 
 [<STAThread>]
 [<EntryPoint>]
-let main _ =          
+let main _ =
+    let rnd = Random()
     let updateNavigation (app : ApplicationCore<Model,_,_>) request =
         match request with
         | NavMessages.StartPage ->
             Navigation.Page.fromComponent
                 Views.createStartPage
                 id
-                emptyComponent 
+                emptyComponent
                 id
         | NavMessages.Issue21 ->
             Navigation.Page.fromComponent
@@ -186,14 +242,25 @@ let main _ =
                 (fun m -> m.Cells)
                 cellsComponent'
                 id
-        | _ -> failwith "Not implemented yet"
+        | NavMessages.Issue24 -> 
+            Navigation.Page.fromComponent
+                Views.createIssue24
+                (fun m -> m.Values)
+                valuesComponent'
+                id
+        | NavMessages.Issue24Dialog -> 
+            Navigation.Page.dialog
+                Views.Issue24Dialog
+                (fun m -> m.Values)
+                valuesComponent'
+                (fun _ -> Msg.Issue24Msg(ValuesMsg.Add (rnd.Next 100)))
 
     let navigator = 
-        Navigation.singlePage 
-            Windows.Application 
-            Views.MainWin 
+        Navigation.singlePage
+            Windows.Application
+            Views.MainWin
             NavMessages.StartPage
-            updateNavigation 
+            updateNavigation
 
     let app = applicationCore navigator.Navigate
 

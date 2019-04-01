@@ -28,6 +28,9 @@ let createIssue21 = Issue21 >> create
 type Issue24 = XAML<"Issue24.xaml">
 let createIssue24 = Issue24 >> create
 
+type Issue24DialogBase = XAML<"Issue24Dialog.xaml">
 
+type Issue24Dialog() as self =
+    inherit Issue24DialogBase()
 
-
+    do self.btn.Click.Add (fun _ -> self.Close())
