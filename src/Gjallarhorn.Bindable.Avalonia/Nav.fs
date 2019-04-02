@@ -140,14 +140,10 @@ type private SinglePageApplicationNavigator<'Model,'Nav,'Message, 'App, 'Win whe
         | ModalDialog window ->
             window.Owner <- mainWindow
             let dataCtx = window.DataContext
-            window.ShowDialog().ContinueWith(fun _ -> 
-                match dataCtx with
-                | :? IDisposable as disp ->
-                    disp.Dispose()
-                | _ -> ()
-            )
-            |> Async.AwaitTask
-            |> ignore
+            let t = window.ShowDialog()
+            match dataCtx with
+            | :? IDisposable as disp -> t.ContinueWith(fun _ -> disp.Dispose()) |> ignore
+            | _ -> ()
 
         factory.AfterNav ()
     interface INavigator<'Model,'Nav,'Message> with
