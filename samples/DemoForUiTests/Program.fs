@@ -54,23 +54,9 @@ module Issue21Component =
     type Cell = { Value : int }
     type Cells = { Items : Cell list; IsOrdered : bool }
     [<RequireQualifiedAccess>]
-    type CellsMsg = | Move of Cell | New of int
+    type CellsMsg = | Move of Cell
     [<RequireQualifiedAccess>]
     type CellMsg = | Click
-
-    let rnd = Random()
-    let create count = 
-        let items = 
-            [ 1..count ]
-            |> List.sortBy (fun _ -> rnd.Next count)
-        let isOrdered = 
-            items 
-            |> Seq.pairwise
-            |> Seq.forall (fun (f,s) -> s >= f)
-        {
-            Items = items |> List.map (fun v -> { Value = v })
-            IsOrdered = isOrdered
-        }
 
     let update msg model =
         match msg with
@@ -79,7 +65,6 @@ module Issue21Component =
             let sorted = nitems |> List.sort
             if nitems = sorted then { Items = nitems ; IsOrdered = true }
             else { model with Items = nitems }
-        | CellsMsg.New count -> create count
 
     type ViewModel = 
         {

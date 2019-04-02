@@ -61,7 +61,7 @@ type UIFactory<'Model,'Nav,'Message when 'Model : equality> () =
 
 type private IgnoreUIFactory<'Model,'Nav,'Message when 'Model : equality> () =
     inherit UIFactory<'Model,'Nav,'Message>()
-    override __.Create app = Ignore
+    override __.Create _ = Ignore
 
 //type private MessageUIFactory<'Model,'Nav,'Message when 'Model : equality> (title,message) =
 //    inherit UIFactory<'Model,'Nav,'Message>()
@@ -139,13 +139,20 @@ type private SinglePageApplicationNavigator<'Model,'Nav,'Message, 'App, 'Win whe
         //    MessageBox.Show(mainWindow,message,title) |> ignore
         | ModalDialog window ->
             window.Owner <- mainWindow
-            window.ShowDialog() |> ignore
+            let dataCtx = window.DataContext
+            window.ShowDialog().ContinueWith(fun _ -> 
+                match dataCtx with
+                | :? IDisposable as disp ->
+                    disp.Dispose()
+                | _ -> ()
+            )
+            |> Async.AwaitTask
+            |> ignore
 
         factory.AfterNav ()
     interface INavigator<'Model,'Nav,'Message> with
         member this.Run app createCtx = this.Run app createCtx
 
-        // Our navigation does nothing
         member this.Navigate (app : ApplicationCore<'Model,'Nav,'Message>) (nav : 'Nav) = this.Update app nav
 
 module Navigation =
@@ -196,11 +203,9 @@ module Navigation =
 
 namespace Gjallarhorn.Avalonia.CSharp
 
-open Gjallarhorn.Bindable
 open Gjallarhorn.Bindable.Framework
 open Gjallarhorn.Avalonia
 
-open System.Windows
 open Avalonia
 open Avalonia.Controls
 
