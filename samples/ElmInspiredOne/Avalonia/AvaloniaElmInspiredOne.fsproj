@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\..\..\packages\Avalonia.Native.0.7.0\build\netstandard2.0\Avalonia.Native.props" Condition="Exists('..\..\..\packages\Avalonia.Native.0.7.0\build\netstandard2.0\Avalonia.Native.props')" />
+  <Import Project="..\..\..\packages\Avalonia.Native.0.8.0\build\netstandard2.0\Avalonia.Native.props" Condition="Exists('..\..\..\packages\Avalonia.Native.0.8.0\build\netstandard2.0\Avalonia.Native.props')" />
+  <Import Project="..\..\..\packages\Avalonia.0.8.0\build\Avalonia.props" Condition="Exists('..\..\..\packages\Avalonia.0.8.0\build\Avalonia.props')" />
   <Import Project="..\..\..\packages\SharpGen.Runtime.COM.1.1.0\build\netstandard1.1\SharpGen.Runtime.COM.props" Condition="Exists('..\..\..\packages\SharpGen.Runtime.COM.1.1.0\build\netstandard1.1\SharpGen.Runtime.COM.props')" />
-  <Import Project="..\..\..\packages\Avalonia.0.7.0\build\Avalonia.props" Condition="Exists('..\..\..\packages\Avalonia.0.7.0\build\Avalonia.props')" />
   <Import Project="..\..\..\packages\SharpGen.Runtime.1.1.0\build\SharpGen.Runtime.props" Condition="Exists('..\..\..\packages\SharpGen.Runtime.1.1.0\build\SharpGen.Runtime.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -52,19 +52,18 @@
     <FSharpTargetsPath>$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\FSharp\Microsoft.FSharp.Targets</FSharpTargetsPath>
   </PropertyGroup>
   <Import Project="$(FSharpTargetsPath)" />
-  <Import Project="..\..\..\packages\SkiaSharp.1.60.0\build\net45\SkiaSharp.targets" Condition="Exists('..\..\..\packages\SkiaSharp.1.60.0\build\net45\SkiaSharp.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\..\..\packages\SkiaSharp.1.60.0\build\net45\SkiaSharp.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\SkiaSharp.1.60.0\build\net45\SkiaSharp.targets'))" />
-    <Error Condition="!Exists('..\..\..\packages\Avalonia.Skia.Linux.Natives.1.60.0.1\build\net45\Avalonia.Skia.Linux.Natives.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\Avalonia.Skia.Linux.Natives.1.60.0.1\build\net45\Avalonia.Skia.Linux.Natives.targets'))" />
     <Error Condition="!Exists('..\..\..\packages\SharpGen.Runtime.1.1.0\build\SharpGen.Runtime.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\SharpGen.Runtime.1.1.0\build\SharpGen.Runtime.props'))" />
-    <Error Condition="!Exists('..\..\..\packages\Avalonia.0.7.0\build\Avalonia.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\Avalonia.0.7.0\build\Avalonia.props'))" />
     <Error Condition="!Exists('..\..\..\packages\SharpGen.Runtime.COM.1.1.0\build\netstandard1.1\SharpGen.Runtime.COM.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\SharpGen.Runtime.COM.1.1.0\build\netstandard1.1\SharpGen.Runtime.COM.props'))" />
-    <Error Condition="!Exists('..\..\..\packages\Avalonia.Native.0.7.0\build\netstandard2.0\Avalonia.Native.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\Avalonia.Native.0.7.0\build\netstandard2.0\Avalonia.Native.props'))" />
+    <Error Condition="!Exists('..\..\..\packages\SkiaSharp.1.68.0\build\net45\SkiaSharp.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\SkiaSharp.1.68.0\build\net45\SkiaSharp.targets'))" />
+    <Error Condition="!Exists('..\..\..\packages\Avalonia.Skia.Linux.Natives.1.68.0.1\build\net45\Avalonia.Skia.Linux.Natives.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\Avalonia.Skia.Linux.Natives.1.68.0.1\build\net45\Avalonia.Skia.Linux.Natives.targets'))" />
+    <Error Condition="!Exists('..\..\..\packages\Avalonia.0.8.0\build\Avalonia.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\Avalonia.0.8.0\build\Avalonia.props'))" />
+    <Error Condition="!Exists('..\..\..\packages\Avalonia.0.8.0\build\Avalonia.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\Avalonia.0.8.0\build\Avalonia.targets'))" />
+    <Error Condition="!Exists('..\..\..\packages\Avalonia.Native.0.8.0\build\netstandard2.0\Avalonia.Native.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\Avalonia.Native.0.8.0\build\netstandard2.0\Avalonia.Native.props'))" />
   </Target>
-  <Import Project="..\..\..\packages\Avalonia.Skia.Linux.Natives.1.60.0.1\build\net45\Avalonia.Skia.Linux.Natives.targets" Condition="Exists('..\..\..\packages\Avalonia.Skia.Linux.Natives.1.60.0.1\build\net45\Avalonia.Skia.Linux.Natives.targets')" />
   <ItemGroup>
     <Compile Include="MainTypes.fs" />
     <Compile Include="Program.fs" />
@@ -72,79 +71,82 @@
     <Content Include="packages.config" />
     <EmbeddedResource Include="MainWindow.xaml" />
     <EmbeddedResource Include="App.xaml" />
-    <None Include="libSkiaSharp.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Avalonia">
+      <HintPath>..\..\..\packages\Avalonia.0.8.0\lib\net461\Avalonia.dll</HintPath>
+    </Reference>
     <Reference Include="Avalonia.Animation">
-      <HintPath>..\..\..\packages\Avalonia.0.7.0\lib\net461\Avalonia.Animation.dll</HintPath>
+      <HintPath>..\..\..\packages\Avalonia.0.8.0\lib\net461\Avalonia.Animation.dll</HintPath>
     </Reference>
     <Reference Include="Avalonia.Base">
-      <HintPath>..\..\..\packages\Avalonia.0.7.0\lib\net461\Avalonia.Base.dll</HintPath>
+      <HintPath>..\..\..\packages\Avalonia.0.8.0\lib\net461\Avalonia.Base.dll</HintPath>
     </Reference>
     <Reference Include="Avalonia.Controls">
-      <HintPath>..\..\..\packages\Avalonia.0.7.0\lib\net461\Avalonia.Controls.dll</HintPath>
+      <HintPath>..\..\..\packages\Avalonia.0.8.0\lib\net461\Avalonia.Controls.dll</HintPath>
     </Reference>
     <Reference Include="Avalonia.DesignerSupport">
-      <HintPath>..\..\..\packages\Avalonia.0.7.0\lib\net461\Avalonia.DesignerSupport.dll</HintPath>
+      <HintPath>..\..\..\packages\Avalonia.0.8.0\lib\net461\Avalonia.DesignerSupport.dll</HintPath>
     </Reference>
     <Reference Include="Avalonia.Desktop">
-      <HintPath>..\..\..\packages\Avalonia.Desktop.0.7.0\lib\netstandard2.0\Avalonia.Desktop.dll</HintPath>
+      <HintPath>..\..\..\packages\Avalonia.Desktop.0.8.0\lib\netstandard2.0\Avalonia.Desktop.dll</HintPath>
     </Reference>
     <Reference Include="Avalonia.DesktopRuntime">
-      <HintPath>..\..\..\packages\Avalonia.0.7.0\lib\net461\Avalonia.DesktopRuntime.dll</HintPath>
+      <HintPath>..\..\..\packages\Avalonia.0.8.0\lib\net461\Avalonia.DesktopRuntime.dll</HintPath>
     </Reference>
     <Reference Include="Avalonia.Diagnostics">
-      <HintPath>..\..\..\packages\Avalonia.0.7.0\lib\net461\Avalonia.Diagnostics.dll</HintPath>
+      <HintPath>..\..\..\packages\Avalonia.0.8.0\lib\net461\Avalonia.Diagnostics.dll</HintPath>
     </Reference>
     <Reference Include="Avalonia.Direct2D1">
-      <HintPath>..\..\..\packages\Avalonia.Direct2D1.0.7.0\lib\netstandard2.0\Avalonia.Direct2D1.dll</HintPath>
+      <HintPath>..\..\..\packages\Avalonia.Direct2D1.0.8.0\lib\netstandard2.0\Avalonia.Direct2D1.dll</HintPath>
     </Reference>
     <Reference Include="Avalonia.Gtk3">
-      <HintPath>..\..\..\packages\Avalonia.Gtk3.0.7.0\lib\netstandard2.0\Avalonia.Gtk3.dll</HintPath>
+      <HintPath>..\..\..\packages\Avalonia.Gtk3.0.8.0\lib\netstandard2.0\Avalonia.Gtk3.dll</HintPath>
     </Reference>
     <Reference Include="Avalonia.Input">
-      <HintPath>..\..\..\packages\Avalonia.0.7.0\lib\net461\Avalonia.Input.dll</HintPath>
+      <HintPath>..\..\..\packages\Avalonia.0.8.0\lib\net461\Avalonia.Input.dll</HintPath>
     </Reference>
     <Reference Include="Avalonia.Interactivity">
-      <HintPath>..\..\..\packages\Avalonia.0.7.0\lib\net461\Avalonia.Interactivity.dll</HintPath>
+      <HintPath>..\..\..\packages\Avalonia.0.8.0\lib\net461\Avalonia.Interactivity.dll</HintPath>
     </Reference>
     <Reference Include="Avalonia.Layout">
-      <HintPath>..\..\..\packages\Avalonia.0.7.0\lib\net461\Avalonia.Layout.dll</HintPath>
+      <HintPath>..\..\..\packages\Avalonia.0.8.0\lib\net461\Avalonia.Layout.dll</HintPath>
     </Reference>
     <Reference Include="Avalonia.Logging.Serilog">
-      <HintPath>..\..\..\packages\Avalonia.0.7.0\lib\net461\Avalonia.Logging.Serilog.dll</HintPath>
+      <HintPath>..\..\..\packages\Avalonia.0.8.0\lib\net461\Avalonia.Logging.Serilog.dll</HintPath>
     </Reference>
     <Reference Include="Avalonia.Markup">
-      <HintPath>..\..\..\packages\Avalonia.0.7.0\lib\net461\Avalonia.Markup.dll</HintPath>
+      <HintPath>..\..\..\packages\Avalonia.0.8.0\lib\net461\Avalonia.Markup.dll</HintPath>
     </Reference>
     <Reference Include="Avalonia.Markup.Xaml">
-      <HintPath>..\..\..\packages\Avalonia.0.7.0\lib\net461\Avalonia.Markup.Xaml.dll</HintPath>
+      <HintPath>..\..\..\packages\Avalonia.0.8.0\lib\net461\Avalonia.Markup.Xaml.dll</HintPath>
     </Reference>
     <Reference Include="Avalonia.Native">
-      <HintPath>..\..\..\packages\Avalonia.Native.0.7.0\lib\netstandard2.0\Avalonia.Native.dll</HintPath>
+      <HintPath>..\..\..\packages\Avalonia.Native.0.8.0\lib\netstandard2.0\Avalonia.Native.dll</HintPath>
     </Reference>
     <Reference Include="Avalonia.OpenGL">
-      <HintPath>..\..\..\packages\Avalonia.0.7.0\lib\net461\Avalonia.OpenGL.dll</HintPath>
+      <HintPath>..\..\..\packages\Avalonia.0.8.0\lib\net461\Avalonia.OpenGL.dll</HintPath>
     </Reference>
     <Reference Include="Avalonia.Remote.Protocol">
-      <HintPath>..\..\..\packages\Avalonia.Remote.Protocol.0.7.0\lib\netstandard2.0\Avalonia.Remote.Protocol.dll</HintPath>
+      <HintPath>..\..\..\packages\Avalonia.Remote.Protocol.0.8.0\lib\netstandard2.0\Avalonia.Remote.Protocol.dll</HintPath>
     </Reference>
     <Reference Include="Avalonia.Skia">
-      <HintPath>..\..\..\packages\Avalonia.Skia.0.7.0\lib\netstandard2.0\Avalonia.Skia.dll</HintPath>
+      <HintPath>..\..\..\packages\Avalonia.Skia.0.8.0\lib\netstandard2.0\Avalonia.Skia.dll</HintPath>
     </Reference>
     <Reference Include="Avalonia.Styling">
-      <HintPath>..\..\..\packages\Avalonia.0.7.0\lib\net461\Avalonia.Styling.dll</HintPath>
+      <HintPath>..\..\..\packages\Avalonia.0.8.0\lib\net461\Avalonia.Styling.dll</HintPath>
     </Reference>
     <Reference Include="Avalonia.Themes.Default">
-      <HintPath>..\..\..\packages\Avalonia.0.7.0\lib\net461\Avalonia.Themes.Default.dll</HintPath>
+      <HintPath>..\..\..\packages\Avalonia.0.8.0\lib\net461\Avalonia.Themes.Default.dll</HintPath>
     </Reference>
     <Reference Include="Avalonia.Visuals">
-      <HintPath>..\..\..\packages\Avalonia.0.7.0\lib\net461\Avalonia.Visuals.dll</HintPath>
+      <HintPath>..\..\..\packages\Avalonia.0.8.0\lib\net461\Avalonia.Visuals.dll</HintPath>
     </Reference>
     <Reference Include="Avalonia.Win32">
-      <HintPath>..\..\..\packages\Avalonia.Win32.0.7.0\lib\netstandard2.0\Avalonia.Win32.dll</HintPath>
+      <HintPath>..\..\..\packages\Avalonia.Win32.0.8.0\lib\netstandard2.0\Avalonia.Win32.dll</HintPath>
+    </Reference>
+    <Reference Include="Avalonia.X11">
+      <HintPath>..\..\..\packages\Avalonia.X11.0.8.0\lib\netstandard2.0\Avalonia.X11.dll</HintPath>
     </Reference>
     <Reference Include="FSharp.Core">
       <HintPath>..\..\..\packages\FSharp.Core.4.3.4\lib\net45\FSharp.Core.dll</HintPath>
@@ -188,7 +190,7 @@
       <HintPath>..\..\..\packages\SharpGen.Runtime.COM.1.1.0\lib\netstandard1.1\SharpGen.Runtime.COM.dll</HintPath>
     </Reference>
     <Reference Include="SkiaSharp">
-      <HintPath>..\..\..\packages\SkiaSharp.1.60.0\lib\net45\SkiaSharp.dll</HintPath>
+      <HintPath>..\..\..\packages\SkiaSharp.1.68.0\lib\net45\SkiaSharp.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.AppContext">
@@ -307,6 +309,9 @@
       <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
+  <Import Project="..\..\..\packages\SkiaSharp.1.68.0\build\net45\SkiaSharp.targets" Condition="Exists('..\..\..\packages\SkiaSharp.1.68.0\build\net45\SkiaSharp.targets')" />
+  <Import Project="..\..\..\packages\Avalonia.Skia.Linux.Natives.1.68.0.1\build\net45\Avalonia.Skia.Linux.Natives.targets" Condition="Exists('..\..\..\packages\Avalonia.Skia.Linux.Natives.1.68.0.1\build\net45\Avalonia.Skia.Linux.Natives.targets')" />
+  <Import Project="..\..\..\packages\Avalonia.0.8.0\build\Avalonia.targets" Condition="Exists('..\..\..\packages\Avalonia.0.8.0\build\Avalonia.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

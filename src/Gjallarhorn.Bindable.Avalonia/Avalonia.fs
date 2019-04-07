@@ -1,11 +1,8 @@
 namespace Gjallarhorn.Avalonia
 
-open System
 open System.Threading
-open Avalonia
 open Avalonia.Data.Core.Plugins
 open Avalonia.Threading
-open Avalonia.Logging.Serilog
 open Gjallarhorn.Bindable
 
 /// Platform installation
@@ -16,7 +13,7 @@ module Platform =
         let sourceType = typedefof<Gjallarhorn.Avalonia.Internal.AvaloniaBindingTarget<_>>.MakeGenericType([|typ|])
         System.Activator.CreateInstance(sourceType) 
     
-    // Gets, and potentially installs, the WPF synchronization context
+    // Gets, and potentially installs, the Avalonia synchronization context
     let private installAndGetSynchronizationContext () =
         AvaloniaSynchronizationContext.InstallIfNeeded ()
         SynchronizationContext.Current
@@ -39,7 +36,7 @@ module App =
                 Render = navigator.Run appCore
             }                
 
-/// WPF Specific implementation of the Application Framework
+/// Avalonia Specific implementation of the Application Framework
 [<AbstractClass;Sealed>]
 type Framework =
     /// Run an application given an Application generator, Window generator, and other required information

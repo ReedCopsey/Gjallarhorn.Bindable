@@ -138,9 +138,8 @@ type private SinglePageApplicationNavigator<'Model,'Nav,'Message, 'App, 'Win whe
         //| Message (title,message) ->
         //    MessageBox.Show(mainWindow,message,title) |> ignore
         | ModalDialog window ->
-            window.Owner <- mainWindow
             let dataCtx = window.DataContext
-            let t = window.ShowDialog()
+            let t = window.ShowDialog mainWindow
             match dataCtx with
             | :? IDisposable as disp -> t.ContinueWith(fun _ -> disp.Dispose()) |> ignore
             | _ -> ()
