@@ -8,7 +8,7 @@ open Gjallarhorn.Bindable.Framework
 open Gjallarhorn.Validation
 open Gjallarhorn.Validation.Validators
 
-// Note that this program is defined in a PCL, and is completely platform neutral.
+// Note that this program is defined in a .NET Standard 2.0 library, and is completely platform neutral.
 // It will work unchanged on WPF, Xamarin Forms, etc
 
 module Program =

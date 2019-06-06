@@ -35,6 +35,14 @@ group UiTest
     nuget FSharp.Core ~> 4.3
     nuget Gjallarhorn >= 1.2.1
 
+group AvaloniaSamples
+  source https://api.nuget.org/v3/index.json
+  storage:none
+  framework: netcoreapp2.2
+  nuget Avalonia.Desktop ~ 0.8
+  nuget FSharp.Core ~> 4.3
+  nuget Gjallarhorn >= 1.2.1
+
 group WpfSamples
   source https://api.nuget.org/v3/index.json
   framework: net471

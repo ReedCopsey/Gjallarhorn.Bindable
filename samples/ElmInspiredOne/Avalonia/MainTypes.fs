@@ -18,3 +18,6 @@ type MainWindow () as self =
 
     do
         AvaloniaXamlLoader.Load self
+    #if DEBUG
+    do self.AttachDevTools()
+    #endif
