@@ -8,7 +8,6 @@ open Gjallarhorn.Bindable.Framework
 // It will work unchanged on WPF, Xamarin Forms, etc
 
 module Program =
-    open Requests
     
     let [<Literal>] minAddTime = 1500
     let [<Literal>] addRandomness = 1500

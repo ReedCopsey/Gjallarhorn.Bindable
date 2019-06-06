@@ -1,7 +1,6 @@
 ﻿namespace CollectionSample
 
 open System
-open Gjallarhorn
 open Gjallarhorn.Bindable
 
 module Requests = 
@@ -14,7 +13,7 @@ module Requests =
         | Remove of Request list
 
     // Update the model based on an UpdateRequest
-    let rec update msg current =
+    let update msg current =
         let excluded guid = current |> List.filter (fun req -> req.Id <> guid)
         match msg with
         | Update r -> r :: excluded r.Id

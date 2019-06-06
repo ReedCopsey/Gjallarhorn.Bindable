@@ -1,0 +1,4 @@
+group AvaloniaSamples
+    FSharp.Core
+    Gjallarhorn
+    Avalonia.Desktop
