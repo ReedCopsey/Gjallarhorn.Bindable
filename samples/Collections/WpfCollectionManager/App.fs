@@ -1,16 +1,12 @@
-﻿
-open System
+﻿open System
 
 open CollectionSample
-open Gjallarhorn
 open Gjallarhorn.Bindable
 open Gjallarhorn.Bindable.Framework
 open Gjallarhorn.Wpf
 
 open Views
-open Gjallarhorn.Bindable.Nav
 open System.Windows
-open CollectionSample.Requests
 open CollectionApplication
 
 // The WPF Platform specific bits of this application need to do 2 things:

@@ -4,9 +4,7 @@
 open Credentials
 
 open System
-open Gjallarhorn
 open Gjallarhorn.Bindable
-open Gjallarhorn.Bindable.Framework
 
 module CollectionApplication =
 
@@ -103,5 +101,3 @@ module CollectionApplication =
             <@ appd.Updates @>  |> Bind.comp id externalComponent fst
             <@ appd.User @>     |> Bind.comp (fun m -> m.Credentials) Credentials.credentialComponent (fst >> UpdateCredentials)
         ] 
-
-
