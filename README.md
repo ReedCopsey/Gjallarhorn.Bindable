@@ -31,3 +31,21 @@ Text="{Binding FirstName-Errors[0]}"
 Avalonia doesn't allow using dashes in PropertyName, therefore attempt to use these properties in bindings raises exception inside of Avalonia.
 It might be changed in the next versions but for now it's impossible.
 See original issue for additional information [#2621 - Chars restriction for PropertyPath](https://github.com/AvaloniaUI/Avalonia/issues/2621)
+
+2. `UIType.Messages`
+
+Currently Avalonia doesn't contain implementation of MessageBox:
+
+[#670 - Native MessageBox API](https://github.com/AvaloniaUI/Avalonia/issues/670)
+
+To achieve result, similar to one that WPF has, you could create helper window `MessageWindow` and show it via `Navigation.Page.dialog`.
+
+Also, there are couple implementation:
+
+as separate NuGet-library
+
+[MessageBox.Avalonia](https://www.nuget.org/packages/MessageBox.Avalonia/)
+
+or as part of the big project:
+
+[MessageBox.xaml](https://github.com/KvanTTT/DAGE/blob/master/DesktopAntlrGrammarEditor/MessageBox.xaml)
