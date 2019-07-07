@@ -1,4 +1,4 @@
 group AvaloniaSamples
     FSharp.Core
     Gjallarhorn
-    Avalonia.Desktop
+    Avalonia.Desktop redirects: off

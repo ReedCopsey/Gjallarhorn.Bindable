@@ -4,9 +4,9 @@ group Main
   redirects: on
 	
   nuget SourceLink.Fake
-  nuget FAKE
+  nuget FAKE ~> 4
   nuget FSharp.Formatting
-  nuget Xamarin.Forms
+  nuget Xamarin.Forms ~> 4
   nuget FSharp.Core ~> 4.3
   nuget Gjallarhorn >= 1.2.3
   nuget Microsoft.Build.Utilities.Core >= 15.5
@@ -39,7 +39,7 @@ group AvaloniaSamples
   source https://api.nuget.org/v3/index.json
   storage:none
   framework: netcoreapp2.2
-  nuget Avalonia.Desktop ~ 0.8
+  nuget Avalonia.Desktop ~> 0.8.1
   nuget FSharp.Core ~> 4.3
   nuget Gjallarhorn >= 1.2.3
 

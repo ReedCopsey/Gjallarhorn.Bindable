@@ -19,6 +19,6 @@ let app () = buildAvaloniaApp().SetupWithoutStarting().Instance
 
 [<STAThread>]
 [<EntryPoint>]
-let main _ =         
+let main _ = 
     Framework.RunApplication (Navigation.singleView app MainWindow, Program.applicationCore)
     1
