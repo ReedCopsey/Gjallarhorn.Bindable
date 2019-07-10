@@ -51,8 +51,18 @@ let solutionFile =
     | "Android" -> "Gjallarhorn.Bindable-Xamarin.sln"
     | _ -> "Gjallarhorn.Bindable.sln" 
 
+// build only core projects until [#7070](Stack Overflow with dotnet build, Visual Studio fine) is not resolved
+let buildCoreProjs =
+    [ "src/Gjallarhorn.Bindable/Gjallarhorn.Bindable.fsproj"    
+      "src/Gjallarhorn.Bindable.Avalonia/Gjallarhorn.Bindable.Avalonia.fsproj" 
+      "src/Gjallarhorn.Bindable.Wpf/Gjallarhorn.Bindable.Wpf.fsproj"
+      "src/Gjallarhorn.Bindable.XamarinForms/Gjallarhorn.Bindable.XamarinForms.fsproj"
+      "src/Gjallarhorn.ReferenceDocumentation/Gjallarhorn.ReferenceDocumentation.fsproj" ]
+
 // Pattern specifying assemblies to be tested using NUnit
 let testAssemblies = "tests/**/bin/Release/netcoreapp2.0/*Tests*.dll"
+
+let testCoreProj = "tests\Gjallarhorn.Bindable.Tests"
 
 // Git configuration (used for publishing documentation in gh-pages branch)
 // The profile where the project is posted
@@ -89,7 +99,7 @@ Target "AssemblyInfo" (fun _ ->
           Attribute.Description summary
           Attribute.Version release.AssemblyVersion
           Attribute.FileVersion release.AssemblyVersion
-          Attribute.Copyright "Copyright 2018 Reed Copsey, Jr."
+          Attribute.Copyright "Copyright 2019 Reed Copsey, Jr."
           Attribute.Company "Reed Copsey, Jr." ]
 
     let getProjectDetails projectPath =
@@ -136,23 +146,21 @@ Target "CleanDocs" (fun _ ->
 // Build library & test project
 
 Target "Build" (fun _ ->
-//    !! solutionFile
-//#if MONO
-//    |> MSBuildReleaseExt "" [ ("DefineConstants","MONO") ] "Rebuild"
-//#else
-//    |> MSBuildRelease "" "Rebuild"
-//#endif
-//    |> ignore
-    DotNetCli.Build (fun p -> { p with Project = solutionFile })
+    for proj in buildCoreProjs do
+        DotNetCli.Build (fun p -> { p with Project = proj })
 )
 
 // --------------------------------------------------------------------------------------
 // Run the unit tests using test runner
 
 Target "RunTests" (fun _ ->
-    () // This fails in build scripts
-
-    //!! testAssemblies
+    DotNetCli.Test
+        (fun p -> 
+            { p with 
+                Project = testCoreProj //!! testAssemblies
+                TimeOut = TimeSpan.FromMinutes 20.
+        })
+    
     //|> NUnit3 (fun p ->
     //    { p with
     //        ToolPath = @".\packages\test\NUnit.ConsoleRunner\tools\nunit3-console.exe"

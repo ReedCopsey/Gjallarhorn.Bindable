@@ -5,7 +5,7 @@ group Main
 	
   nuget SourceLink.Fake
   nuget FAKE ~> 4
-  nuget FSharp.Formatting
+  nuget FSharp.Formatting ~> 2
   nuget Xamarin.Forms ~> 4
   nuget FSharp.Core ~> 4.3
   nuget Gjallarhorn >= 1.2.3
