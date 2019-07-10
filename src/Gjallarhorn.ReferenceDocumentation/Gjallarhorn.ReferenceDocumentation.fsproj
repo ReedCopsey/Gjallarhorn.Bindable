@@ -21,12 +21,6 @@
     <DocumentationFile>bin\Release\Gjallarhorn.ReferenceDocumentation.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="mscorlib" />
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Numerics" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="..\Gjallarhorn.Bindable\AssemblyInfo.fs">
       <Link>AssemblyInfo.fs</Link>
     </Compile>

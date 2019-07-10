@@ -1,0 +1,5 @@
+﻿type project
+tags F# FSharp async Reactive Rx Observable Avalonia
+projectUrl https://github.com/ReedCopsey/Gjallarhorn.Bindable
+licenseUrl http://opensource.org/licenses/MIT
+

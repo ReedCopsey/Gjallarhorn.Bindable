@@ -7,7 +7,7 @@ open System.Reflection
 [<assembly: AssemblyDescriptionAttribute("Unidirectional Framework for XAML Platforms built on top of Gjallarhorn")>]
 [<assembly: AssemblyVersionAttribute("1.0.0")>]
 [<assembly: AssemblyFileVersionAttribute("1.0.0")>]
-[<assembly: AssemblyCopyrightAttribute("Copyright 2018 Reed Copsey, Jr.")>]
+[<assembly: AssemblyCopyrightAttribute("Copyright 2019 Reed Copsey, Jr.")>]
 [<assembly: AssemblyCompanyAttribute("Reed Copsey, Jr.")>]
 do ()
 
@@ -17,5 +17,5 @@ module internal AssemblyVersionInformation =
     let [<Literal>] AssemblyDescription = "Unidirectional Framework for XAML Platforms built on top of Gjallarhorn"
     let [<Literal>] AssemblyVersion = "1.0.0"
     let [<Literal>] AssemblyFileVersion = "1.0.0"
-    let [<Literal>] AssemblyCopyright = "Copyright 2018 Reed Copsey, Jr."
+    let [<Literal>] AssemblyCopyright = "Copyright 2019 Reed Copsey, Jr."
     let [<Literal>] AssemblyCompany = "Reed Copsey, Jr."
