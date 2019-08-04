@@ -51,7 +51,7 @@ let solutionFile =
     | "Android" -> "Gjallarhorn.Bindable-Xamarin.sln"
     | _ -> "Gjallarhorn.Bindable.sln" 
 
-// build only core projects until [#7070](Stack Overflow with dotnet build, Visual Studio fine) is not resolved
+// build only core projects until [#7070-Stack Overflow with dotnet build, Visual Studio fine](https://github.com/dotnet/fsharp/issues/7070) is not resolved
 let buildCoreProjs =
     [ "src/Gjallarhorn.Bindable/Gjallarhorn.Bindable.fsproj"    
       "src/Gjallarhorn.Bindable.Avalonia/Gjallarhorn.Bindable.Avalonia.fsproj" 
