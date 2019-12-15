@@ -2,9 +2,6 @@
 
 open System
 open System.ComponentModel
-open System.Threading
-open Avalonia
-open Avalonia.Data
 open Avalonia.Data.Core.Plugins
 open Gjallarhorn.Bindable
 open Gjallarhorn.Bindable.Internal
@@ -13,18 +10,16 @@ open Avalonia.Utilities
 type IAvaloniaBindingTarget =
     abstract member GetProperty : string -> (IValueHolder * Type) option    
 
-type DynamicPropertyAccessor (weakRef : WeakReference, name : string) =    
+type DynamicPropertyAccessor (weakRef : WeakReference<obj>, name : string) =    
     inherit PropertyAccessorBase ()
 
     let mutable wr = weakRef
     let mutable eventRaised = false
 
     let getVH () = 
-        let v = wr.Target 
-        match v with
-        | :? IAvaloniaBindingTarget as v' ->
-            let vh = v'.GetProperty(name)
-            match vh with
+        match wr.TryGetTarget() with
+        | true, (:? IAvaloniaBindingTarget as target) -> 
+            match target.GetProperty(name) with
             | Some vh -> vh
             | None -> failwith "Invalid binding sent to DynamicPropertyAccessor"
         | _ -> failwith "Invalid binding sent to DynamicPropertyAccessor"
@@ -45,13 +40,13 @@ type DynamicPropertyAccessor (weakRef : WeakReference, name : string) =
         true
     override this.SubscribeCore () =
         this.SendCurrentValue ()
-        match wr.Target with
-        | :? INotifyPropertyChanged as inpc ->
+        match wr.TryGetTarget() with
+        | true , (:? INotifyPropertyChanged as inpc) ->
             WeakSubscriptionManager.Subscribe(inpc, "PropertyChanged", this :> IWeakSubscriber<PropertyChangedEventArgs>)
         | _ -> ()
     override this.UnsubscribeCore() =
-        match wr.Target with
-        | :? INotifyPropertyChanged as inpc ->
+        match wr.TryGetTarget() with
+        | true, (:? INotifyPropertyChanged as inpc) ->
             WeakSubscriptionManager.Unsubscribe(inpc, "PropertyChanged", this :> IWeakSubscriber<PropertyChangedEventArgs>)
         | _ -> ()
     
@@ -60,8 +55,6 @@ type DynamicPropertyAccessor (weakRef : WeakReference, name : string) =
             if e.PropertyName = name then  
                 eventRaised <- true
                 this.SendCurrentValue ()
-
-                      
 
 type DynamicPropertyAccessorPlugin () =
     interface IPropertyAccessorPlugin with
@@ -101,4 +94,3 @@ type internal AvaloniaBindingTarget<'b>() =
         
     interface IAvaloniaBindingTarget with  
         member __.GetProperty name = getProperty name    
-

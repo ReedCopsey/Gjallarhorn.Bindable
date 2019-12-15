@@ -13,7 +13,7 @@ open Avalonia.Logging.Serilog
 
 // This is required to use VS Extension Previewer currently
 [<CompiledName "BuildAvaloniaApp">] 
-let buildAvaloniaApp () = AppBuilder.Configure<App>().UsePlatformDetect().LogToDebug()                           
+let buildAvaloniaApp () = AppBuilder.Configure<App>().UsePlatformDetect().LogToDebug()
 
 let app () = buildAvaloniaApp().SetupWithoutStarting().Instance
 

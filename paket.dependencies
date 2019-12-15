@@ -39,7 +39,7 @@ group AvaloniaSamples
   source https://api.nuget.org/v3/index.json
   storage:none
   framework: netcoreapp2.2
-  nuget Avalonia.Desktop ~> 0.8.2
+  nuget Avalonia.Desktop ~> 0.9
   nuget FSharp.Core ~> 4.3
   nuget Gjallarhorn >= 1.2.3
 
