@@ -7,7 +7,7 @@ group Main
   nuget FAKE ~> 4
   nuget FSharp.Formatting ~> 2
   nuget Xamarin.Forms ~> 4
-  nuget FSharp.Core ~> 4.3
+  nuget FSharp.Core 4.3.4
   nuget Gjallarhorn >= 1.2.3
   nuget Microsoft.Build.Utilities.Core >= 15.5
   github fsharp/FAKE modules/Octokit/Octokit.fsx
@@ -20,7 +20,7 @@ group Test
   nuget NUnit 3.9.0 
   nuget NUnit3TestAdapter 3.9.0 
   nuget NUnit.ConsoleRunner ~> 3
-  nuget FSharp.Core ~> 4.3
+  nuget FSharp.Core 4.3.4
   nuget Gjallarhorn >= 1.2.3
 
 group UiTest
@@ -32,20 +32,20 @@ group UiTest
     nuget NUnit 3.9.0 
     nuget NUnit3TestAdapter 3.9.0 
     nuget NUnit.ConsoleRunner ~> 3
-    nuget FSharp.Core ~> 4.3
+    nuget FSharp.Core 4.3.4
     nuget Gjallarhorn >= 1.2.3
 
 group AvaloniaSamples
   source https://api.nuget.org/v3/index.json
   storage:none
   framework: netcoreapp2.2
-  nuget Avalonia.Desktop ~> 0.9
-  nuget FSharp.Core ~> 4.3
+  nuget Avalonia.Desktop ~> 0.9.1
+  nuget FSharp.Core 4.3.4
   nuget Gjallarhorn >= 1.2.3
 
 group WpfSamples
   source https://api.nuget.org/v3/index.json
   framework: net471
   nuget FsXaml.Wpf
-  nuget FSharp.Core ~> 4.3
+  nuget FSharp.Core 4.3.4
   nuget Gjallarhorn >= 1.2.3
