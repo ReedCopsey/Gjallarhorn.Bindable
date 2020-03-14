@@ -10,8 +10,11 @@
   <ItemGroup>
     <Compile Include="MainTypes.fs" />
     <Compile Include="Program.fs" />
-    <AvaloniaResource Include="MainWindow.xaml" />
-    <AvaloniaResource Include="App.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="**\*.xaml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\Gjallarhorn.Bindable.Avalonia\Gjallarhorn.Bindable.Avalonia.fsproj">
