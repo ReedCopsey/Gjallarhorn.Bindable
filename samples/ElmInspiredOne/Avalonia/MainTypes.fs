@@ -4,7 +4,6 @@ open Avalonia
 open Avalonia.Controls
 open Avalonia.Markup.Xaml
 
-
 // ----------------------------------     View      ---------------------------------- 
 // Our platform specific view type
 

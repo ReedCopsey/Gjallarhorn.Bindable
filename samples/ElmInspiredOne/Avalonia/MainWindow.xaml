@@ -11,7 +11,7 @@
     d:DataContext="{x:Static model:Program.d}"
     SizeToContent="WidthAndHeight"
     mc:Ignorable="d">
-    <Grid ColumnDefinitions="*,*" RowDefinitions="*,*">
+    <Grid ColumnDefinitions="*,*" RowDefinitions="*,Auto">
         <TextBlock
             Grid.Row="0"
             Grid.Column="0"
@@ -29,6 +29,7 @@
             Grid.Row="1"
             Grid.Column="0"
             Margin="5"
+            HorizontalAlignment="Stretch"
             Command="{Binding Increment}">
             Increment
         </Button>
@@ -36,6 +37,7 @@
             Grid.Row="1"
             Grid.Column="1"
             Margin="5"
+            HorizontalAlignment="Stretch"
             Command="{Binding Decrement}">
             Decrement
         </Button>

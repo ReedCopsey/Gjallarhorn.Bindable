@@ -7,13 +7,13 @@ open AvaloniaElmInspiredOne
 
 open Gjallarhorn.Avalonia
 open Avalonia
-open Avalonia.Logging.Serilog
+open Avalonia.Logging
 
 // ----------------------------------  Application  ---------------------------------- 
 
 // This is required to use VS Extension Previewer currently
 [<CompiledName "BuildAvaloniaApp">] 
-let buildAvaloniaApp () = AppBuilder.Configure<App>().UsePlatformDetect().LogToDebug()
+let buildAvaloniaApp () = AppBuilder.Configure<App>().UsePlatformDetect().LogToTrace<AppBuilder>(LogEventLevel.Warning)
 
 let app () = buildAvaloniaApp().SetupWithoutStarting().Instance
 

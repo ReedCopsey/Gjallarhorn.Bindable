@@ -1,4 +1,2 @@
-group Main
-    FSharp.Core
-    Xamarin.Forms
-    Gjallarhorn
+Xamarin.Forms
+Gjallarhorn

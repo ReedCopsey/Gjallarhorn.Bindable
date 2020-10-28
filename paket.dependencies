@@ -25,7 +25,7 @@ group Test
 
 group UiTest
   source https://api.nuget.org/v3/index.json
-    framework: net471
+    framework: net472
     storage:none
     nuget Gu.Wpf.UiAutomation
     nuget Microsoft.NET.Test.Sdk 15.5.0 
@@ -39,13 +39,15 @@ group AvaloniaSamples
   source https://api.nuget.org/v3/index.json
   storage:none
   framework: netcoreapp3.1
-  nuget Avalonia.Desktop ~> 0.9.9
+  nuget Avalonia.Desktop >= 0.10 prerelease
+  nuget Avalonia.Diagnostics >= 0.10 prerelease
   nuget FSharp.Core 4.3.4
   nuget Gjallarhorn >= 1.2.3
+  nuget Microsoft.Windows.CsWinRT 0.1.0-prerelease.200512.7
 
 group WpfSamples
   source https://api.nuget.org/v3/index.json
-  framework: net471
+  framework: net472
   nuget FsXaml.Wpf
   nuget FSharp.Core 4.3.4
   nuget Gjallarhorn >= 1.2.3

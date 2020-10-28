@@ -12,9 +12,9 @@
     <Compile Include="Program.fs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="**\*.xaml">
+    <AvaloniaResource Include="**\*.xaml">
       <SubType>Designer</SubType>
-    </EmbeddedResource>
+    </AvaloniaResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\Gjallarhorn.Bindable.Avalonia\Gjallarhorn.Bindable.Avalonia.fsproj">
@@ -32,10 +32,6 @@
       <Project>{7bdae80e-995f-45d9-b034-ccf4fe226314}</Project>
       <Private>True</Private>
     </ProjectReference>
-    <Reference Include="mscorlib" />
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Numerics" />
   </ItemGroup>
   <Import Project="..\..\..\.paket\Paket.Restore.targets" />
 </Project>
