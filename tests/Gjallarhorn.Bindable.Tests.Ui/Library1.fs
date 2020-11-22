@@ -7,7 +7,7 @@ module Collection =
     open System.IO
     open System
 
-    let appPath = @"samples\DemoForUiTests\bin\Debug\net471\DemoForUiTests.exe"
+    let appPath = @"samples\DemoForUiTests\bin\Debug\net472\DemoForUiTests.exe"
 
     [<Test>]
     let ``issue: #21 - InvalidOperationException: Added item does not appear at given index '1'``() = 
